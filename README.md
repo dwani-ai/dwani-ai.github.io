@@ -9,6 +9,15 @@
 
 - [Voice Demo](https://huggingface.co/spaces/gaganyatri/dhwani)
 
+
+## Target Solution
+
+| Answer Engine                                  | Voice Translation                          |
+|-----------------------------------------------|---------------------------------------------|
+| ![Answer Engine](docs/workflow/kannada-answer-engine.drawio.png "Engine") | ![Voice Translation](docs/workflow/voice-translation.drawio.png "Voice Translation") |
+
+<!-- 
+
 - TTS - Text to Speech
 ```
 curl -X 'POST' \
@@ -43,3 +52,4 @@ curl -X 'POST' \
 }'
 ```
 
+-->

@@ -20,7 +20,7 @@ services:
     volumes:
       - ~/.cache/huggingface:/root/.cache/huggingface
     ports:
-      - 7860:7860
+      - 8860:7860
     environment:
       - LANGUAGE=kn
     deploy:
@@ -35,7 +35,7 @@ services:
     volumes:
       - ~/.cache/huggingface:/root/.cache/huggingface
     ports:
-      - 7860:7860
+      - 9860:7860
     environment:
       - LANGUAGE=kn
     deploy:
@@ -50,7 +50,7 @@ services:
     volumes:
       - ~/.cache/huggingface:/root/.cache/huggingface
     ports:
-      - 7860:7860
+      - 10860:7860
     deploy:
       resources:
         reservations:

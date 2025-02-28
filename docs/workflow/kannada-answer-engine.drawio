@@ -1,0 +1,63 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:135.0) Gecko/20100101 Firefox/135.0" version="26.0.16">
+  <diagram name="Page-1" id="TjPUEq3-6Y8OgARFmF61">
+    <mxGraphModel dx="1364" dy="795" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="7NWk5v_2v0UnBuUJUOe5-3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="7NWk5v_2v0UnBuUJUOe5-1" target="7NWk5v_2v0UnBuUJUOe5-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7NWk5v_2v0UnBuUJUOe5-1" value="Kannada Voice Query" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="170" y="100" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="7NWk5v_2v0UnBuUJUOe5-7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="7NWk5v_2v0UnBuUJUOe5-2">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="240" y="293" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="7NWk5v_2v0UnBuUJUOe5-2" value="&lt;div&gt;ASR Indic Server&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="180" y="153" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="7NWk5v_2v0UnBuUJUOe5-11" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="7NWk5v_2v0UnBuUJUOe5-8" target="7NWk5v_2v0UnBuUJUOe5-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7NWk5v_2v0UnBuUJUOe5-8" value="Translate Indic Server" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="180" y="260" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="7NWk5v_2v0UnBuUJUOe5-9" value="kannada Text Query" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="260" y="223" width="130" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="7NWk5v_2v0UnBuUJUOe5-14" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="7NWk5v_2v0UnBuUJUOe5-10" target="7NWk5v_2v0UnBuUJUOe5-13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7NWk5v_2v0UnBuUJUOe5-10" value="LLM Server" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="180" y="366" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="7NWk5v_2v0UnBuUJUOe5-12" value="English Text Query" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="260" y="330" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="7NWk5v_2v0UnBuUJUOe5-17" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="7NWk5v_2v0UnBuUJUOe5-13" target="7NWk5v_2v0UnBuUJUOe5-16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7NWk5v_2v0UnBuUJUOe5-13" value="Translate Indic Server" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="180" y="480" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="7NWk5v_2v0UnBuUJUOe5-15" value="English Text Answer" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="253" y="439" width="130" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="7NWk5v_2v0UnBuUJUOe5-20" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="7NWk5v_2v0UnBuUJUOe5-16" target="7NWk5v_2v0UnBuUJUOe5-19">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7NWk5v_2v0UnBuUJUOe5-16" value="&lt;div&gt;TTS Indic Server&lt;/div&gt;&lt;div&gt;Text to Speech&lt;/div&gt;" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="180" y="589" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="7NWk5v_2v0UnBuUJUOe5-18" value="Kannada Text Answer" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="247" y="548" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="7NWk5v_2v0UnBuUJUOe5-19" value="Kannada Voice Answer" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="165" y="698" width="150" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

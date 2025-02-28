@@ -1,0 +1,43 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:135.0) Gecko/20100101 Firefox/135.0" version="26.0.16">
+  <diagram name="Page-1" id="LszgLbd63_Km7cw7AWJ_">
+    <mxGraphModel dx="1364" dy="795" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="_7CElcBm5qUWaAuJiir1-3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="_7CElcBm5qUWaAuJiir1-1" target="_7CElcBm5qUWaAuJiir1-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="_7CElcBm5qUWaAuJiir1-1" value="&lt;div&gt;Kannada Voice&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="280" y="98" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="_7CElcBm5qUWaAuJiir1-5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="_7CElcBm5qUWaAuJiir1-2" target="_7CElcBm5qUWaAuJiir1-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="_7CElcBm5qUWaAuJiir1-2" value="ASR Indic Server" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="270" y="193" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="_7CElcBm5qUWaAuJiir1-7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="_7CElcBm5qUWaAuJiir1-4" target="_7CElcBm5qUWaAuJiir1-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="_7CElcBm5qUWaAuJiir1-4" value="Translate Server" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="270" y="333" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="_7CElcBm5qUWaAuJiir1-9" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="_7CElcBm5qUWaAuJiir1-6" target="_7CElcBm5qUWaAuJiir1-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="_7CElcBm5qUWaAuJiir1-6" value="TTS Indic Server" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="270" y="473" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="_7CElcBm5qUWaAuJiir1-8" value="Hindi Voice" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="290" y="560" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="_7CElcBm5qUWaAuJiir1-10" value="Kannada Text" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="324" y="268" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="_7CElcBm5qUWaAuJiir1-11" value="Hindi Text" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="334" y="420" width="80" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

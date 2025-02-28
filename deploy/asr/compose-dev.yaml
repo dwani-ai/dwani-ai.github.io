@@ -1,0 +1,16 @@
+services:
+  asr-indic-server:
+    image: slabstech/asr_indic_server_12_6
+    volumes:
+      - ~/.cache/huggingface:/root/.cache/huggingface
+    ports:
+      - 7860:7860
+    environment:
+      - LANGUAGE=kn
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ['0']
+              capabilities: [gpu]

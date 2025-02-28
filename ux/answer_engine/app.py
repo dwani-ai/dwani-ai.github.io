@@ -1,0 +1,169 @@
+import gradio as gr
+import os
+import requests
+import json
+import logging
+from dotenv import load_dotenv
+import time
+
+# Load environment variables from a .env file
+load_dotenv()
+
+# Set up logging
+logging.basicConfig(filename='execution.log', level=logging.DEBUG,
+                    format='%(asctime)s - %(levelname)s - %(message)s')
+
+# Configuration
+CONFIG = {
+    "TIMEOUT": int(os.getenv("TIMEOUT", 1)),
+    "RETRY_ATTEMPTS": int(os.getenv("RETRY_ATTEMPTS", 3)),
+    "RETRY_DELAY": int(os.getenv("RETRY_DELAY", 2))
+}
+
+def get_endpoint(use_gpu, use_localhost, service_type):
+    logging.debug(f"Getting endpoint for service: {service_type}, use_gpu: {use_gpu}, use_localhost: {use_localhost}")
+    device_type_ep = "" if use_gpu else "-cpu"
+    if use_localhost:
+        port_mapping = {
+            "asr": 8860,
+            "translate": 10860,
+            "tts": 9860
+        }
+        base_url = f'http://localhost:{port_mapping[service_type]}'
+    else:
+        base_url = f'https://gaganyatri-{service_type}-indic-server{device_type_ep}.hf.space'
+    logging.debug(f"Endpoint for {service_type}: {base_url}")
+    return base_url
+
+def check_health(use_gpu, use_localhost):
+    logging.debug(f"Checking health for use_gpu: {use_gpu}, use_localhost: {use_localhost}")
+    services = ["asr", "translate", "tts"]
+    healthy = True
+    for service in services:
+        base_url = get_endpoint(use_gpu, use_localhost, service)
+        url = f'{base_url}/health'
+        try:
+            response = requests.get(url, timeout=CONFIG["TIMEOUT"])
+            response.raise_for_status()
+            logging.debug(f"Health check successful for {service} endpoint: {url}")
+        except requests.exceptions.RequestException as e:
+            logging.debug(f"Health check failed for {service} endpoint: {url}, error: {e}")
+            healthy = False
+    return healthy
+
+def transcribe_audio(audio_path, use_gpu, use_localhost):
+    logging.debug(f"Transcribing audio from {audio_path}, use_gpu: {use_gpu}, use_localhost: {use_localhost}")
+    base_url = get_endpoint(use_gpu, use_localhost, "asr")
+    url = f'{base_url}/transcribe/?language=kannada'
+    files = {'file': open(audio_path, 'rb')}
+    for attempt in range(CONFIG["RETRY_ATTEMPTS"]):
+        try:
+            response = requests.post(url, files=files, timeout=CONFIG["TIMEOUT"])
+            response.raise_for_status()
+            transcription = response.json()
+            logging.debug(f"Transcription successful: {transcription}")
+            return transcription.get('text', '')
+        except requests.exceptions.RequestException as e:
+            logging.debug(f"Transcription failed: {e}, attempt {attempt + 1}/{CONFIG['RETRY_ATTEMPTS']}")
+            time.sleep(CONFIG["RETRY_DELAY"])
+    return ""
+
+def translate_text(transcription, use_gpu, use_localhost):
+    logging.debug(f"Translating text: {transcription}, use_gpu: {use_gpu}, use_localhost: {use_localhost}")
+    base_url = get_endpoint(use_gpu, use_localhost, "translate")
+    device_type = "cuda" if use_gpu else "cpu"
+    url = f'{base_url}/translate?src_lang=kan_Knda&tgt_lang=hin_Deva&device_type={device_type}'
+    headers = {
+        'accept': 'application/json',
+        'Content-Type': 'application/json'
+    }
+    data = {
+        "sentences": [transcription],
+        "src_lang": "kan_Knda",
+        "tgt_lang": "hin_Deva"
+    }
+    for attempt in range(CONFIG["RETRY_ATTEMPTS"]):
+        try:
+            response = requests.post(url, headers=headers, data=json.dumps(data), timeout=CONFIG["TIMEOUT"])
+            response.raise_for_status()
+            logging.debug(f"Translation successful: {response.json()}")
+            return response.json()
+        except requests.exceptions.RequestException as e:
+            logging.debug(f"Translation failed: {e}, attempt {attempt + 1}/{CONFIG['RETRY_ATTEMPTS']}")
+            time.sleep(CONFIG["RETRY_DELAY"])
+    return {"translations": [""]}
+
+# Perform health check on startup and determine the initial state of the checkboxes
+use_gpu = False
+use_localhost = False
+
+if check_health(use_gpu=True, use_localhost=False):
+    use_gpu = True
+    use_localhost = False
+    logging.info(f"Selected configuration: use_gpu={use_gpu}, use_localhost={use_localhost}")
+elif check_health(use_gpu=True, use_localhost=True):
+    use_gpu = True
+    use_localhost = True
+    logging.info(f"Selected configuration: use_gpu={use_gpu}, use_localhost={use_localhost}")
+elif check_health(use_gpu=False, use_localhost=False):
+    use_gpu = False
+    use_localhost = False
+    logging.info(f"Selected configuration: use_gpu={use_gpu}, use_localhost={use_localhost}")
+elif check_health(use_gpu=False, use_localhost=True):
+    use_gpu = False
+    use_localhost = True
+    logging.info(f"Selected configuration: use_gpu={use_gpu}, use_localhost={use_localhost}")
+
+# Create the Gradio interface
+with gr.Blocks(title="Dhwani - Answer Engine") as demo:
+    gr.Markdown("# Voice Recorder and Player")
+    gr.Markdown("Record your voice or upload a WAV file and play it back!")
+
+    audio_input = gr.Microphone(type="filepath", label="Record your voice")
+    audio_upload = gr.File(type="filepath", file_types=[".wav"], label="Upload WAV file")
+    audio_output = gr.Audio(type="filepath", label="Playback", interactive=False)
+    transcription_output = gr.Textbox(label="Transcription Result", interactive=False)
+    translation_output = gr.Textbox(label="Translated Text", interactive=False)
+    use_gpu_checkbox = gr.Checkbox(label="Use GPU", value=use_gpu)
+    use_localhost_checkbox = gr.Checkbox(label="Use Localhost", value=use_localhost)
+
+    def on_transcription_complete(transcription, use_gpu, use_localhost):
+        logging.debug(f"Transcription complete: {transcription}, use_gpu: {use_gpu}, use_localhost: {use_localhost}")
+        translation = translate_text(transcription, use_gpu, use_localhost)
+        translated_text = translation['translations'][0]
+        return translated_text
+
+    def process_audio(audio_path, use_gpu, use_localhost):
+        logging.debug(f"Processing audio from {audio_path}, use_gpu: {use_gpu}, use_localhost: {use_localhost}")
+        transcription = transcribe_audio(audio_path, use_gpu, use_localhost)
+        return transcription
+
+    audio_input.stop_recording(
+        fn=process_audio,
+        inputs=[audio_input, use_gpu_checkbox, use_localhost_checkbox],
+        outputs=transcription_output
+    )
+
+    audio_upload.upload(
+        fn=process_audio,
+        inputs=[audio_upload, use_gpu_checkbox, use_localhost_checkbox],
+        outputs=transcription_output
+    )
+
+    transcription_output.change(
+        fn=on_transcription_complete,
+        inputs=[transcription_output, use_gpu_checkbox, use_localhost_checkbox],
+        outputs=translation_output
+    )
+    '''
+    translation_output.change(
+        fn=on_translation_complete,
+        inputs=[translation_output, use_gpu_checkbox, use_localhost_checkbox],
+        outputs=[tts_audio_output, tts_success_output]
+    
+    )
+    '''
+
+
+# Launch the interface
+demo.launch()

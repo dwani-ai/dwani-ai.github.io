@@ -3,10 +3,22 @@ import os
 import requests
 import json
 import logging
+from dotenv import load_dotenv
+import time
+
+# Load environment variables from a .env file
+load_dotenv()
 
 # Set up logging
 logging.basicConfig(filename='execution.log', level=logging.DEBUG,
                     format='%(asctime)s - %(levelname)s - %(message)s')
+
+# Configuration
+CONFIG = {
+    "TIMEOUT": int(os.getenv("TIMEOUT", 1)),
+    "RETRY_ATTEMPTS": int(os.getenv("RETRY_ATTEMPTS", 3)),
+    "RETRY_DELAY": int(os.getenv("RETRY_DELAY", 2))
+}
 
 def get_endpoint(use_gpu, use_localhost, service_type):
     logging.debug(f"Getting endpoint for service: {service_type}, use_gpu: {use_gpu}, use_localhost: {use_localhost}")
@@ -31,7 +43,7 @@ def check_health(use_gpu, use_localhost):
         base_url = get_endpoint(use_gpu, use_localhost, service)
         url = f'{base_url}/health'
         try:
-            response = requests.get(url, timeout=1)
+            response = requests.get(url, timeout=CONFIG["TIMEOUT"])
             response.raise_for_status()
             logging.debug(f"Health check successful for {service} endpoint: {url}")
         except requests.exceptions.RequestException as e:
@@ -44,15 +56,17 @@ def transcribe_audio(audio_path, use_gpu, use_localhost):
     base_url = get_endpoint(use_gpu, use_localhost, "asr")
     url = f'{base_url}/transcribe/?language=kannada'
     files = {'file': open(audio_path, 'rb')}
-    try:
-        response = requests.post(url, files=files)
-        response.raise_for_status()
-        transcription = response.json()
-        logging.debug(f"Transcription successful: {transcription}")
-        return transcription.get('text', '')
-    except requests.exceptions.RequestException as e:
-        logging.debug(f"Transcription failed: {e}")
-        return ""
+    for attempt in range(CONFIG["RETRY_ATTEMPTS"]):
+        try:
+            response = requests.post(url, files=files, timeout=CONFIG["TIMEOUT"])
+            response.raise_for_status()
+            transcription = response.json()
+            logging.debug(f"Transcription successful: {transcription}")
+            return transcription.get('text', '')
+        except requests.exceptions.RequestException as e:
+            logging.debug(f"Transcription failed: {e}, attempt {attempt + 1}/{CONFIG['RETRY_ATTEMPTS']}")
+            time.sleep(CONFIG["RETRY_DELAY"])
+    return ""
 
 def translate_text(transcription, use_gpu, use_localhost):
     logging.debug(f"Translating text: {transcription}, use_gpu: {use_gpu}, use_localhost: {use_localhost}")
@@ -68,14 +82,16 @@ def translate_text(transcription, use_gpu, use_localhost):
         "src_lang": "kan_Knda",
         "tgt_lang": "hin_Deva"
     }
-    try:
-        response = requests.post(url, headers=headers, data=json.dumps(data))
-        response.raise_for_status()
-        logging.debug(f"Translation successful: {response.json()}")
-        return response.json()
-    except requests.exceptions.RequestException as e:
-        logging.debug(f"Translation failed: {e}")
-        return {"translations": [""]}
+    for attempt in range(CONFIG["RETRY_ATTEMPTS"]):
+        try:
+            response = requests.post(url, headers=headers, data=json.dumps(data), timeout=CONFIG["TIMEOUT"])
+            response.raise_for_status()
+            logging.debug(f"Translation successful: {response.json()}")
+            return response.json()
+        except requests.exceptions.RequestException as e:
+            logging.debug(f"Translation failed: {e}, attempt {attempt + 1}/{CONFIG['RETRY_ATTEMPTS']}")
+            time.sleep(CONFIG["RETRY_DELAY"])
+    return {"translations": [""]}
 
 def text_to_speech(translated_text, use_gpu, use_localhost):
     logging.debug(f"Converting text to speech: {translated_text}, use_gpu: {use_gpu}, use_localhost: {use_localhost}")
@@ -91,17 +107,19 @@ def text_to_speech(translated_text, use_gpu, use_localhost):
         "voice": "A female speaker delivers a slightly expressive and animated speech with a moderate speed and pitch. The recording is of very high quality, with the speakers voice sounding clear and very close up.",
         "response_type": "wav"
     }
-    try:
-        response = requests.post(url, headers=headers, data=json.dumps(data))
-        response.raise_for_status()
-        audio_path = "translated_audio.wav"
-        with open(audio_path, 'wb') as f:
-            f.write(response.content)
-        logging.debug(f"Text to speech successful, audio saved to {audio_path}")
-        return audio_path, "Yes"
-    except requests.exceptions.RequestException as e:
-        logging.debug(f"Text to speech failed: {e}")
-        return None, "No"
+    for attempt in range(CONFIG["RETRY_ATTEMPTS"]):
+        try:
+            response = requests.post(url, headers=headers, data=json.dumps(data), timeout=CONFIG["TIMEOUT"])
+            response.raise_for_status()
+            audio_path = "translated_audio.wav"
+            with open(audio_path, 'wb') as f:
+                f.write(response.content)
+            logging.debug(f"Text to speech successful, audio saved to {audio_path}")
+            return audio_path, "Yes"
+        except requests.exceptions.RequestException as e:
+            logging.debug(f"Text to speech failed: {e}, attempt {attempt + 1}/{CONFIG['RETRY_ATTEMPTS']}")
+            time.sleep(CONFIG["RETRY_DELAY"])
+    return None, "No"
 
 # Perform health check on startup and determine the initial state of the checkboxes
 use_gpu = False

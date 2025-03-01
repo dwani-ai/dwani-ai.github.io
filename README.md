@@ -27,6 +27,27 @@
   - [voice_to_voice_translation]()
   - [text_query]()
 
+  - [Answer Engine]()
+  - [Answer Engine with Translate]()
+  - [pdf translate]()
+  - [text_translate]()
+  - [voice generation]()
+  - [voice_to_text_translation]()
+  - [voice_to_voice_translation]()
+  - [text_query]()
+
+| Feature                      | Description                                                                 | Demo Link | Components          |
+|------------------------------|-----------------------------------------------------------------------------|-----------|---------------------|
+| Answer Engine                | Provides answers to queries using a large language model.                     | [Link]()  | LLM                 |
+| Answer Engine with Translate| Provides answers to queries with translation capabilities.                   | [Link]()  | LLM, Translation    |
+| PDF Translate                | Translates content from PDF documents.                                       | [Link]()  | Translation         |
+| Text Translate               | Translates text from one language to another.                                | [Link]()  | Translation         |
+| Voice Generation            | Generates speech from text.                                                  | [Link]()  | TTS                 |
+| Voice to Text Translation    | Converts spoken language to text and translates it.                          | [Link]()  | ASR, Translation    |
+| Voice to Voice Translation   | Converts spoken language to text, translates it, and then generates speech.   | [Link]()  | ASR, Translation, TTS|
+| Text Query                   | Allows querying text data for specific information.                          | [Link]()  | LLM                 |
+
+
 <!-- 
 
 - TTS - Text to Speech

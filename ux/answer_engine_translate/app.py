@@ -48,6 +48,7 @@ def get_endpoint(use_gpu, use_localhost, service_type):
     if use_localhost:
         port_mapping = {
             "asr": 10860,
+            "translate": 8860,
             "tts": 9860  # Added TTS service port
         }
         base_url = f'http://localhost:{port_mapping[service_type]}'
@@ -70,6 +71,29 @@ def transcribe_audio(audio_path, use_gpu, use_localhost):
     except requests.exceptions.RequestException as e:
         logging.error(f"Transcription failed: {e}")
         return ""
+
+def translate_text(transcription, src_lang, tgt_lang, use_gpu=False, use_localhost=False):
+    logging.info(f"Translating text: {transcription}, src_lang: {src_lang}, tgt_lang: {tgt_lang}, use_gpu: {use_gpu}, use_localhost: {use_localhost}")
+    base_url = get_endpoint(use_gpu, use_localhost, "translate")
+    device_type = "cuda" if use_gpu else "cpu"
+    url = f'{base_url}/translate?src_lang={src_lang}&tgt_lang={tgt_lang}&device_type={device_type}'
+    headers = {
+        'accept': 'application/json',
+        'Content-Type': 'application/json'
+    }
+    data = {
+        "sentences": [transcription],
+        "src_lang": src_lang,
+        "tgt_lang": tgt_lang
+    }
+    try:
+        response = requests.post(url, headers=headers, data=json.dumps(data))
+        response.raise_for_status()
+        logging.info(f"Translation successful: {response.json()}")
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Translation failed: {e}")
+        return {"translations": [""]}
 
 def get_audio(input_text, voice_description="Anu speaks with a high pitch at a normal pace in a clear, close-sounding environment. Her neutral tone is captured with excellent audio quality."):
     try:
@@ -108,7 +132,7 @@ def get_audio(input_text, voice_description="Anu speaks with a high pitch at a n
         logger.error(f"General exception: {e}")
         return f"Error: {e}"
 
-def send_to_mistral(transcription):
+def send_to_mistral(translated_text):
     api_key = os.environ["MISTRAL_API_KEY"]
     model = "mistral-saba-latest"
     client = Mistral(api_key=api_key)
@@ -117,7 +141,7 @@ def send_to_mistral(transcription):
         messages=[
             {
                 "role": "user",
-                "content": transcription,
+                "content": translated_text,
             },
         ]
     )
@@ -134,10 +158,16 @@ with gr.Blocks(title="Dhwani - Voice to Text Translation") as demo:
         value="Kannada",
         interactive=False
     )
+    translate_tgt_language = gr.Dropdown(
+        choices=list(language_mapping.keys()),
+        label="Target Language",
+        value="English"
+    )
     audio_input = gr.Microphone(type="filepath", label="Record your voice")
     audio_upload = gr.File(type="filepath", file_types=[".wav"], label="Upload WAV file")
     audio_output = gr.Audio(type="filepath", label="Playback", interactive=False)
     transcription_output = gr.Textbox(label="Transcription Result", interactive=False)
+    translation_output = gr.Textbox(label="Translated Text", interactive=False)
     mistral_output = gr.Textbox(label="Mistral API Response", interactive=False)
     tts_output = gr.Audio(label="Generated Audio", interactive=False)
     voice_description = gr.Textbox(
@@ -150,14 +180,13 @@ with gr.Blocks(title="Dhwani - Voice to Text Translation") as demo:
     use_localhost_checkbox = gr.Checkbox(label="Use Localhost", value=False, interactive=False)
     #resubmit_button = gr.Button(value="Resubmit Translation")
 
-    def on_transcription_complete(transcription, voice_description, enable_tts, use_gpu, use_localhost):
-        logging.info(f"Transcription complete: {transcription}, use_gpu: {use_gpu}, use_localhost: {use_localhost}")
-        mistral_response = send_to_mistral(transcription)
-        if enable_tts:
-            audio_file_path = get_audio(mistral_response, voice_description)
-        else:
-            audio_file_path = None
-        return mistral_response, audio_file_path
+    def on_transcription_complete(transcription, src_lang, tgt_lang, use_gpu, use_localhost):
+        src_lang_id = language_mapping[src_lang]
+        tgt_lang_id = language_mapping[tgt_lang]
+        logging.info(f"Transcription complete: {transcription}, src_lang: {src_lang_id}, tgt_lang: {tgt_lang_id}, use_gpu: {use_gpu}, use_localhost: {use_localhost}")
+        translation = translate_text(transcription, src_lang_id, tgt_lang_id, use_gpu, use_localhost)
+        translated_text = translation['translations'][0]
+        return translated_text
 
     def process_audio(audio_path, use_gpu, use_localhost):
         logging.info(f"Processing audio from {audio_path}, use_gpu: {use_gpu}, use_localhost: {use_localhost}")
@@ -168,6 +197,14 @@ with gr.Blocks(title="Dhwani - Voice to Text Translation") as demo:
         logging.info(f"Reloading endpoint info, use_gpu: {use_gpu}, use_localhost: {use_localhost}")
         # This function can be used to reload or reconfigure endpoints if needed
         return
+
+    def on_translation_complete(translated_text, voice_description, enable_tts):
+        mistral_response = send_to_mistral(translated_text)
+        if enable_tts:
+            audio_file_path = get_audio(mistral_response, voice_description)
+        else:
+            audio_file_path = None
+        return mistral_response, audio_file_path
 
     audio_input.stop_recording(
         fn=process_audio,
@@ -183,11 +220,17 @@ with gr.Blocks(title="Dhwani - Voice to Text Translation") as demo:
 
     transcription_output.change(
         fn=on_transcription_complete,
-        inputs=[transcription_output, voice_description, enable_tts_checkbox, use_gpu_checkbox, use_localhost_checkbox],
+        inputs=[transcription_output, translate_src_language, translate_tgt_language, use_gpu_checkbox, use_localhost_checkbox],
+        outputs=translation_output
+    )
+
+    translation_output.change(
+        fn=on_translation_complete,
+        inputs=[translation_output, voice_description, enable_tts_checkbox],
         outputs=[mistral_output, tts_output]
     )
 
-    translate_src_language.change(
+    translate_tgt_language.change(
         fn=reload_endpoint_info,
         inputs=[use_gpu_checkbox, use_localhost_checkbox]
     )

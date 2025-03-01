@@ -18,34 +18,18 @@
 
 
 - Demo for Testing components for Dhwani for Accuracy and evaluation
-  - [Answer Engine]()
-  - [Answer Engine with Translate]()
-  - [pdf translate]()
-  - [text_translate]()
-  - [voice generation]()
-  - [voice_to_text_translation]()
-  - [voice_to_voice_translation]()
-  - [text_query]()
 
-  - [Answer Engine]()
-  - [Answer Engine with Translate]()
-  - [pdf translate]()
-  - [text_translate]()
-  - [voice generation]()
-  - [voice_to_text_translation]()
-  - [voice_to_voice_translation]()
-  - [text_query]()
 
-| Feature                      | Description                                                                 | Demo Link | Components          |
-|------------------------------|-----------------------------------------------------------------------------|-----------|---------------------|
-| Answer Engine                | Provides answers to queries using a large language model.                     | [Link]()  | LLM                 |
-| Answer Engine with Translate| Provides answers to queries with translation capabilities.                   | [Link]()  | LLM, Translation    |
-| PDF Translate                | Translates content from PDF documents.                                       | [Link]()  | Translation         |
-| Text Translate               | Translates text from one language to another.                                | [Link]()  | Translation         |
-| Voice Generation            | Generates speech from text.                                                  | [Link]()  | TTS                 |
-| Voice to Text Translation    | Converts spoken language to text and translates it.                          | [Link]()  | ASR, Translation    |
-| Voice to Voice Translation   | Converts spoken language to text, translates it, and then generates speech.   | [Link]()  | ASR, Translation, TTS|
-| Text Query                   | Allows querying text data for specific information.                          | [Link]()  | LLM                 |
+| Feature                      | Description                                                                 | Demo Link | Components          | Source Code       |
+|------------------------------|-----------------------------------------------------------------------------|-----------|---------------------|-------------------|
+| Answer Engine                | Provides answers to queries using a large language model.                     |   | LLM                 | [Link](ux/answer_engine/app.py)          |
+| Answer Engine with Translate| Provides answers to queries with translation capabilities.                   | [Link](https://huggingface.co/spaces/gaganyatri/dhwani-voice-model)  | LLM, Translation    | [Link](ux/answer_engine_translate/app.py)          |
+| PDF Translate                | Translates content from PDF documents.                                       |  | Translation         |           |
+| Text Translate               | Translates text from one language to another.                                |   | Translation         | [Link]()          |
+| Voice Generation            | Generates speech from text.                                                  |   | TTS                 | [Link](ux/text_to_speech/app.py)          |
+| Voice to Text Translation    | Converts spoken language to text and translates it.                          | [Link](https://huggingface.co/spaces/gaganyatri/dhwani-tts)  | ASR, Translation    | [Link](ux/voice_to_text_translation/app.py)          |
+| Voice to Voice Translation   | Converts spoken language to text, translates it, and then generates speech.   | [Link](https://huggingface.co/spaces/gaganyatri/dhwani-tts)  | ASR, Translation, TTS| [Link](ux/voice_to_voice_translation/app.py)          |
+| Text Query                   | Allows querying text data for specific information.                          | [Link](https://huggingface.co/spaces/gaganyatri/dhwani_text_query)  | LLM                 | [Link](ux/text_query/app.py)          |
 
 
 <!-- 

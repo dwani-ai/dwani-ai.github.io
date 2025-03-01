@@ -8,6 +8,36 @@ import logging
 logging.basicConfig(filename='execution.log', level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(message)s')
 
+# Mapping of user-friendly language names to language IDs
+language_mapping = {
+    "Assamese": "asm_Beng",
+    "Kashmiri (Arabic)": "kas_Arab",
+    "Punjabi": "pan_Guru",
+    "Bengali": "ben_Beng",
+    "Kashmiri (Devanagari)": "kas_Deva",
+    "Sanskrit": "san_Deva",
+    "Bodo": "brx_Deva",
+    "Maithili": "mai_Deva",
+    "Santali": "sat_Olck",
+    "Dogri": "doi_Deva",
+    "Malayalam": "mal_Mlym",
+    "Sindhi (Arabic)": "snd_Arab",
+    "English": "eng_Latn",
+    "Marathi": "mar_Deva",
+    "Sindhi (Devanagari)": "snd_Deva",
+    "Konkani": "gom_Deva",
+    "Manipuri (Bengali)": "mni_Beng",
+    "Tamil": "tam_Taml",
+    "Gujarati": "guj_Gujr",
+    "Manipuri (Meitei)": "mni_Mtei",
+    "Telugu": "tel_Telu",
+    "Hindi": "hin_Deva",
+    "Nepali": "npi_Deva",
+    "Urdu": "urd_Arab",
+    "Kannada": "kan_Knda",
+    "Odia": "ory_Orya"
+}
+
 def get_endpoint(use_gpu, use_localhost, service_type):
     logging.info(f"Getting endpoint for service: {service_type}, use_gpu: {use_gpu}, use_localhost: {use_localhost}")
     device_type_ep = "" if use_gpu else "-cpu"
@@ -37,19 +67,19 @@ def transcribe_audio(audio_path, use_gpu, use_localhost):
         logging.error(f"Transcription failed: {e}")
         return ""
 
-def translate_text(transcription, use_gpu, use_localhost):
-    logging.info(f"Translating text: {transcription}, use_gpu: {use_gpu}, use_localhost: {use_localhost}")
+def translate_text(transcription, src_lang, tgt_lang, use_gpu=False, use_localhost=False):
+    logging.info(f"Translating text: {transcription}, src_lang: {src_lang}, tgt_lang: {tgt_lang}, use_gpu: {use_gpu}, use_localhost: {use_localhost}")
     base_url = get_endpoint(use_gpu, use_localhost, "translate")
     device_type = "cuda" if use_gpu else "cpu"
-    url = f'{base_url}/translate?src_lang=kan_Knda&tgt_lang=hin_Deva&device_type={device_type}'
+    url = f'{base_url}/translate?src_lang={src_lang}&tgt_lang={tgt_lang}&device_type={device_type}'
     headers = {
         'accept': 'application/json',
         'Content-Type': 'application/json'
     }
     data = {
         "sentences": [transcription],
-        "src_lang": "kan_Knda",
-        "tgt_lang": "hin_Deva"
+        "src_lang": src_lang,
+        "tgt_lang": tgt_lang
     }
     try:
         response = requests.post(url, headers=headers, data=json.dumps(data))
@@ -63,7 +93,7 @@ def translate_text(transcription, use_gpu, use_localhost):
 # Create the Gradio interface
 with gr.Blocks(title="Dhwani - Voice to Text Translation") as demo:
     gr.Markdown("# Voice to Text Translation")
-    gr.Markdown("Record your voice or upload a WAV file and Translate it your required Indian Language")
+    gr.Markdown("Record your voice or upload a WAV file and Translate it to your required Indian Language")
 
     audio_input = gr.Microphone(type="filepath", label="Record your voice")
     audio_upload = gr.File(type="filepath", file_types=[".wav"], label="Upload WAV file")
@@ -73,9 +103,22 @@ with gr.Blocks(title="Dhwani - Voice to Text Translation") as demo:
     use_gpu_checkbox = gr.Checkbox(label="Use GPU", value=False)
     use_localhost_checkbox = gr.Checkbox(label="Use Localhost", value=False)
 
-    def on_transcription_complete(transcription, use_gpu, use_localhost):
-        logging.info(f"Transcription complete: {transcription}, use_gpu: {use_gpu}, use_localhost: {use_localhost}")
-        translation = translate_text(transcription, use_gpu, use_localhost)
+    translate_src_language = gr.Dropdown(
+        choices=list(language_mapping.keys()),
+        label="Source Language",
+        value="Kannada"
+    )
+    translate_tgt_language = gr.Dropdown(
+        choices=list(language_mapping.keys()),
+        label="Target Language",
+        value="English"
+    )
+
+    def on_transcription_complete(transcription, src_lang, tgt_lang, use_gpu, use_localhost):
+        src_lang_id = language_mapping[src_lang]
+        tgt_lang_id = language_mapping[tgt_lang]
+        logging.info(f"Transcription complete: {transcription}, src_lang: {src_lang_id}, tgt_lang: {tgt_lang_id}, use_gpu: {use_gpu}, use_localhost: {use_localhost}")
+        translation = translate_text(transcription, src_lang_id, tgt_lang_id, use_gpu, use_localhost)
         translated_text = translation['translations'][0]
         return translated_text
 
@@ -98,7 +141,7 @@ with gr.Blocks(title="Dhwani - Voice to Text Translation") as demo:
 
     transcription_output.change(
         fn=on_transcription_complete,
-        inputs=[transcription_output, use_gpu_checkbox, use_localhost_checkbox],
+        inputs=[transcription_output, translate_src_language, translate_tgt_language, use_gpu_checkbox, use_localhost_checkbox],
         outputs=translation_output
     )
 

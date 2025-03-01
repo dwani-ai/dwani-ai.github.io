@@ -168,14 +168,14 @@ with gr.Blocks(title="Dhwani - Voice to Text Translation") as demo:
     audio_output = gr.Audio(type="filepath", label="Playback", interactive=False)
     transcription_output = gr.Textbox(label="Transcription Result", interactive=False)
     translation_output = gr.Textbox(label="Translated Text", interactive=False)
-    mistral_output = gr.Textbox(label="LLM Answer", interactive=False)
+    mistral_output = gr.Textbox(label="Mistral API Response", interactive=False)
     tts_output = gr.Audio(label="Generated Audio", interactive=False)
     voice_description = gr.Textbox(
         label="Voice Description",
         placeholder="A female speaker delivers a slightly expressive and animated speech with a moderate speed and pitch. The recording is of very high quality, with the speakers voice sounding clear and very close up",
         lines=2,
     )
-
+    enable_tts_checkbox = gr.Checkbox(label="Enable Text-to-Speech", value=False, interactive=False)
     use_gpu_checkbox = gr.Checkbox(label="Use GPU", value=False, interactive=False)
     use_localhost_checkbox = gr.Checkbox(label="Use Localhost", value=False, interactive=False)
     #resubmit_button = gr.Button(value="Resubmit Translation")
@@ -198,9 +198,12 @@ with gr.Blocks(title="Dhwani - Voice to Text Translation") as demo:
         # This function can be used to reload or reconfigure endpoints if needed
         return
 
-    def on_translation_complete(translated_text, voice_description):
+    def on_translation_complete(translated_text, voice_description, enable_tts):
         mistral_response = send_to_mistral(translated_text)
-        audio_file_path = get_audio(mistral_response, voice_description)
+        if enable_tts:
+            audio_file_path = get_audio(mistral_response, voice_description)
+        else:
+            audio_file_path = None
         return mistral_response, audio_file_path
 
     audio_input.stop_recording(
@@ -223,7 +226,7 @@ with gr.Blocks(title="Dhwani - Voice to Text Translation") as demo:
 
     translation_output.change(
         fn=on_translation_complete,
-        inputs=[translation_output, voice_description],
+        inputs=[translation_output, voice_description, enable_tts_checkbox],
         outputs=[mistral_output, tts_output]
     )
 

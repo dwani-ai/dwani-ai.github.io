@@ -3,19 +3,52 @@ import os
 import requests
 import json
 import logging
+from pydub import AudioSegment
+from pydub.playback import play
 
 # Set up logging
 logging.basicConfig(filename='execution.log', level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
+
+# Mapping of user-friendly language names to language IDs
+language_mapping = {
+    "Assamese": "asm_Beng",
+    "Bengali": "ben_Beng",
+    "Bodo": "brx_Deva",
+    "Dogri": "doi_Deva",
+    "English": "eng_Latn",
+    "Gujarati": "guj_Gujr",
+    "Hindi": "hin_Deva",
+    "Kannada": "kan_Knda",
+    "Kashmiri (Arabic)": "kas_Arab",
+    "Kashmiri (Devanagari)": "kas_Deva",
+    "Konkani": "gom_Deva",
+    "Malayalam": "mal_Mlym",
+    "Manipuri (Bengali)": "mni_Beng",
+    "Manipuri (Meitei)": "mni_Mtei",
+    "Maithili": "mai_Deva",
+    "Marathi": "mar_Deva",
+    "Nepali": "npi_Deva",
+    "Odia": "ory_Orya",
+    "Punjabi": "pan_Guru",
+    "Sanskrit": "san_Deva",
+    "Santali": "sat_Olck",
+    "Sindhi (Arabic)": "snd_Arab",
+    "Sindhi (Devanagari)": "snd_Deva",
+    "Tamil": "tam_Taml",
+    "Telugu": "tel_Telu",
+    "Urdu": "urd_Arab"
+}
 
 def get_endpoint(use_gpu, use_localhost, service_type):
     logging.info(f"Getting endpoint for service: {service_type}, use_gpu: {use_gpu}, use_localhost: {use_localhost}")
     device_type_ep = "" if use_gpu else "-cpu"
     if use_localhost:
         port_mapping = {
-            "asr": 8860,
-            "translate": 10860,
-            "tts": 9860
+            "asr": 10860,
+            "translate": 8860,
+            "tts": 9860  # Added TTS service port
         }
         base_url = f'http://localhost:{port_mapping[service_type]}'
     else:
@@ -38,19 +71,19 @@ def transcribe_audio(audio_path, use_gpu, use_localhost):
         logging.error(f"Transcription failed: {e}")
         return ""
 
-def translate_text(transcription, use_gpu, use_localhost):
-    logging.info(f"Translating text: {transcription}, use_gpu: {use_gpu}, use_localhost: {use_localhost}")
+def translate_text(transcription, src_lang, tgt_lang, use_gpu=False, use_localhost=False):
+    logging.info(f"Translating text: {transcription}, src_lang: {src_lang}, tgt_lang: {tgt_lang}, use_gpu: {use_gpu}, use_localhost: {use_localhost}")
     base_url = get_endpoint(use_gpu, use_localhost, "translate")
     device_type = "cuda" if use_gpu else "cpu"
-    url = f'{base_url}/translate?src_lang=kan_Knda&tgt_lang=hin_Deva&device_type={device_type}'
+    url = f'{base_url}/translate?src_lang={src_lang}&tgt_lang={tgt_lang}&device_type={device_type}'
     headers = {
         'accept': 'application/json',
         'Content-Type': 'application/json'
     }
     data = {
         "sentences": [transcription],
-        "src_lang": "kan_Knda",
-        "tgt_lang": "hin_Deva"
+        "src_lang": src_lang,
+        "tgt_lang": tgt_lang
     }
     try:
         response = requests.post(url, headers=headers, data=json.dumps(data))
@@ -61,62 +94,97 @@ def translate_text(transcription, use_gpu, use_localhost):
         logging.error(f"Translation failed: {e}")
         return {"translations": [""]}
 
-def text_to_speech(translated_text, use_gpu, use_localhost):
-    logging.info(f"Converting text to speech: {translated_text}, use_gpu: {use_gpu}, use_localhost: {use_localhost}")
-    base_url = get_endpoint(use_gpu, use_localhost, "tts")
-    url = f'{base_url}/v1/audio/speech'
-    headers = {
-        'accept': 'application/json',
-        'Content-Type': 'application/json'
-    }
-
-    data = {
-        "input": translated_text,
-        "voice": "A female speaker delivers a slightly expressive and animated speech with a moderate speed and pitch. The recording is of very high quality, with the speakers voice sounding clear and very close up.",
-        "response_type": "wav"
-    }
+def get_audio(input_text, voice_description="Anu speaks with a high pitch at a normal pace in a clear, close-sounding environment. Her neutral tone is captured with excellent audio quality."):
     try:
-        response = requests.post(url, headers=headers, data=json.dumps(data))
-        response.raise_for_status()
-        audio_path = "translated_audio.wav"
-        with open(audio_path, 'wb') as f:
-            f.write(response.content)
-        logging.info(f"Text to speech successful, audio saved to {audio_path}")
-        return audio_path, "Yes"
+        
+        # Define the API endpoint and headers
+        url = "https://gaganyatri-tts-indic-server.hf.space/v1/audio/speech"  # Note: Added http://
+        headers = {
+            "accept": "application/json",
+            "Content-Type": "application/json"
+        }
+        # Define the request payload
+        payload = {
+            "input": input_text,
+            "voice": voice_description
+        }
+        # Send the POST request
+        response = requests.post(url, json=payload, headers=headers, stream=True)
+        # Check if the request was successful
+        if response.status_code == 200:
+            logger.info(f"API request successful. Status code: {response.status_code}")
+            # Save the audio file
+            audio_file_path = "output_audio.mp3"
+            with open(audio_file_path, "wb") as audio_file:
+                for chunk in response.iter_content(chunk_size=1024):
+                    if chunk:
+                        audio_file.write(chunk)
+            logger.info(f"Audio file saved to: {audio_file_path}")
+            # Return the path to the saved audio file
+            return audio_file_path
+        else:
+            logger.error(f"API request failed. Status code: {response.status_code}, {response.text}")
+            return f"Error: {response.status_code}, {response.text}"
     except requests.exceptions.RequestException as e:
-        logging.error(f"Text to speech failed: {e}")
-        return None, "No"
+        logger.error(f"Request exception: {e}")
+        return f"Request error: {e}"
+    except Exception as e:
+        logger.error(f"General exception: {e}")
+        return f"Error: {e}"
 
 # Create the Gradio interface
-with gr.Blocks(title="Voice Recorder and Player") as demo:
-    gr.Markdown("# Voice Recorder and Player")
-    gr.Markdown("Record your voice or upload a WAV file and play it back!")
+with gr.Blocks(title="Dhwani - Voice to Text Translation") as demo:
+    gr.Markdown("# Voice to Text Translation")
+    gr.Markdown("Record your voice or upload a WAV file and Translate it to your required Indian Language")
 
+    translate_src_language = gr.Dropdown(
+        choices=list(language_mapping.keys()),
+        label="Source Language - Fixed",
+        value="Kannada",
+        interactive=False
+    )
+    translate_tgt_language = gr.Dropdown(
+        choices=list(language_mapping.keys()),
+        label="Target Language",
+        value="English"
+    )
     audio_input = gr.Microphone(type="filepath", label="Record your voice")
     audio_upload = gr.File(type="filepath", file_types=[".wav"], label="Upload WAV file")
     audio_output = gr.Audio(type="filepath", label="Playback", interactive=False)
     transcription_output = gr.Textbox(label="Transcription Result", interactive=False)
     translation_output = gr.Textbox(label="Translated Text", interactive=False)
-    tts_audio_output = gr.Audio(type="filepath", label="TTS Playback", interactive=False)
-    tts_success_output = gr.Textbox(label="TTS Success", interactive=False)
-    use_gpu_checkbox = gr.Checkbox(label="Use GPU", value=False)
-    use_localhost_checkbox = gr.Checkbox(label="Use Localhost", value=False)
+    tts_output = gr.Audio(label="Generated Audio", interactive=False)
+    voice_description = gr.Textbox(
+        label="Voice Description",
+        placeholder="A female speaker delivers a slightly expressive and animated speech with a moderate speed and pitch. The recording is of very high quality, with the speakers voice sounding clear and very close up",
+        lines=2,
+    )
 
-    def on_transcription_complete(transcription, use_gpu, use_localhost):
-        logging.info(f"Transcription complete: {transcription}, use_gpu: {use_gpu}, use_localhost: {use_localhost}")
-        translation = translate_text(transcription, use_gpu, use_localhost)
+    use_gpu_checkbox = gr.Checkbox(label="Use GPU", value=True, interactive=False)
+    use_localhost_checkbox = gr.Checkbox(label="Use Localhost", value=False, interactive=False)
+    #resubmit_button = gr.Button(value="Resubmit Translation")
+
+    def on_transcription_complete(transcription, src_lang, tgt_lang, use_gpu, use_localhost):
+        src_lang_id = language_mapping[src_lang]
+        tgt_lang_id = language_mapping[tgt_lang]
+        logging.info(f"Transcription complete: {transcription}, src_lang: {src_lang_id}, tgt_lang: {tgt_lang_id}, use_gpu: {use_gpu}, use_localhost: {use_localhost}")
+        translation = translate_text(transcription, src_lang_id, tgt_lang_id, use_gpu, use_localhost)
         translated_text = translation['translations'][0]
         return translated_text
-
-    def on_translation_complete(translated_text, use_gpu, use_localhost):
-        logging.info(f"Translation complete: {translated_text}, use_gpu: {use_gpu}, use_localhost: {use_localhost}")
-        tts_audio_path, success = text_to_speech(translated_text, use_gpu, use_localhost)
-        return tts_audio_path, success
 
     def process_audio(audio_path, use_gpu, use_localhost):
         logging.info(f"Processing audio from {audio_path}, use_gpu: {use_gpu}, use_localhost: {use_localhost}")
         transcription = transcribe_audio(audio_path, use_gpu, use_localhost)
         return transcription
+
+    def reload_endpoint_info(use_gpu, use_localhost):
+        logging.info(f"Reloading endpoint info, use_gpu: {use_gpu}, use_localhost: {use_localhost}")
+        # This function can be used to reload or reconfigure endpoints if needed
+        return
+
+    def on_translation_complete(translated_text, voice_description):
+        audio_file_path = get_audio(translated_text, voice_description)
+        return audio_file_path
 
     audio_input.stop_recording(
         fn=process_audio,
@@ -132,15 +200,27 @@ with gr.Blocks(title="Voice Recorder and Player") as demo:
 
     transcription_output.change(
         fn=on_transcription_complete,
-        inputs=[transcription_output, use_gpu_checkbox, use_localhost_checkbox],
+        inputs=[transcription_output, translate_src_language, translate_tgt_language, use_gpu_checkbox, use_localhost_checkbox],
         outputs=translation_output
     )
 
     translation_output.change(
         fn=on_translation_complete,
-        inputs=[translation_output, use_gpu_checkbox, use_localhost_checkbox],
-        outputs=[tts_audio_output, tts_success_output]
+        inputs=[translation_output, voice_description],
+        outputs=tts_output
     )
 
+    translate_tgt_language.change(
+        fn=reload_endpoint_info,
+        inputs=[use_gpu_checkbox, use_localhost_checkbox]
+    )
+
+'''
+    resubmit_button.click(
+        fn=on_transcription_complete,
+        inputs=[transcription_output, translate_src_language, translate_tgt_language, use_gpu_checkbox, use_localhost_checkbox],
+        outputs=translation_output
+    )
+'''
 # Launch the interface
 demo.launch()

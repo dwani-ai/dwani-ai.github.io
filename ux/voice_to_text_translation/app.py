@@ -115,7 +115,7 @@ with gr.Blocks(title="Dhwani - Voice to Text Translation") as demo:
     translation_output = gr.Textbox(label="Translated Text", interactive=False)
 
 
-    use_gpu_checkbox = gr.Checkbox(label="Use GPU", value=False, interactive=False)
+    use_gpu_checkbox = gr.Checkbox(label="Use GPU", value=True, interactive=False)
     use_localhost_checkbox = gr.Checkbox(label="Use Localhost", value=False, interactive=False)
     #resubmit_button = gr.Button(value="Resubmit Translation")
 

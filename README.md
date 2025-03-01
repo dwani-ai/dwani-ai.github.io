@@ -16,6 +16,17 @@
 |-----------------------------------------------|---------------------------------------------|
 | ![Answer Engine](docs/workflow/kannada-answer-engine.drawio.png "Engine") | ![Voice Translation](docs/workflow/voice-translation.drawio.png "Voice Translation") |
 
+
+- Demo for Testing components for Dhwani for Accuracy and evaluation
+  - [Answer Engine]()
+  - [Answer Engine with Translate]()
+  - [pdf translate]()
+  - [text_translate]()
+  - [voice generation]()
+  - [voice_to_text_translation]()
+  - [voice_to_voice_translation]()
+  - [text_query]()
+
 <!-- 
 
 - TTS - Text to Speech

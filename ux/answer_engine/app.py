@@ -134,7 +134,7 @@ def get_audio(input_text, voice_description="Anu speaks with a high pitch at a n
 
 def send_to_mistral(translated_text):
     api_key = os.environ["MISTRAL_API_KEY"]
-    model = "mistral-large-latest"
+    model = "mistral-saba"
     client = Mistral(api_key=api_key)
     chat_response = client.chat.complete(
         model=model,

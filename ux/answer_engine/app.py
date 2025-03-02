@@ -112,9 +112,16 @@ def send_to_mistral(transcription):
     api_key = os.environ["MISTRAL_API_KEY"]
     model = "mistral-large-latest"
     client = Mistral(api_key=api_key)
+
+    system_prompt = "You are a helpful assistant. Provide a concise respone in one line to the user's query."
+
     chat_response = client.chat.complete(
         model=model,
         messages=[
+            {
+                "role": "system",
+                "content": system_prompt,
+            },
             {
                 "role": "user",
                 "content": transcription,
@@ -126,10 +133,12 @@ def send_to_mistral(transcription):
 # Create the Gradio interface
 with gr.Blocks(title="Dhwani - Voice AI for Kannada") as demo:
     gr.Markdown("# Voice AI for Kannada")
-    gr.Markdown("Record your voice or upload a WAV file and get your answer in Kannada")
+    gr.Markdown("Record your voice and get your answer in Kannada")
+    gr.Markdown("Click on Recording button, to ask your question")
+    gr.Markdown("Click on stop recording button, to submit your question")
+    
 
     audio_input = gr.Microphone(type="filepath", label="Record your voice")
-    audio_upload = gr.File(type="filepath", file_types=[".wav"], label="Upload WAV file")
     audio_output = gr.Audio(type="filepath", label="Playback", interactive=False)
     transcription_output = gr.Textbox(label="Transcription Result", interactive=False)
     mistral_output = gr.Textbox(label="LLM answer", interactive=False)
@@ -138,10 +147,11 @@ with gr.Blocks(title="Dhwani - Voice AI for Kannada") as demo:
         label="Voice Description",
         placeholder="A female speaker delivers a slightly expressive and animated speech with a moderate speed and pitch. The recording is of very high quality, with the speakers voice sounding clear and very close up",
         lines=2,
+        visible=False
     )
-    enable_tts_checkbox = gr.Checkbox(label="Enable Text-to-Speech", value=True, interactive=False)
-    use_gpu_checkbox = gr.Checkbox(label="Use GPU", value=True, interactive=True)
-    use_localhost_checkbox = gr.Checkbox(label="Use Localhost", value=False, interactive=False)
+    enable_tts_checkbox = gr.Checkbox(label="Enable Text-to-Speech", value=True, interactive=False, visible=False)
+    use_gpu_checkbox = gr.Checkbox(label="Use GPU", value=True, interactive=True, visible=False)
+    use_localhost_checkbox = gr.Checkbox(label="Use Localhost", value=False, interactive=False, visible=False)
 
     def process_audio(audio_path, use_gpu, use_localhost):
         logging.info(f"Processing audio from {audio_path}, use_gpu: {use_gpu}, use_localhost: {use_localhost}")
@@ -159,12 +169,6 @@ with gr.Blocks(title="Dhwani - Voice AI for Kannada") as demo:
     audio_input.stop_recording(
         fn=process_audio,
         inputs=[audio_input, use_gpu_checkbox, use_localhost_checkbox],
-        outputs=transcription_output
-    )
-
-    audio_upload.upload(
-        fn=process_audio,
-        inputs=[audio_upload, use_gpu_checkbox, use_localhost_checkbox],
         outputs=transcription_output
     )
 

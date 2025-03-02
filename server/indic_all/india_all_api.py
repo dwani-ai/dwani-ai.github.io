@@ -211,7 +211,6 @@ class ModelManager:
 ip = IndicProcessor(inference=True)
 
 # Initialize FastAPI app
-app = FastAPI()
 
 # Initialize ASR and Translation Model Managers
 #asr_manager = ASRModelManager()
@@ -235,9 +234,6 @@ class TranslationResponse(BaseModel):
 def get_translate_manager(src_lang: str, tgt_lang: str) -> TranslateManager:
     return model_manager.get_model(src_lang, tgt_lang)
 
-@app.get("/")
-async def home():
-    return RedirectResponse(url="/docs")
 '''
 @app.post("/transcribe/", response_model=TranscriptionResponse)
 async def transcribe_audio(file: UploadFile = File(...), language: str = Query(..., enum=list(asr_manager.model_language.keys()))):
@@ -386,46 +382,6 @@ async def transcribe_audio_batch(files: List[UploadFile] = File(...), language: 
 
     return JSONResponse(content={"transcriptions": transcriptions})
 '''
-@app.post("/translate", response_model=TranslationResponse)
-async def translate(request: TranslationRequest, translate_manager: TranslateManager = Depends(get_translate_manager)):
-    input_sentences = request.sentences
-    src_lang = request.src_lang
-    tgt_lang = request.tgt_lang
-    if not input_sentences:
-        raise HTTPException(status_code=400, detail="Input sentences are required")
-    batch = ip.preprocess_batch(
-        input_sentences,
-        src_lang=src_lang,
-        tgt_lang=tgt_lang,
-    )
-    # Tokenize the sentences and generate input encodings
-    inputs = translate_manager.tokenizer(
-        batch,
-        truncation=True,
-        padding="longest",
-        return_tensors="pt",
-        return_attention_mask=True,
-    ).to(translate_manager.device_type)
-    # Generate translations using the model
-    with torch.no_grad():
-        generated_tokens = translate_manager.model.generate(
-            **inputs,
-            use_cache=True,
-            min_length=0,
-            max_length=256,
-            num_beams=5,
-            num_return_sequences=1,
-        )
-    # Decode the generated tokens into text
-    with translate_manager.tokenizer.as_target_tokenizer():
-        generated_tokens = translate_manager.tokenizer.batch_decode(
-            generated_tokens.detach().cpu().tolist(),
-            skip_special_tokens=True,
-            clean_up_tokenization_spaces=True,
-        )
-    # Postprocess the translations, including entity replacement
-    translations = ip.postprocess_batch(generated_tokens, lang=tgt_lang)
-    return TranslationResponse(translations=translations)
 
 # TTS Integration
 if torch.cuda.is_available():
@@ -466,7 +422,7 @@ class TTSModelManager:
         tokenizer = AutoTokenizer.from_pretrained(model_name)
         description_tokenizer = AutoTokenizer.from_pretrained(model.config.text_encoder._name_or_path)
         logger.info(
-            f"Loaded {model_name} and tokenizer in {time.perf_counter() - start:.2f} seconds"
+            f"Loaded {model_name} and tokenizer in {perf_counter() - start:.2f} seconds"
         )
         return model, tokenizer, description_tokenizer
 
@@ -520,7 +476,7 @@ async def generate_audio(
         logger.warning(
             "Specifying speed isn't supported by this model. Audio will be generated with the default speed"
         )
-    start = time.perf_counter()
+    start = perf_counter()
     # Tokenize the voice description
     input_ids = description_tokenizer(voice, return_tensors="pt").input_ids.to(device)
     # Tokenize the input text
@@ -533,7 +489,7 @@ async def generate_audio(
     # Ensure device is a string
     device_str = str(device)
     logger.info(
-        f"Took {time.perf_counter() - start:.2f} seconds to generate audio for {len(input.split())} words using {device_str.upper()}"
+        f"Took {perf_counter() - start:.2f} seconds to generate audio for {len(input.split())} words using {device_str.upper()}"
     )
     # Create an in-memory file
     audio_buffer = io.BytesIO()
@@ -554,7 +510,7 @@ async def generate_audio_batch(
         logger.warning(
             "Specifying speed isn't supported by this model. Audio will be generated with the default speed"
         )
-    start = time.perf_counter()
+    start = perf_counter()
     length_of_input_text = len(input)
     # Set chunk size for text processing
     chunk_size = 15 # Adjust this value based on your needs
@@ -600,9 +556,56 @@ async def generate_audio_batch(
     # Create in-memory zip file
     in_memory_zip = create_in_memory_zip(file_data)
     logger.info(
-        f"Took {time.perf_counter() - start:.2f} seconds to generate audio"
+        f"Took {perf_counter() - start:.2f} seconds to generate audio"
     )
     return StreamingResponse(in_memory_zip, media_type="application/zip")
+
+
+@app.post("/translate", response_model=TranslationResponse)
+async def translate(request: TranslationRequest, translate_manager: TranslateManager = Depends(get_translate_manager)):
+    input_sentences = request.sentences
+    src_lang = request.src_lang
+    tgt_lang = request.tgt_lang
+    if not input_sentences:
+        raise HTTPException(status_code=400, detail="Input sentences are required")
+    batch = ip.preprocess_batch(
+        input_sentences,
+        src_lang=src_lang,
+        tgt_lang=tgt_lang,
+    )
+    # Tokenize the sentences and generate input encodings
+    inputs = translate_manager.tokenizer(
+        batch,
+        truncation=True,
+        padding="longest",
+        return_tensors="pt",
+        return_attention_mask=True,
+    ).to(translate_manager.device_type)
+    # Generate translations using the model
+    with torch.no_grad():
+        generated_tokens = translate_manager.model.generate(
+            **inputs,
+            use_cache=True,
+            min_length=0,
+            max_length=256,
+            num_beams=5,
+            num_return_sequences=1,
+        )
+    # Decode the generated tokens into text
+    with translate_manager.tokenizer.as_target_tokenizer():
+        generated_tokens = translate_manager.tokenizer.batch_decode(
+            generated_tokens.detach().cpu().tolist(),
+            skip_special_tokens=True,
+            clean_up_tokenization_spaces=True,
+        )
+    # Postprocess the translations, including entity replacement
+    translations = ip.postprocess_batch(generated_tokens, lang=tgt_lang)
+    return TranslationResponse(translations=translations)
+
+
+@app.get("/")
+async def home():
+    return RedirectResponse(url="/docs")
 
 # Function to parse command-line arguments
 def parse_args():

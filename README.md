@@ -24,12 +24,13 @@ The project utilizes the following open-source tools:
 | Automatic Speech Recognition : ASR   | [ASR Indic Server](https://github.com/slabstech/asr-indic-server) | [HF Demo](https://huggingface.co/spaces/gaganyatri/asr_indic_server_cpu) |  [Ondemand - HF Demo](https://huggingface.co/spaces/gaganyatri/asr_indic_server)  |
 | Text to Speech : TTS                  | [TTS Indic Server](https://github.com/slabstech/tts-indic-server)  | Not suitable           | [Ondemand - HF Demo](https://huggingface.co/spaces/gaganyatri/asr_indic_server) |
 | Translation                           | [Indic Translate Server](https://github.com/slabstech/indic-translate-server) | [HF Demo](https://huggingface.co/spaces/gaganyatri/translate_indic_server_cpu)          | [Ondemand - HF Demo](https://huggingface.co/spaces/gaganyatri/translate_indic_server)            |
+|All in One Server - ASR + TTS + Translate | [indic-all-server](server/indic_all/) | Not Suitable | [API](https://gaganyatri-indic-all-server.hf.space/docs) |
 
 ## Target Solution
 
-| Answer Engine                                  | Voice Translation                          |
-|-----------------------------------------------|---------------------------------------------|
-| ![Answer Engine](docs/workflow/kannada-answer-engine.drawio.png "Engine") | ![Voice Translation](docs/workflow/voice-translation.drawio.png "Voice Translation") |
+| Answer Engine| Answer Engine with Translation                                 | Voice Translation                          |
+|----------|-----------------------------------------------|---------------------------------------------|
+| ![Answer Engine](docs/workflow/kannada-answer-engine.drawio.png "Engine") | ![Answer Engine](docs/workflow/kannada-answer-engine.drawio.png "Engine") | ![Voice Translation](docs/workflow/voice-translation.drawio.png "Voice Translation") |
 
 ## Demo for Testing Components
 

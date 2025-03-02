@@ -148,9 +148,9 @@ def send_to_mistral(translated_text):
     return chat_response.choices[0].message.content
 
 # Create the Gradio interface
-with gr.Blocks(title="Dhwani - Voice to Text Translation") as demo:
-    gr.Markdown("# Voice to Text Translation")
-    gr.Markdown("Record your voice or upload a WAV file and Translate it to your required Indian Language")
+with gr.Blocks(title="Dhwani - Voice AI - Kannada to Any") as demo:
+    gr.Markdown("# Voice AI for Kannada - To any lanugage")
+    gr.Markdown("Record your voice or upload a WAV file and get answers in your required Indian Language")
 
     translate_src_language = gr.Dropdown(
         choices=list(language_mapping.keys()),
@@ -168,15 +168,15 @@ with gr.Blocks(title="Dhwani - Voice to Text Translation") as demo:
     audio_output = gr.Audio(type="filepath", label="Playback", interactive=False)
     transcription_output = gr.Textbox(label="Transcription Result", interactive=False)
     translation_output = gr.Textbox(label="Translated Text", interactive=False)
-    mistral_output = gr.Textbox(label="Mistral API Response", interactive=False)
+    mistral_output = gr.Textbox(label="LLM Answer", interactive=False)
     tts_output = gr.Audio(label="Generated Audio", interactive=False)
     voice_description = gr.Textbox(
         label="Voice Description",
         placeholder="A female speaker delivers a slightly expressive and animated speech with a moderate speed and pitch. The recording is of very high quality, with the speakers voice sounding clear and very close up",
         lines=2,
     )
-    enable_tts_checkbox = gr.Checkbox(label="Enable Text-to-Speech", value=False, interactive=False)
-    use_gpu_checkbox = gr.Checkbox(label="Use GPU", value=False, interactive=False)
+    enable_tts_checkbox = gr.Checkbox(label="Enable Text-to-Speech", value=True, interactive=False)
+    use_gpu_checkbox = gr.Checkbox(label="Use GPU", value=True, interactive=False)
     use_localhost_checkbox = gr.Checkbox(label="Use Localhost", value=False, interactive=False)
     #resubmit_button = gr.Button(value="Resubmit Translation")
 

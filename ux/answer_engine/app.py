@@ -110,7 +110,7 @@ def get_audio(input_text, voice_description="Anu speaks with a high pitch at a n
 
 def send_to_mistral(transcription):
     api_key = os.environ["MISTRAL_API_KEY"]
-    model = "mistral-saba-latest"
+    model = "mistral-large-latest"
     client = Mistral(api_key=api_key)
     chat_response = client.chat.complete(
         model=model,
@@ -124,16 +124,10 @@ def send_to_mistral(transcription):
     return chat_response.choices[0].message.content
 
 # Create the Gradio interface
-with gr.Blocks(title="Dhwani - Voice to Text Translation") as demo:
-    gr.Markdown("# Voice to Text Translation")
-    gr.Markdown("Record your voice or upload a WAV file and Translate it to your required Indian Language")
+with gr.Blocks(title="Dhwani - Voice AI for Kannada") as demo:
+    gr.Markdown("# Voice AI for Kannada")
+    gr.Markdown("Record your voice or upload a WAV file and get your answer in Kannada")
 
-    translate_src_language = gr.Dropdown(
-        choices=list(language_mapping.keys()),
-        label="Source Language - Fixed",
-        value="Kannada",
-        interactive=False
-    )
     audio_input = gr.Microphone(type="filepath", label="Record your voice")
     audio_upload = gr.File(type="filepath", file_types=[".wav"], label="Upload WAV file")
     audio_output = gr.Audio(type="filepath", label="Playback", interactive=False)
@@ -145,29 +139,22 @@ with gr.Blocks(title="Dhwani - Voice to Text Translation") as demo:
         placeholder="A female speaker delivers a slightly expressive and animated speech with a moderate speed and pitch. The recording is of very high quality, with the speakers voice sounding clear and very close up",
         lines=2,
     )
-    enable_tts_checkbox = gr.Checkbox(label="Enable Text-to-Speech", value=False, interactive=False)
-    use_gpu_checkbox = gr.Checkbox(label="Use GPU", value=False, interactive=False)
+    enable_tts_checkbox = gr.Checkbox(label="Enable Text-to-Speech", value=True, interactive=False)
+    use_gpu_checkbox = gr.Checkbox(label="Use GPU", value=True, interactive=True)
     use_localhost_checkbox = gr.Checkbox(label="Use Localhost", value=False, interactive=False)
-    #resubmit_button = gr.Button(value="Resubmit Translation")
-
-    def on_transcription_complete(transcription, voice_description, enable_tts, use_gpu, use_localhost):
-        logging.info(f"Transcription complete: {transcription}, use_gpu: {use_gpu}, use_localhost: {use_localhost}")
-        mistral_response = send_to_mistral(transcription)
-        if enable_tts:
-            audio_file_path = get_audio(mistral_response, voice_description)
-        else:
-            audio_file_path = None
-        return mistral_response, audio_file_path
 
     def process_audio(audio_path, use_gpu, use_localhost):
         logging.info(f"Processing audio from {audio_path}, use_gpu: {use_gpu}, use_localhost: {use_localhost}")
         transcription = transcribe_audio(audio_path, use_gpu, use_localhost)
         return transcription
 
-    def reload_endpoint_info(use_gpu, use_localhost):
-        logging.info(f"Reloading endpoint info, use_gpu: {use_gpu}, use_localhost: {use_localhost}")
-        # This function can be used to reload or reconfigure endpoints if needed
-        return
+    def on_transcription_complete(transcription, voice_description, enable_tts):
+        mistral_response = send_to_mistral(transcription)
+        if enable_tts:
+            audio_file_path = get_audio(mistral_response, voice_description)
+        else:
+            audio_file_path = None
+        return mistral_response, audio_file_path
 
     audio_input.stop_recording(
         fn=process_audio,
@@ -183,21 +170,9 @@ with gr.Blocks(title="Dhwani - Voice to Text Translation") as demo:
 
     transcription_output.change(
         fn=on_transcription_complete,
-        inputs=[transcription_output, voice_description, enable_tts_checkbox, use_gpu_checkbox, use_localhost_checkbox],
+        inputs=[transcription_output, voice_description, enable_tts_checkbox],
         outputs=[mistral_output, tts_output]
     )
 
-    translate_src_language.change(
-        fn=reload_endpoint_info,
-        inputs=[use_gpu_checkbox, use_localhost_checkbox]
-    )
-
-'''
-    resubmit_button.click(
-        fn=on_transcription_complete,
-        inputs=[transcription_output, translate_src_language, translate_tgt_language, use_gpu_checkbox, use_localhost_checkbox],
-        outputs=translation_output
-    )
-'''
 # Launch the interface
 demo.launch()

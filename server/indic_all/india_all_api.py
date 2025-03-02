@@ -458,7 +458,7 @@ class TTSModelManager:
         self, model_name: str
     ) -> tuple[ParlerTTSForConditionalGeneration, AutoTokenizer]:
         logger.debug(f"Loading {model_name}...")
-        start = time.perf_counter()
+        start = perf_counter()
         model = ParlerTTSForConditionalGeneration.from_pretrained(model_name).to(
             device,
             dtype=torch_dtype,

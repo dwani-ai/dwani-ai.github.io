@@ -132,7 +132,7 @@ with gr.Blocks(title="Dhwani - Voice AI for Kannada") as demo:
     audio_upload = gr.File(type="filepath", file_types=[".wav"], label="Upload WAV file")
     audio_output = gr.Audio(type="filepath", label="Playback", interactive=False)
     transcription_output = gr.Textbox(label="Transcription Result", interactive=False)
-    mistral_output = gr.Textbox(label="Mistral API Response", interactive=False)
+    mistral_output = gr.Textbox(label="LLM answer", interactive=False)
     tts_output = gr.Audio(label="Generated Audio", interactive=False)
     voice_description = gr.Textbox(
         label="Voice Description",

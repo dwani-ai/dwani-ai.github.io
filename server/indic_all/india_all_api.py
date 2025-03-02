@@ -1,5 +1,5 @@
 import torch
-#import nemo.collections.asr as nemo_asr
+import nemo.collections.asr as nemo_asr
 from fastapi import FastAPI, File, UploadFile, HTTPException, Query, Depends, Body, HTTPException, Response
 
 from fastapi.responses import RedirectResponse, JSONResponse, StreamingResponse
@@ -213,7 +213,7 @@ ip = IndicProcessor(inference=True)
 # Initialize FastAPI app
 
 # Initialize ASR and Translation Model Managers
-#asr_manager = ASRModelManager()
+asr_manager = ASRModelManager()
 model_manager = ModelManager()
 
 # Define the response models
@@ -234,154 +234,6 @@ class TranslationResponse(BaseModel):
 def get_translate_manager(src_lang: str, tgt_lang: str) -> TranslateManager:
     return model_manager.get_model(src_lang, tgt_lang)
 
-'''
-@app.post("/transcribe/", response_model=TranscriptionResponse)
-async def transcribe_audio(file: UploadFile = File(...), language: str = Query(..., enum=list(asr_manager.model_language.keys()))):
-    start_time = time()
-    try:
-        # Check file extension
-        file_extension = file.filename.split(".")[-1].lower()
-        if file_extension not in ["wav", "mp3"]:
-            logging.warning(f"Unsupported file format: {file_extension}")
-            raise HTTPException(status_code=400, detail="Unsupported file format. Please upload a WAV or MP3 file.")
-
-        # Read the file content
-        file_content = await file.read()
-
-        # Convert MP3 to WAV if necessary
-        if file_extension == "mp3":
-            audio = AudioSegment.from_mp3(io.BytesIO(file_content))
-        else:
-            audio = AudioSegment.from_wav(io.BytesIO(file_content))
-
-        # Check the sample rate of the WAV file
-        sample_rate = audio.frame_rate
-
-        # Convert WAV to the required format using ffmpeg if necessary
-        if sample_rate != 16000:
-            audio = audio.set_frame_rate(16000).set_channels(1)
-
-        # Export the audio to a temporary WAV file
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp_file:
-            audio.export(tmp_file.name, format="wav")
-            tmp_file_path = tmp_file.name
-
-        # Split the audio if necessary
-        chunk_file_paths = asr_manager.split_audio(tmp_file_path)
-
-        try:
-            # Transcribe the audio
-            language_id = asr_manager.model_language.get(language, asr_manager.default_language)
-
-            if language_id != asr_manager.default_language:
-                asr_manager.model = asr_manager.load_model(language_id)
-                asr_manager.default_language = language_id
-
-            asr_manager.model.cur_decoder = "rnnt"
-
-            rnnt_texts = asr_manager.model.transcribe(chunk_file_paths, batch_size=1, language_id=language_id)
-
-            # Flatten the list of transcriptions
-            rnnt_text = " ".join([text for sublist in rnnt_texts for text in sublist])
-
-            end_time = time()
-            logging.info(f"Transcription completed in {end_time - start_time:.2f} seconds")
-            return JSONResponse(content={"text": rnnt_text})
-        except subprocess.CalledProcessError as e:
-            logging.error(f"FFmpeg conversion failed: {str(e)}")
-            raise HTTPException(status_code=500, detail=f"FFmpeg conversion failed: {str(e)}")
-        except Exception as e:
-            logging.error(f"An error occurred during processing: {str(e)}")
-            raise HTTPException(status_code=500, detail=f"An error occurred during processing: {str(e)}")
-        finally:
-            # Clean up temporary files
-            for chunk_file_path in chunk_file_paths:
-                if os.path.exists(chunk_file_path):
-                    os.remove(chunk_file_path)
-    except HTTPException as e:
-        logging.error(f"HTTPException: {str(e)}")
-        raise e
-    except Exception as e:
-        logging.error(f"An unexpected error occurred: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"An unexpected error occurred: {str(e)}")
-
-@app.post("/transcribe_batch/", response_model=BatchTranscriptionResponse)
-async def transcribe_audio_batch(files: List[UploadFile] = File(...), language: str = Query(..., enum=list(asr_manager.model_language.keys()))):
-    start_time = time()
-    tmp_file_paths = []
-    transcriptions = []
-    try:
-        for file in files:
-            # Check file extension
-            file_extension = file.filename.split(".")[-1].lower()
-            if file_extension not in ["wav", "mp3"]:
-                logging.warning(f"Unsupported file format: {file_extension}")
-                raise HTTPException(status_code=400, detail="Unsupported file format. Please upload WAV or MP3 files.")
-
-            # Read the file content
-            file_content = await file.read()
-
-            # Convert MP3 to WAV if necessary
-            if file_extension == "mp3":
-                audio = AudioSegment.from_mp3(io.BytesIO(file_content))
-            else:
-                audio = AudioSegment.from_wav(io.BytesIO(file_content))
-
-            # Check the sample rate of the WAV file
-            sample_rate = audio.frame_rate
-
-            # Convert WAV to the required format using ffmpeg if necessary
-            if sample_rate != 16000:
-                audio = audio.set_frame_rate(16000).set_channels(1)
-
-            # Export the audio to a temporary WAV file
-            with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp_file:
-                audio.export(tmp_file.name, format="wav")
-                tmp_file_path = tmp_file.name
-
-            # Split the audio if necessary
-            chunk_file_paths = asr_manager.split_audio(tmp_file_path)
-            tmp_file_paths.extend(chunk_file_paths)
-
-        logging.info(f"Temporary file paths: {tmp_file_paths}")
-        try:
-            # Transcribe the audio files in batch
-            language_id = asr_manager.model_language.get(language, asr_manager.default_language)
-
-            if language_id != asr_manager.default_language:
-                asr_manager.model = asr_manager.load_model(language_id)
-                asr_manager.default_language = language_id
-
-            asr_manager.model.cur_decoder = "rnnt"
-
-            rnnt_texts = asr_manager.model.transcribe(tmp_file_paths, batch_size=len(files), language_id=language_id)
-
-            logging.info(f"Raw transcriptions from model: {rnnt_texts}")
-            end_time = time()
-            logging.info(f"Transcription completed in {end_time - start_time:.2f} seconds")
-
-            # Flatten the list of transcriptions
-            transcriptions = [text for sublist in rnnt_texts for text in sublist]
-        except subprocess.CalledProcessError as e:
-            logging.error(f"FFmpeg conversion failed: {str(e)}")
-            raise HTTPException(status_code=500, detail=f"FFmpeg conversion failed: {str(e)}")
-        except Exception as e:
-            logging.error(f"An error occurred during processing: {str(e)}")
-            raise HTTPException(status_code=500, detail=f"An error occurred during processing: {str(e)}")
-        finally:
-            # Clean up temporary files
-            for tmp_file_path in tmp_file_paths:
-                if os.path.exists(tmp_file_path):
-                    os.remove(tmp_file_path)
-    except HTTPException as e:
-        logging.error(f"HTTPException: {str(e)}")
-        raise e
-    except Exception as e:
-        logging.error(f"An unexpected error occurred: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"An unexpected error occurred: {str(e)}")
-
-    return JSONResponse(content={"transcriptions": transcriptions})
-'''
 
 # TTS Integration
 if torch.cuda.is_available():
@@ -601,6 +453,153 @@ async def translate(request: TranslationRequest, translate_manager: TranslateMan
     # Postprocess the translations, including entity replacement
     translations = ip.postprocess_batch(generated_tokens, lang=tgt_lang)
     return TranslationResponse(translations=translations)
+
+@app.post("/transcribe/", response_model=TranscriptionResponse)
+async def transcribe_audio(file: UploadFile = File(...), language: str = Query(..., enum=list(asr_manager.model_language.keys()))):
+    start_time = time()
+    try:
+        # Check file extension
+        file_extension = file.filename.split(".")[-1].lower()
+        if file_extension not in ["wav", "mp3"]:
+            logging.warning(f"Unsupported file format: {file_extension}")
+            raise HTTPException(status_code=400, detail="Unsupported file format. Please upload a WAV or MP3 file.")
+
+        # Read the file content
+        file_content = await file.read()
+
+        # Convert MP3 to WAV if necessary
+        if file_extension == "mp3":
+            audio = AudioSegment.from_mp3(io.BytesIO(file_content))
+        else:
+            audio = AudioSegment.from_wav(io.BytesIO(file_content))
+
+        # Check the sample rate of the WAV file
+        sample_rate = audio.frame_rate
+
+        # Convert WAV to the required format using ffmpeg if necessary
+        if sample_rate != 16000:
+            audio = audio.set_frame_rate(16000).set_channels(1)
+
+        # Export the audio to a temporary WAV file
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp_file:
+            audio.export(tmp_file.name, format="wav")
+            tmp_file_path = tmp_file.name
+
+        # Split the audio if necessary
+        chunk_file_paths = asr_manager.split_audio(tmp_file_path)
+
+        try:
+            # Transcribe the audio
+            language_id = asr_manager.model_language.get(language, asr_manager.default_language)
+
+            if language_id != asr_manager.default_language:
+                asr_manager.model = asr_manager.load_model(language_id)
+                asr_manager.default_language = language_id
+
+            asr_manager.model.cur_decoder = "rnnt"
+
+            rnnt_texts = asr_manager.model.transcribe(chunk_file_paths, batch_size=1, language_id=language_id)
+
+            # Flatten the list of transcriptions
+            rnnt_text = " ".join([text for sublist in rnnt_texts for text in sublist])
+
+            end_time = time()
+            logging.info(f"Transcription completed in {end_time - start_time:.2f} seconds")
+            return JSONResponse(content={"text": rnnt_text})
+        except subprocess.CalledProcessError as e:
+            logging.error(f"FFmpeg conversion failed: {str(e)}")
+            raise HTTPException(status_code=500, detail=f"FFmpeg conversion failed: {str(e)}")
+        except Exception as e:
+            logging.error(f"An error occurred during processing: {str(e)}")
+            raise HTTPException(status_code=500, detail=f"An error occurred during processing: {str(e)}")
+        finally:
+            # Clean up temporary files
+            for chunk_file_path in chunk_file_paths:
+                if os.path.exists(chunk_file_path):
+                    os.remove(chunk_file_path)
+    except HTTPException as e:
+        logging.error(f"HTTPException: {str(e)}")
+        raise e
+    except Exception as e:
+        logging.error(f"An unexpected error occurred: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"An unexpected error occurred: {str(e)}")
+
+@app.post("/transcribe_batch/", response_model=BatchTranscriptionResponse)
+async def transcribe_audio_batch(files: List[UploadFile] = File(...), language: str = Query(..., enum=list(asr_manager.model_language.keys()))):
+    start_time = time()
+    tmp_file_paths = []
+    transcriptions = []
+    try:
+        for file in files:
+            # Check file extension
+            file_extension = file.filename.split(".")[-1].lower()
+            if file_extension not in ["wav", "mp3"]:
+                logging.warning(f"Unsupported file format: {file_extension}")
+                raise HTTPException(status_code=400, detail="Unsupported file format. Please upload WAV or MP3 files.")
+
+            # Read the file content
+            file_content = await file.read()
+
+            # Convert MP3 to WAV if necessary
+            if file_extension == "mp3":
+                audio = AudioSegment.from_mp3(io.BytesIO(file_content))
+            else:
+                audio = AudioSegment.from_wav(io.BytesIO(file_content))
+
+            # Check the sample rate of the WAV file
+            sample_rate = audio.frame_rate
+
+            # Convert WAV to the required format using ffmpeg if necessary
+            if sample_rate != 16000:
+                audio = audio.set_frame_rate(16000).set_channels(1)
+
+            # Export the audio to a temporary WAV file
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp_file:
+                audio.export(tmp_file.name, format="wav")
+                tmp_file_path = tmp_file.name
+
+            # Split the audio if necessary
+            chunk_file_paths = asr_manager.split_audio(tmp_file_path)
+            tmp_file_paths.extend(chunk_file_paths)
+
+        logging.info(f"Temporary file paths: {tmp_file_paths}")
+        try:
+            # Transcribe the audio files in batch
+            language_id = asr_manager.model_language.get(language, asr_manager.default_language)
+
+            if language_id != asr_manager.default_language:
+                asr_manager.model = asr_manager.load_model(language_id)
+                asr_manager.default_language = language_id
+
+            asr_manager.model.cur_decoder = "rnnt"
+
+            rnnt_texts = asr_manager.model.transcribe(tmp_file_paths, batch_size=len(files), language_id=language_id)
+
+            logging.info(f"Raw transcriptions from model: {rnnt_texts}")
+            end_time = time()
+            logging.info(f"Transcription completed in {end_time - start_time:.2f} seconds")
+
+            # Flatten the list of transcriptions
+            transcriptions = [text for sublist in rnnt_texts for text in sublist]
+        except subprocess.CalledProcessError as e:
+            logging.error(f"FFmpeg conversion failed: {str(e)}")
+            raise HTTPException(status_code=500, detail=f"FFmpeg conversion failed: {str(e)}")
+        except Exception as e:
+            logging.error(f"An error occurred during processing: {str(e)}")
+            raise HTTPException(status_code=500, detail=f"An error occurred during processing: {str(e)}")
+        finally:
+            # Clean up temporary files
+            for tmp_file_path in tmp_file_paths:
+                if os.path.exists(tmp_file_path):
+                    os.remove(tmp_file_path)
+    except HTTPException as e:
+        logging.error(f"HTTPException: {str(e)}")
+        raise e
+    except Exception as e:
+        logging.error(f"An unexpected error occurred: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"An unexpected error occurred: {str(e)}")
+
+    return JSONResponse(content={"transcriptions": transcriptions})
 
 
 @app.get("/")

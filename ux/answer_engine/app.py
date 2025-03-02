@@ -131,17 +131,17 @@ def send_to_mistral(transcription):
     return chat_response.choices[0].message.content
 
 # Create the Gradio interface
-with gr.Blocks(title="Dhwani - Voice AI for Kannada") as demo:
+with gr.Blocks(title="Dhwani - Voice AI for Kannada /ಕನ್ನಡಕ್ಕಾಗಿ ಧ್ವನಿ AI ") as demo:
     gr.Markdown("# Voice AI for Kannada")
-    gr.Markdown("Record your voice and get your answer in Kannada")
-    gr.Markdown("Click on Recording button, to ask your question")
-    gr.Markdown("Click on stop recording button, to submit your question")
+    gr.Markdown("Record your voice and get your answer in Kannada/ ನಿಮ್ಮ ಧ್ವನಿಯನ್ನು ರೆಕಾರ್ಡ್ ಮಾಡಿ ಮತ್ತು ನಿಮ್ಮ ಉತ್ತರವನ್ನು ಕನ್ನಡದಲ್ಲಿ ಪಡೆಯಿರಿ")
+    gr.Markdown("Click on Recording button, to ask your question / ನಿಮ್ಮ ಪ್ರಶ್ನೆಯನ್ನು ಕೇಳಲು ರೆಕಾರ್ಡಿಂಗ್ ಬಟನ್ ಮೇಲೆ ಕ್ಲಿಕ್ ಮಾಡಿ")
+    gr.Markdown("Click on stop recording button, to submit your question/ ನಿಮ್ಮ ಪ್ರಶ್ನೆಯನ್ನು ಸಲ್ಲಿಸಲು ರೆಕಾರ್ಡಿಂಗ್ ನಿಲ್ಲಿಸು ಬಟನ್ ಮೇಲೆ ಕ್ಲಿಕ್ ಮಾಡಿ")
     
 
     audio_input = gr.Microphone(type="filepath", label="Record your voice")
     audio_output = gr.Audio(type="filepath", label="Playback", interactive=False)
     transcription_output = gr.Textbox(label="Transcription Result", interactive=False)
-    mistral_output = gr.Textbox(label="LLM answer", interactive=False)
+    mistral_output = gr.Textbox(label="Dhwani answer/ ಉತ್ತರ", interactive=False)
     tts_output = gr.Audio(label="Generated Audio", interactive=False)
     voice_description = gr.Textbox(
         label="Voice Description",

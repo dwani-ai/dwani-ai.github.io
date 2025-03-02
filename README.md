@@ -44,13 +44,6 @@ The project utilizes the following open-source tools:
 | Voice to Voice Translation   | Converts spoken language to text, translates it, and then generates speech.   | [Link](https://huggingface.co/spaces/gaganyatri/dhwani-tts)  | ASR, Translation, TTS| [Link](ux/voice_to_voice_translation/app.py)          |
 | Text Query                   | Allows querying text data for specific information.                          | [Link](https://huggingface.co/spaces/gaganyatri/dhwani_text_query)  | LLM                 | [Link](ux/text_query/app.py)          |
 
-## Collaborations
-
-Join our Discord group for collaborations: [Invite Link](https://discord.gg/WZMCerEZ2P)
-
-## Business Queries
-
-For business queries, please email: info (at) slabstech (dot) com
 ## Contact
 - For any questions or issues, please open an issue on GitHub or contact us via email.
 - For collaborations

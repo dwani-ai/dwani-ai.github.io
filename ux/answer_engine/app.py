@@ -6,11 +6,19 @@ import logging
 from pydub import AudioSegment
 from pydub.playback import play
 from mistralai import Mistral
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Set up logging
 logging.basicConfig(filename='execution.log', level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
+
+# Load configuration from config.json
+with open('config.json', 'r') as config_file:
+    config = json.load(config_file)
 
 # Mapping of user-friendly language names to language IDs
 language_mapping = {
@@ -46,13 +54,9 @@ def get_endpoint(use_gpu, use_localhost, service_type):
     logging.info(f"Getting endpoint for service: {service_type}, use_gpu: {use_gpu}, use_localhost: {use_localhost}")
     device_type_ep = "" if use_gpu else "-cpu"
     if use_localhost:
-        port_mapping = {
-            "asr": 10860,
-            "tts": 9860  # Added TTS service port
-        }
-        base_url = f'http://localhost:{port_mapping[service_type]}'
+        base_url = f'http://localhost:{config["endpoints"][service_type]["localhost"]}'
     else:
-        base_url = f'https://gaganyatri-{service_type}-indic-server{device_type_ep}.hf.space'
+        base_url = f'{config["endpoints"][service_type]["remote"]}{device_type_ep}'
     logging.info(f"Endpoint for {service_type}: {base_url}")
     return base_url
 
@@ -71,10 +75,10 @@ def transcribe_audio(audio_path, use_gpu, use_localhost):
         logging.error(f"Transcription failed: {e}")
         return ""
 
-def get_audio(input_text, voice_description="Anu speaks with a high pitch at a normal pace in a clear, close-sounding environment. Her neutral tone is captured with excellent audio quality."):
+def get_audio(input_text, voice_description=config["voice_description"]):
     try:
         # Define the API endpoint and headers
-        url = "https://gaganyatri-tts-indic-server.hf.space/v1/audio/speech"  # Note: Added http://
+        url = f'{config["endpoints"]["tts"]["remote"]}/v1/audio/speech'
         headers = {
             "accept": "application/json",
             "Content-Type": "application/json"
@@ -109,11 +113,11 @@ def get_audio(input_text, voice_description="Anu speaks with a high pitch at a n
         return f"Error: {e}"
 
 def send_to_mistral(transcription):
-    api_key = os.environ["MISTRAL_API_KEY"]
-    model = "mistral-large-latest"
+    api_key = os.getenv("MISTRAL_API_KEY")
+    model = "mistral-saba-latest"
     client = Mistral(api_key=api_key)
 
-    system_prompt = "You are a helpful assistant. Provide a concise respone in one line to the user's query."
+    system_prompt = "You are a helpful assistant. Provide a concise response in one sentence maximum to the user's query."
 
     chat_response = client.chat.complete(
         model=model,
@@ -136,19 +140,13 @@ with gr.Blocks(title="Dhwani - Voice AI for Kannada /ಕನ್ನಡಕ್ಕಾ
     gr.Markdown("Record your voice and get your answer in Kannada/ ನಿಮ್ಮ ಧ್ವನಿಯನ್ನು ರೆಕಾರ್ಡ್ ಮಾಡಿ ಮತ್ತು ನಿಮ್ಮ ಉತ್ತರವನ್ನು ಕನ್ನಡದಲ್ಲಿ ಪಡೆಯಿರಿ")
     gr.Markdown("Click on Recording button, to ask your question / ನಿಮ್ಮ ಪ್ರಶ್ನೆಯನ್ನು ಕೇಳಲು ರೆಕಾರ್ಡಿಂಗ್ ಬಟನ್ ಮೇಲೆ ಕ್ಲಿಕ್ ಮಾಡಿ")
     gr.Markdown("Click on stop recording button, to submit your question/ ನಿಮ್ಮ ಪ್ರಶ್ನೆಯನ್ನು ಸಲ್ಲಿಸಲು ರೆಕಾರ್ಡಿಂಗ್ ನಿಲ್ಲಿಸು ಬಟನ್ ಮೇಲೆ ಕ್ಲಿಕ್ ಮಾಡಿ")
-    
 
     audio_input = gr.Microphone(type="filepath", label="Record your voice")
     audio_output = gr.Audio(type="filepath", label="Playback", interactive=False)
     transcription_output = gr.Textbox(label="Transcription Result", interactive=False)
     mistral_output = gr.Textbox(label="Dhwani answer/ ಉತ್ತರ", interactive=False)
     tts_output = gr.Audio(label="Generated Audio", interactive=False)
-    voice_description = gr.Textbox(
-        label="Voice Description",
-        placeholder="A female speaker delivers a slightly expressive and animated speech with a moderate speed and pitch. The recording is of very high quality, with the speakers voice sounding clear and very close up",
-        lines=2,
-        visible=False
-    )
+
     enable_tts_checkbox = gr.Checkbox(label="Enable Text-to-Speech", value=True, interactive=False, visible=False)
     use_gpu_checkbox = gr.Checkbox(label="Use GPU", value=True, interactive=True, visible=False)
     use_localhost_checkbox = gr.Checkbox(label="Use Localhost", value=False, interactive=False, visible=False)
@@ -171,6 +169,8 @@ with gr.Blocks(title="Dhwani - Voice AI for Kannada /ಕನ್ನಡಕ್ಕಾ
         inputs=[audio_input, use_gpu_checkbox, use_localhost_checkbox],
         outputs=transcription_output
     )
+
+    voice_description = "Anu speaks with a high pitch at a normal pace in a clear, close-sounding environment. Her neutral tone is captured with excellent audio quality."
 
     transcription_output.change(
         fn=on_transcription_complete,

@@ -1,4 +1,13 @@
+gunicorn -k uvicorn.workers.UvicornWorker src.india_all_api:app -w 4 -b 0.0.0.0:8000
+
+
+
+
+
+
 Single GPU Setup 
+
+
 
 - Use concept of Load balancer to utilise Single GPU for Multi LLM inference
 

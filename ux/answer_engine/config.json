@@ -6,7 +6,7 @@
         },
         "tts": {
             "localhost": 9860,
-            "remote": "https://gaganyatri-tts-indic-server.hf.space"
+            "remote": "https://gaganyatri-indic-all-server.hf.space/v1/audio/speech"
         }
     },
     "voice_description": "Anu speaks with a high pitch at a normal pace in a clear, close-sounding environment. Her neutral tone is captured with excellent audio quality."

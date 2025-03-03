@@ -31,7 +31,7 @@ The project utilizes the following open-source tools:
 
 | Answer Engine| Answer Engine with Translation                                 | Voice Translation                          |
 |----------|-----------------------------------------------|---------------------------------------------|
-| ![Answer Engine](docs/workflow/kannada-answer-engine.drawio.png "Engine") | ![Answer Engine](docs/workflow/kannada-answer-engine.drawio.png "Engine") | ![Voice Translation](docs/workflow/voice-translation.drawio.png "Voice Translation") |
+| ![Answer Engine](docs/workflow/kannada-answer-engine.drawio.png "Engine") | ![Answer Engine Translation](docs/workflow/kannada-answer-engine-translate.png "Engine") | ![Voice Translation](docs/workflow/voice-translation.drawio.png "Voice Translation") |
 
 ## Demo for Testing Components
 

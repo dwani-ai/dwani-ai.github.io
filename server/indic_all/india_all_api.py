@@ -25,6 +25,8 @@ from transformers import AutoTokenizer, AutoFeatureExtractor, set_seed
 import numpy as np
 from tts_config import SPEED, ResponseFormat, config
 from logger import logger
+import shutil
+
 
 # Configure logging with log rotation
 logging.basicConfig(
@@ -132,12 +134,10 @@ class ASRModelManager:
         # Check if the duration is more than the specified chunk duration
         if duration_ms > chunk_duration_ms:
             # Calculate the number of chunks needed
-            num_chunks = duration_ms // chunk_duration_ms
-            if duration_ms % chunk_duration_ms != 0:
-                num_chunks += 1
+            num_chunks = (duration_ms + chunk_duration_ms - 1) // chunk_duration_ms  # This handles the remainder correctly
 
             # Split the audio into chunks
-            chunks = [audio[i*chunk_duration_ms:(i+1)*chunk_duration_ms] for i in range(num_chunks)]
+            chunks = [audio[i*chunk_duration_ms:min((i+1)*chunk_duration_ms, duration_ms)] for i in range(num_chunks)]
 
             # Create a directory to save the chunks
             output_dir = "audio_chunks"
@@ -154,6 +154,12 @@ class ASRModelManager:
             return chunk_file_paths
         else:
             return [file_path]
+        
+    def cleanup(audio):
+                # Create a directory to save the chunks
+        output_dir = "audio_chunks"
+        if os.path.exists(output_dir):
+            shutil.rmtree(output_dir)
 
 # Translation Model Manager
 class TranslateManager:
@@ -521,14 +527,20 @@ async def transcribe_audio(file: UploadFile = File(...), language: str = Query(.
 
             asr_manager.model.cur_decoder = "rnnt"
 
-            rnnt_texts = asr_manager.model.transcribe(chunk_file_paths, batch_size=1, language_id=language_id)
 
-            # Flatten the list of transcriptions
-            rnnt_text = " ".join([text for sublist in rnnt_texts for text in sublist])
+            transcriptions = []
+            for chunk_file_path in chunk_file_paths:
+                rnnt_texts = asr_manager.model.transcribe([chunk_file_path], batch_size=1, language_id=language_id)[0]
+                if isinstance(rnnt_texts, list) and len(rnnt_texts) > 0:
+                    transcriptions.append(rnnt_texts[0])
+                else:
+                    transcriptions.append(rnnt_texts)
+
+            joined_transcriptions = ' '.join(transcriptions)
 
             end_time = time()
             logging.info(f"Transcription completed in {end_time - start_time:.2f} seconds")
-            return JSONResponse(content={"text": rnnt_text})
+            return JSONResponse(content={"text": joined_transcriptions})
         except subprocess.CalledProcessError as e:
             logging.error(f"FFmpeg conversion failed: {str(e)}")
             raise HTTPException(status_code=500, detail=f"FFmpeg conversion failed: {str(e)}")
@@ -540,6 +552,7 @@ async def transcribe_audio(file: UploadFile = File(...), language: str = Query(.
             for chunk_file_path in chunk_file_paths:
                 if os.path.exists(chunk_file_path):
                     os.remove(chunk_file_path)
+            asr_manager.cleanup()
     except HTTPException as e:
         logging.error(f"HTTPException: {str(e)}")
         raise e
@@ -551,7 +564,7 @@ async def transcribe_audio(file: UploadFile = File(...), language: str = Query(.
 async def transcribe_audio_batch(files: List[UploadFile] = File(...), language: str = Query(..., enum=list(asr_manager.model_language.keys()))):
     start_time = time()
     tmp_file_paths = []
-    transcriptions = []
+    all_transcriptions = []
     try:
         for file in files:
             # Check file extension
@@ -585,36 +598,45 @@ async def transcribe_audio_batch(files: List[UploadFile] = File(...), language: 
             chunk_file_paths = asr_manager.split_audio(tmp_file_path)
             tmp_file_paths.extend(chunk_file_paths)
 
-        logging.info(f"Temporary file paths: {tmp_file_paths}")
-        try:
-            # Transcribe the audio files in batch
-            language_id = asr_manager.model_language.get(language, asr_manager.default_language)
+            logging.info(f"Temporary file paths: {tmp_file_paths}")
+            try:
+                # Transcribe the audio files in batch
+                language_id = asr_manager.model_language.get(language, asr_manager.default_language)
 
-            if language_id != asr_manager.default_language:
-                asr_manager.model = asr_manager.load_model(language_id)
-                asr_manager.default_language = language_id
+                if language_id != asr_manager.default_language:
+                    asr_manager.model = asr_manager.load_model(language_id)
+                    asr_manager.default_language = language_id
 
-            asr_manager.model.cur_decoder = "rnnt"
+                asr_manager.model.cur_decoder = "rnnt"
 
-            rnnt_texts = asr_manager.model.transcribe(tmp_file_paths, batch_size=len(files), language_id=language_id)
+                transcriptions = []
+                for chunk_file_path in chunk_file_paths:
+                    rnnt_texts = asr_manager.model.transcribe([chunk_file_path], batch_size=1, language_id=language_id)[0]
+                    if isinstance(rnnt_texts, list) and len(rnnt_texts) > 0:
+                        transcriptions.append(rnnt_texts[0])
+                    else:
+                        transcriptions.append(rnnt_texts)
 
-            logging.info(f"Raw transcriptions from model: {rnnt_texts}")
-            end_time = time()
-            logging.info(f"Transcription completed in {end_time - start_time:.2f} seconds")
+                joined_transcriptions = ' '.join(transcriptions)
 
-            # Flatten the list of transcriptions
-            transcriptions = [text for sublist in rnnt_texts for text in sublist]
-        except subprocess.CalledProcessError as e:
-            logging.error(f"FFmpeg conversion failed: {str(e)}")
-            raise HTTPException(status_code=500, detail=f"FFmpeg conversion failed: {str(e)}")
-        except Exception as e:
-            logging.error(f"An error occurred during processing: {str(e)}")
-            raise HTTPException(status_code=500, detail=f"An error occurred during processing: {str(e)}")
-        finally:
-            # Clean up temporary files
-            for tmp_file_path in tmp_file_paths:
-                if os.path.exists(tmp_file_path):
-                    os.remove(tmp_file_path)
+                logging.info(f"Raw transcriptions from model: {joined_transcriptions}")
+                end_time = time()
+                logging.info(f"Transcription completed in {end_time - start_time:.2f} seconds")
+
+                # Flatten the list of transcriptions
+                all_transcriptions.append(joined_transcriptions)
+            except subprocess.CalledProcessError as e:
+                logging.error(f"FFmpeg conversion failed: {str(e)}")
+                raise HTTPException(status_code=500, detail=f"FFmpeg conversion failed: {str(e)}")
+            except Exception as e:
+                logging.error(f"An error occurred during processing: {str(e)}")
+                raise HTTPException(status_code=500, detail=f"An error occurred during processing: {str(e)}")
+            finally:
+                # Clean up temporary files
+                for tmp_file_path in tmp_file_paths:
+                    if os.path.exists(tmp_file_path):
+                        os.remove(tmp_file_path)
+                asr_manager.cleanup()
     except HTTPException as e:
         logging.error(f"HTTPException: {str(e)}")
         raise e
@@ -622,7 +644,7 @@ async def transcribe_audio_batch(files: List[UploadFile] = File(...), language: 
         logging.error(f"An unexpected error occurred: {str(e)}")
         raise HTTPException(status_code=500, detail=f"An unexpected error occurred: {str(e)}")
 
-    return JSONResponse(content={"transcriptions": transcriptions})
+    return JSONResponse(content={"transcriptions": all_transcriptions})
 
 
 @app.get("/")

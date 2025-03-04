@@ -56,7 +56,7 @@ def get_endpoint(use_gpu, use_localhost, service_type):
     if use_localhost:
         base_url = f'http://localhost:{config["endpoints"][service_type]["localhost"]}'
     else:
-        base_url = f'{config["endpoints"][service_type]["remote"]}{device_type_ep}'
+        base_url = f'{os.getenv("REMOTE_ENDPOINT")}{device_type_ep}'
     logging.info(f"Endpoint for {service_type}: {base_url}")
     return base_url
 
@@ -65,8 +65,10 @@ def transcribe_audio(audio_path, use_gpu, use_localhost):
     base_url = get_endpoint(use_gpu, use_localhost, "asr")
     url = f'{base_url}/transcribe/?language=kannada'
     files = {'file': open(audio_path, 'rb')}
+    api_token = os.getenv("API_TOKEN")
+    headers = {"Authorization": f"Bearer {api_token}"}
     try:
-        response = requests.post(url, files=files)
+        response = requests.post(url, files=files, headers=headers)
         response.raise_for_status()
         transcription = response.json()
         logging.info(f"Transcription successful: {transcription}")
@@ -78,10 +80,12 @@ def transcribe_audio(audio_path, use_gpu, use_localhost):
 def get_audio(input_text, voice_description=config["voice_description"]):
     try:
         # Define the API endpoint and headers
-        url = f'{config["endpoints"]["tts"]["remote"]}/v1/audio/speech'
+        url = f'{os.getenv("REMOTE_ENDPOINT")}/v1/audio/speech'
+        api_token = os.getenv("HF_TOKEN")
         headers = {
             "accept": "application/json",
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {api_token}"
         }
         # Define the request payload
         payload = {
@@ -151,6 +155,8 @@ with gr.Blocks(title="Dhwani - Voice AI for Kannada /ಕನ್ನಡಕ್ಕಾ
     use_gpu_checkbox = gr.Checkbox(label="Use GPU", value=True, interactive=True, visible=False)
     use_localhost_checkbox = gr.Checkbox(label="Use Localhost", value=False, interactive=False, visible=False)
 
+    voice_description = gr.Textbox(value="Anu speaks with a high pitch at a normal pace in a clear, close-sounding environment. Her neutral tone is captured with excellent audio quality.", label="Voice Description", interactive=False, visible=False)
+
     def process_audio(audio_path, use_gpu, use_localhost):
         logging.info(f"Processing audio from {audio_path}, use_gpu: {use_gpu}, use_localhost: {use_localhost}")
         transcription = transcribe_audio(audio_path, use_gpu, use_localhost)
@@ -169,8 +175,6 @@ with gr.Blocks(title="Dhwani - Voice AI for Kannada /ಕನ್ನಡಕ್ಕಾ
         inputs=[audio_input, use_gpu_checkbox, use_localhost_checkbox],
         outputs=transcription_output
     )
-
-    voice_description = "Anu speaks with a high pitch at a normal pace in a clear, close-sounding environment. Her neutral tone is captured with excellent audio quality."
 
     transcription_output.change(
         fn=on_transcription_complete,

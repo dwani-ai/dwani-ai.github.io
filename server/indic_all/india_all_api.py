@@ -358,16 +358,50 @@ async def generate_audio(
             "Specifying speed isn't supported by this model. Audio will be generated with the default speed"
         )
     start = perf_counter()
-    # Tokenize the voice description
-    input_ids = description_tokenizer(voice, return_tensors="pt").input_ids.to(device)
-    # Tokenize the input text
-    prompt_input_ids = tokenizer(input, return_tensors="pt").input_ids.to(device)
-    # Generate the audio
-    generation = tts.generate(
-        input_ids=input_ids, prompt_input_ids=prompt_input_ids
-    ).to(torch.float32)
-    audio_arr = generation.cpu().numpy().squeeze()
-    # Ensure device is a string
+
+    chunk_size = 15
+    all_chunks = chunk_text(input, chunk_size)
+
+    if(len(all_chunks) <= chunk_size ):
+        # Tokenize the voice description
+        input_ids = description_tokenizer(voice, return_tensors="pt").input_ids.to(device)
+
+        # Tokenize the input text
+        prompt_input_ids = tokenizer(input, return_tensors="pt").input_ids.to(device)
+        # Generate the audio
+        generation = tts.generate(
+            input_ids=input_ids, prompt_input_ids=prompt_input_ids
+        ).to(torch.float32)
+        audio_arr = generation.cpu().numpy().squeeze()
+    else:
+        all_descriptions = voice * len(all_chunks)
+        description_inputs = description_tokenizer(all_descriptions, return_tensors="pt", padding=True).to("cuda")
+        prompts = tokenizer(all_chunks, return_tensors="pt", padding=True).to("cuda")
+
+        set_seed(0)
+        generation = tts.generate(
+            input_ids=description_inputs.input_ids,
+            attention_mask=description_inputs.attention_mask,
+            prompt_input_ids=prompts.input_ids,
+            prompt_attention_mask=prompts.attention_mask,
+            do_sample=True,
+            return_dict_in_generate=True,
+        )
+        chunk_audios = []
+        '''
+        for j in range(len(all_chunks)):
+            audio_arr = generation.sequences[j][:generation.audios_length[j]].cpu().numpy().squeeze()
+            audio_arr = audio_arr.astype('float32')
+            chunk_audios.append(audio_arr)
+        combined_audio = np.concatenate(chunk_audios)
+        audio_arr = combined_audio
+        '''
+        for i, audio in enumerate(generation.sequences):
+            audio_data = audio[:generation.audios_length].cpu().numpy().squeeze()
+            chunk_audios.append(audio_data)
+        combined_audio = np.concatenate(chunk_audios)
+        audio_arr = combined_audio
+                # Ensure device is a string
     device_str = str(device)
     logger.info(
         f"Took {perf_counter() - start:.2f} seconds to generate audio for {len(input.split())} words using {device_str.upper()}"

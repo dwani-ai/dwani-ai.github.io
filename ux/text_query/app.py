@@ -3,7 +3,6 @@ import os
 import requests
 import json
 import logging
-from mistralai import Mistral
 
 # Set up logging
 logging.basicConfig(filename='execution.log', level=logging.INFO,
@@ -86,7 +85,8 @@ def send_llm(query):
             response_data = response.json()
         except json.JSONDecodeError:
             logging.error("Invalid JSON response from LLM server")
-            return "Sorry, I couldn't process your request."
+            return "Sorry, I couldn't process your request. ಕ್ಷಮಿಸಿ, ನಿಮ್ಮ ವಿನಂತಿಯನ್ನು ಪ್ರಕ್ರಿಯೆ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ."
+
 
         llm_response = response_data.get('response', "Sorry, I couldn't process your request.")
 
@@ -97,16 +97,19 @@ def send_llm(query):
         return translated_response_text
     except requests.exceptions.RequestException as e:
         logging.error(f"LLM request failed: {e}")
-        return "Sorry, I couldn't process your request."
+        return "Sorry, I couldn't process your request. ಕ್ಷಮಿಸಿ, ನಿಮ್ಮ ವಿನಂತಿಯನ್ನು ಪ್ರಕ್ರಿಯೆ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ."
 
 # Create the Gradio interface
 with gr.Blocks(title="Indian language Query") as demo:
-    gr.Markdown("# LLM - Answer")
-    gr.Markdown("Enter your query and get a response from the Mistral AI")
+    gr.Markdown("# Dhwani AI- Text Query / ಧ್ವಾನಿ AI- ಪಠ್ಯ ಪ್ರಶ್ನೆ")
+   
 
-    query_input = gr.Textbox(label="Enter your query", lines=2, placeholder="ಕರ್ನಾಟಕದ ರಾಜಧಾನಿ ಯಾವುದು ?")
+    #gr.Markdown("Enter your query and get a response Dhwani AI")
+    #gr.Markdown("ನಿಮ್ಮ ಪ್ರಶ್ನೆಯನ್ನು ನಮೂದಿಸಿ ಮತ್ತು ಧ್ವಾನಿ AI ನಿಂದ ಉತ್ತರವನ್ನು ಪಡೆಯಿರಿ")
+
+    query_input = gr.Textbox(label="Enter your text query / ನಿಮ್ಮ ಪ್ರಶ್ನೆಯನ್ನು ನಮೂದಿಸಿ", lines=2, placeholder="ಕರ್ನಾಟಕದ ರಾಜಧಾನಿ ಯಾವುದು ?")
     submit_button = gr.Button("Submit")
-    mistral_output = gr.Textbox(label="LLM Answer", interactive=False)
+    mistral_output = gr.Textbox(label="Answer / ಉತ್ತರ", interactive=False)
 
     submit_button.click(
         fn=send_llm,
@@ -115,4 +118,4 @@ with gr.Blocks(title="Indian language Query") as demo:
     )
 
 # Launch the interface with share=True
-demo.launch(share=True)
+demo.launch(share=False)

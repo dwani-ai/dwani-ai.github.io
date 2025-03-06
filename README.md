@@ -21,8 +21,8 @@ The project utilizes the following open-source tools:
 
 | Open-Source Tool                       | Source Repository                                          | CPU / Available 24/7 - Free| GPU / On-demand |
 |---------------------------------------|-------------------------------------------------------------|----------------|----------------|
-| Automatic Speech Recognition : ASR   | [ASR Indic Server](https://github.com/slabstech/asr-indic-server) | [API Demo](https://huggingface.co/spaces/gaganyatri/asr_indic_server_cpu) // [TODO - App Demo](https://huggingface.co/spaces/gaganyatri/asr_indic_app_gradio) |  - |
-| Text to Speech : TTS                  | [TTS Indic Server](https://github.com/slabstech/tts-indic-server)  | CPU-not suitable // [Todo App -Demo]()           | - |
+| Automatic Speech Recognition : ASR   | [ASR Indic Server](https://github.com/slabstech/asr-indic-server) | [API Demo](https://huggingface.co/spaces/gaganyatri/asr_indic_server_cpu) // [TODO-App Demo](https://huggingface.co/spaces/gaganyatri/asr_indic_app_gradio) |  - |
+| Text to Speech : TTS                  | [TTS Indic Server](https://github.com/slabstech/tts-indic-server)  | CPU-not suitable             | [App -Demo](https://huggingface.co/spaces/gaganyatri/tts_indic_local) |
 | Translation                           | [Indic Translate Server](https://github.com/slabstech/indic-translate-server) | [API Demo](https://huggingface.co/spaces/gaganyatri/translate_indic_server_cpu) // [App Demo](https://huggingface.co/spaces/gaganyatri/translate_indic_local)          |            |
 | Large Language Model                           | [LLM Indic Server](https://github.com/slabstech/llm-indic-server) | [API Demo](https://huggingface.co/spaces/gaganyatri/translate_indic_server_cpu) // [App Demo](https://huggingface.co/spaces/gaganyatri/llm_indic_local_2)         |            |
 | Document Parser                           | [Indic Document Server](https://github.com/slabstech/docs-indic-server) | Not Suitable          |    -        |
@@ -38,7 +38,7 @@ The project utilizes the following open-source tools:
 
 | Feature                      | Description                                                                 | Demo Link | Components          | Source Code       | Hardware       |
 |------------------------------|-----------------------------------------------------------------------------|-----------|---------------------|-------------------|---------------|
-| Kannada Voice AI                | Provides answers to voice queries using a LLM                     | [Link](https://huggingface.co/spaces/gaganyatri/dhwani-voice-model)  | LLM                 | [Link](ux/answer_engine/app.py)          | CPU / GPU |
+| Kannada Voice AI                | Provides answers to voice queries using a LLM                     | [API Demo](https://huggingface.co/spaces/gaganyatri/dhwani-voice-model) // [App Demo](https://huggingface.co/spaces/gaganyatri/tts_indic_local) | LLM                 | [API](ux/answer_engine/app.py) // [APP](ux/answer_engine/local/app.py)          | CPU / GPU |
 | Text Translate               | Translates text from one language to another.                                | [Link](https://huggingface.co/spaces/gaganyatri/dhwani_text_translate)  | Translation         | [Link](ux/text_translate/app.py)          | CPU / GPU | 
 | Text Query                   | Allows querying text data for specific information.                          | [Link](https://huggingface.co/spaces/gaganyatri/dhwani_text_query)  | LLM                 | [Link](ux/text_query/app.py)          | CPU / GPU |
 | Voice to Text Translation    | Converts spoken language to text and translates it.                          | [Link](https://huggingface.co/spaces/gaganyatri/dhwani)  | ASR, Translation    | [Link](ux/voice_to_text_translation/app.py)          | CPU / GPU |

@@ -16,18 +16,16 @@ import spaces
 from parler_tts import ParlerTTSForConditionalGeneration
 import soundfile as sf
 
-
-
 # Load the model and tokenizer for the causal language model
-model_name = "Qwen/Qwen2.5-1.5B-Instruct"
+model_name_llm = "Qwen/Qwen2.5-1.5B-Instruct"
 
-model = AutoModelForCausalLM.from_pretrained(
-    model_name,
+model_llm = AutoModelForCausalLM.from_pretrained(
+    model_name_llm,
     torch_dtype="auto",
     device_map="auto"
 )
 
-tokenizer = AutoTokenizer.from_pretrained(model_name)
+tokenizer_llm = AutoTokenizer.from_pretrained(model_name_llm)
 
 # Load the translation models and tokenizers
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
@@ -62,14 +60,14 @@ def generate_response(prompt):
     ]
 
     print(prompt)
-    text = tokenizer.apply_chat_template(
+    text = tokenizer_llm.apply_chat_template(
         messages,
         tokenize=False,
         add_generation_prompt=True
     )
-    model_inputs = tokenizer([text], return_tensors="pt").to(model.device)
+    model_inputs = tokenizer_llm([text], return_tensors="pt").to(model_llm.device)
 
-    generated_ids = model.generate(
+    generated_ids = model_llm.generate(
         **model_inputs,
         max_new_tokens=512
     )
@@ -77,7 +75,7 @@ def generate_response(prompt):
         output_ids[len(input_ids):] for input_ids, output_ids in zip(model_inputs.input_ids, generated_ids)
     ]
 
-    response = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)[0]
+    response = tokenizer_llm.batch_decode(generated_ids, skip_special_tokens=True)[0]
     return response
 
 @spaces.GPU
@@ -230,7 +228,7 @@ def generate_audio_locally(input_text, voice_description_id):
         audio_arr = generation.cpu().numpy().squeeze()
 
         # Save the audio file
-        sf.write(output_file_name, audio_arr, model.config.sampling_rate)
+        sf.write(output_file_name, audio_arr, model_tts.config.sampling_rate)
         logger.info(f"Audio file saved to: {output_file_name}")
 
         # Return the path to the saved audio file
@@ -273,44 +271,6 @@ def transcribe_audio(audio_path, use_gpu, use_localhost):
         logging.error(f"Transcription failed: {e}")
         return ""
 
-def get_audio(input_text, voice_description=config["voice_description"]):
-    try:
-        # Define the API endpoint and headers
-        url = f'{os.getenv("REMOTE_ENDPOINT")}/v1/audio/speech'
-        api_token = os.getenv("HF_TOKEN")
-        headers = {
-            "accept": "application/json",
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {api_token}"
-        }
-        # Define the request payload
-        payload = {
-            "input": input_text,
-            "voice": voice_description
-        }
-        # Send the POST request
-        response = requests.post(url, json=payload, headers=headers, stream=True)
-        # Check if the request was successful
-        if response.status_code == 200:
-            logger.info(f"API request successful. Status code: {response.status_code}")
-            # Save the audio file
-            audio_file_path = "output_audio.mp3"
-            with open(audio_file_path, "wb") as audio_file:
-                for chunk in response.iter_content(chunk_size=1024):
-                    if chunk:
-                        audio_file.write(chunk)
-            logger.info(f"Audio file saved to: {audio_file_path}")
-            # Return the path to the saved audio file
-            return audio_file_path
-        else:
-            logger.error(f"API request failed. Status code: {response.status_code}, {response.text}")
-            return f"Error: {response.status_code}, {response.text}"
-    except requests.exceptions.RequestException as e:
-        logger.error(f"Request exception: {e}")
-        return f"Request error: {e}"
-    except Exception as e:
-        logger.error(f"General exception: {e}")
-        return f"Error: {e}"
 
 # Create the Gradio interface
 with gr.Blocks(title="Dhwani - Voice AI for Kannada /ಕನ್ನಡಕ್ಕಾಗಿ ಧ್ವನಿ AI ") as demo:
@@ -319,17 +279,8 @@ with gr.Blocks(title="Dhwani - Voice AI for Kannada /ಕನ್ನಡಕ್ಕಾ
     gr.Markdown("Click on Recording button, to ask your question / ನಿಮ್ಮ ಪ್ರಶ್ನೆಯನ್ನು ಕೇಳಲು ರೆಕಾರ್ಡಿಂಗ್ ಬಟನ್ ಮೇಲೆ ಕ್ಲಿಕ್ ಮಾಡಿ")
     gr.Markdown("Click on stop recording button, to submit your question/ ನಿಮ್ಮ ಪ್ರಶ್ನೆಯನ್ನು ಸಲ್ಲಿಸಲು ರೆಕಾರ್ಡಿಂಗ್ ನಿಲ್ಲಿಸು ಬಟನ್ ಮೇಲೆ ಕ್ಲಿಕ್ ಮಾಡಿ")
 
-    audio_input = gr.Microphone(type="filepath", label="Record your voice")
-    audio_output = gr.Audio(type="filepath", label="Playback", interactive=False)
-    transcription_output = gr.Textbox(label="Transcription Result", interactive=False)
-    mistral_output = gr.Textbox(label="Dhwani answer/ ಉತ್ತರ", interactive=False)
-    tts_output = gr.Audio(label="Generated Audio", interactive=False)
+    gr.Markdown("Choose the output Voice Type/ ಔಟ್ಪುಟ್ ವಾಯ್ಸ್ ಟೈಪ್ ಆಯ್ಕೆಮಾಡಿ")
 
-    enable_tts_checkbox = gr.Checkbox(label="Enable Text-to-Speech", value=True, interactive=False, visible=False)
-    use_gpu_checkbox = gr.Checkbox(label="Use GPU", value=True, interactive=True, visible=False)
-    use_localhost_checkbox = gr.Checkbox(label="Use Localhost", value=False, interactive=False, visible=False)
-
-    
     voice_dropdown = gr.Dropdown(
         choices=[choice[0] for choice in dropdown_choices],
         label="Select Voice Description",
@@ -338,7 +289,20 @@ with gr.Blocks(title="Dhwani - Voice AI for Kannada /ಕನ್ನಡಕ್ಕಾ
         interactive=True,
     )
 
-    voice_description = gr.Textbox(value="Anu speaks with a high pitch at a normal pace in a clear, close-sounding environment. Her neutral tone is captured with excellent audio quality.", label="Voice Description", interactive=False, visible=False)
+
+    audio_input = gr.Microphone(type="filepath", label="Record your voice")
+    audio_output = gr.Audio(type="filepath", label="Playback", interactive=False)
+    transcription_output = gr.Textbox(label="Transcription Result", interactive=False)
+    llm_output = gr.Textbox(label="Dhwani answer/ ಉತ್ತರ", interactive=False)
+    tts_output = gr.Audio(label="Generated Audio", interactive=False)
+
+    enable_tts_checkbox = gr.Checkbox(label="Enable Text-to-Speech", value=True, interactive=False, visible=False)
+    use_gpu_checkbox = gr.Checkbox(label="Use GPU", value=True, interactive=True, visible=False)
+    use_localhost_checkbox = gr.Checkbox(label="Use Localhost", value=False, interactive=False, visible=False)
+
+    
+
+    #voice_description = gr.Textbox(value="Anu speaks with a high pitch at a normal pace in a clear, close-sounding environment. Her neutral tone is captured with excellent audio quality.", label="Voice Description", interactive=False, visible=False)
 
     def process_audio(audio_path, use_gpu, use_localhost):
         logging.info(f"Processing audio from {audio_path}, use_gpu: {use_gpu}, use_localhost: {use_localhost}")
@@ -346,14 +310,14 @@ with gr.Blocks(title="Dhwani - Voice AI for Kannada /ಕನ್ನಡಕ್ಕಾ
         return transcription
 
     def on_transcription_complete(transcription, voice_dropdown, enable_tts):
-        mistral_response = send_llm(transcription)
+        llm_response = send_llm(transcription)
         ''''''
         if enable_tts:
             audio_file_path = None
-            audio_file_path = generate_audio_locally(mistral_response, voice_dropdown)
+            audio_file_path = generate_audio_locally(llm_response, voice_dropdown)
         else:
             audio_file_path = None
-        return mistral_response, audio_file_path
+        return llm_response, audio_file_path
 
     audio_input.stop_recording(
         fn=process_audio,
@@ -364,7 +328,7 @@ with gr.Blocks(title="Dhwani - Voice AI for Kannada /ಕನ್ನಡಕ್ಕಾ
     transcription_output.change(
         fn=on_transcription_complete,
         inputs=[transcription_output, voice_dropdown, enable_tts_checkbox],
-        outputs=[mistral_output, tts_output]
+        outputs=[llm_output, tts_output]
     )
 
 # Launch the interface

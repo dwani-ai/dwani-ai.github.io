@@ -2,7 +2,7 @@
     "endpoints": {
         "asr": {
             "localhost": 10860,
-            "remote": "https://gaganyatri-indic-all-server.hf.space"
+            "remote": "https://gaganyatri-asr-indic-server-cpu.hf.space/"
         },
         "tts": {
             "localhost": 9860,

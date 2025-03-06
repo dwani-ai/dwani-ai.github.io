@@ -1,0 +1,15 @@
+[
+  {
+    "id": 1,
+    "voice_description": "Suresh  speaks at a moderate pace with a slightly monotone tone. The recording is clear, with a close sound and only minimal ambient noise",
+    "output_file_name": "male_indian_very_low_pitch.mp3",
+    "userdomain_voice": "male_kannada_monotone"
+  },
+  {
+    "id": 2,
+    "voice_description": "Anu speaks with a high pitch at a normal pace in a clear, close-sounding environment. Her neutral tone is captured with excellent audio quality",
+    "output_file_name": "female_indian_quite_low_pitch.mp3",
+    "userdomain_voice": "female_kannada_high_pitch"
+  }
+ 
+]

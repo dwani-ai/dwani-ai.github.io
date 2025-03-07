@@ -36,16 +36,16 @@ The project utilizes the following open-source tools:
 
 ## Features
 
-| Feature                      | Description                                                                 | Demo Link | Components          | Source Code       | Hardware       |
-|------------------------------|-----------------------------------------------------------------------------|-----------|---------------------|-------------------|---------------|
-| Kannada Voice AI                | Provides answers to voice queries using a LLM                     | [API Demo](https://huggingface.co/spaces/gaganyatri/dhwani-voice-model) // [App Demo](https://huggingface.co/spaces/gaganyatri/tts_indic_local) | LLM                 | [API](ux/answer_engine/app.py) // [APP](ux/answer_engine/local/app.py)          | CPU / GPU |
-| Text Translate               | Translates text from one language to another.                                | [Link](https://huggingface.co/spaces/gaganyatri/dhwani_text_translate)  | Translation         | [Link](ux/text_translate/app.py)          | CPU / GPU | 
-| Text Query                   | Allows querying text data for specific information.                          | [Link](https://huggingface.co/spaces/gaganyatri/dhwani_text_query)  | LLM                 | [Link](ux/text_query/app.py)          | CPU / GPU |
-| Voice to Text Translation    | Converts spoken language to text and translates it.                          | [Link](https://huggingface.co/spaces/gaganyatri/dhwani)  | ASR, Translation    | [Link](ux/voice_to_text_translation/app.py)          | CPU / GPU |
+| Feature                      | Description                                                                 |  Components          | Source Code       | Hardware       |
+|------------------------------|-----------------------------------------------------------------------------|-----------|---------------------|---------------|
+| Kannada Voice AI                | Provides answers to voice queries using a LLM                     | LLM                 | [API](ux/answer_engine/app.py) // [APP](ux/answer_engine/local/app.py)          | CPU / GPU |
+| Text Translate               | Translates text from one language to another.                                |  Translation         | [Link](ux/text_translate/app.py)          | CPU / GPU | 
+| Text Query                   | Allows querying text data for specific information.                          | LLM                 | [Link](ux/text_query/app.py)          | CPU / GPU |
+| Voice to Text Translation    | Converts spoken language to text and translates it.                          |  ASR, Translation    | [Link](ux/voice_to_text_translation/app.py)          | CPU / GPU |
 | PDF Translate                | Translates content from PDF documents.                                       |  | Translation         |           | GPU |
-| Text to Speech           | Generates speech from text.                                                  |  [Link](https://huggingface.co/spaces/gaganyatri/tts_dhwani_usecase) | TTS                 | [Link](ux/text_to_speech/app.py)          | GPU |
-| Voice to Voice Translation   | Converts spoken language to text, translates it, and then generates speech.   | [Link](https://huggingface.co/spaces/gaganyatri/dhwani-tts)  | ASR, Translation, TTS| [Link](ux/voice_to_voice_translation/app.py)          | GPU |
-| Answer Engine with Translate| Provides answers to queries with translation capabilities.                   |   [link](https://huggingface.co/spaces/gaganyatri/dhwani_voice_to_any) | LLM, Translation    | [Link](ux/answer_engine_translate/app.py)          | GPU|
+| Text to Speech           | Generates speech from text.                                                  |  TTS                 | [Link](ux/text_to_speech/app.py)          | GPU |
+| Voice to Voice Translation   | Converts spoken language to text, translates it, and then generates speech.   |  ASR, Translation, TTS| [Link](ux/voice_to_voice_translation/app.py)          | GPU |
+| Answer Engine with Translate| Provides answers to queries with translation capabilities.                   |  ASR, LLM, Translation, TTS|  [Link](ux/answer_engine_translate/app.py)          | GPU|
 
 ## Contact
 - For any questions or issues, please open an issue on GitHub or contact us via email.

@@ -217,8 +217,8 @@ class TTSModelManager:
             if len(self.tts_model_tokenizer) == config.max_models:
                 logger.info("Unloading the oldest loaded model")
                 del self.tts_model_tokenizer[next(iter(self.tts_model_tokenizer))]
-            self.model_tokenizer[tts_model_name] = self.load_model(tts_model_name)
-        return self.model_tokenizer[tts_model_name]
+            self.tts_model_tokenizer[tts_model_name] = self.load_model(tts_model_name)
+        return self.tts_model_tokenizer[tts_model_name]
 
 tts_model_manager = TTSModelManager()
 

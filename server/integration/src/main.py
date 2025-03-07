@@ -17,8 +17,9 @@ import soundfile as sf
 from parler_tts import ParlerTTSForConditionalGeneration
 from time import perf_counter
 import io
+from tts_config import SPEED, ResponseFormat, config  # Import from tts_config
 
-# Configuration Settings
+# Configuration Settings for the main app
 class Settings(BaseSettings):
     model_name: str = "Qwen/Qwen2.5-3B-Instruct"
     max_tokens: int = 512
@@ -54,8 +55,8 @@ app = FastAPI(
 # CORS configuration for browser access
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Update to specific origins in production (e.g., ["https://yourdomain.com"])
-    allow_credentials=False,  # No cookies/credentials needed with API key
+    allow_origins=["*"],  # Update to specific origins in production
+    allow_credentials=False,
     allow_methods=["GET", "POST"],
     allow_headers=["X-API-Key", "Content-Type", "Accept"],
 )
@@ -67,9 +68,6 @@ app.state.limiter = limiter
 # Device setup
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 torch_dtype = torch.float16 if device != "cpu" else torch.float32
-
-from tts_config import SPEED, ResponseFormat, config
-
 
 # Model and tokenizer initialization
 model = AutoModelForCausalLM.from_pretrained(
@@ -119,7 +117,7 @@ class SpeechRequest(BaseModel):
     input: str
     voice: str
     model: str
-    response_format: str = config.response_format
+    response_format: ResponseFormat = config.response_format  # Use ResponseFormat from tts_config
     speed: float = SPEED
 
     @field_validator('input')
@@ -130,9 +128,9 @@ class SpeechRequest(BaseModel):
 
     @field_validator('response_format')
     def validate_response_format(cls, v):
-        supported_formats = ["wav", "mp3"]  # Add supported formats as needed
+        supported_formats = [ResponseFormat.MP3, ResponseFormat.FLAC, ResponseFormat.WAV]
         if v not in supported_formats:
-            raise ValueError(f"Response format must be one of {supported_formats}")
+            raise ValueError(f"Response format must be one of {[fmt.value for fmt in supported_formats]}")
         return v
 
 # API Key Authentication
@@ -238,6 +236,7 @@ async def home():
 @app.post("/v1/audio/speech", summary="Generate speech from text")
 @limiter.limit(settings.speech_rate_limit)
 async def generate_audio(
+    request: Request,
     speech_request: SpeechRequest = Body(...),
     api_key: str = Depends(get_api_key)
 ) -> StreamingResponse:
@@ -283,17 +282,16 @@ async def generate_audio(
             f"Took {perf_counter() - start:.2f} seconds to generate audio for {len(speech_request.input.split())} words using {device_str.upper()}"
         )
         audio_buffer = io.BytesIO()
-        sf.write(audio_buffer, audio_arr, tts_model.config.sampling_rate, format=speech_request.response_format)
+        sf.write(audio_buffer, audio_arr, tts_model.config.sampling_rate, format=speech_request.response_format.value)  # Use .value for StrEnum
         audio_buffer.seek(0)
 
-        # Headers for browser and Android compatibility
         headers = {
-            "Content-Disposition": f"inline; filename=\"speech.{speech_request.response_format}\"",
+            "Content-Disposition": f"inline; filename=\"speech.{speech_request.response_format.value}\"",
             "Cache-Control": "no-cache",
         }
         return StreamingResponse(
             audio_buffer,
-            media_type=f"audio/{speech_request.response_format}",
+            media_type=f"audio/{speech_request.response_format.value}",
             headers=headers
         )
     except Exception as e:
@@ -310,11 +308,9 @@ async def chat(request: Request, chat_request: ChatRequest, api_key: str = Depen
         if not prompt:
             raise HTTPException(status_code=400, detail="Prompt cannot be empty")
 
-        # Step 1: Translate Kannada prompt to English
         translated_prompt = translate_text(prompt, src_lang="kan_Knda", tgt_lang="eng_Latn")
         logger.info(f"Translated prompt to English: {translated_prompt}")
 
-        # Step 2: Generate LLM response in English
         messages = [
             {"role": "system", "content": "You are Dhwani, a helpful assistant. Provide a concise response in one sentence maximum to the user's query."},
             {"role": "user", "content": translated_prompt}
@@ -334,7 +330,6 @@ async def chat(request: Request, chat_request: ChatRequest, api_key: str = Depen
         response = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)[0]
         logger.info(f"Generated English response: {response}")
 
-        # Step 3: Translate English response to Kannada
         translated_response = translate_text(response, src_lang="eng_Latn", tgt_lang="kan_Knda")
         logger.info(f"Translated response to Kannada: {translated_response}")
 

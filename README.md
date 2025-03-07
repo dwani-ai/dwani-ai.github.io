@@ -21,12 +21,12 @@ The project utilizes the following open-source tools:
 
 | Open-Source Tool                       | Source Repository                                          | CPU / Available 24/7 - Free| GPU / On-demand |
 |---------------------------------------|-------------------------------------------------------------|----------------|----------------|
-| Automatic Speech Recognition : ASR   | [ASR Indic Server](https://github.com/slabstech/asr-indic-server) | [API Demo](https://huggingface.co/spaces/gaganyatri/asr_indic_server_cpu) // [TODO-App Demo](https://huggingface.co/spaces/gaganyatri/asr_indic_app_gradio) |  - |
+| Automatic Speech Recognition : ASR   | [ASR Indic Server](https://github.com/slabstech/asr-indic-server) | [API Demo](https://huggingface.co/spaces/gaganyatri/asr_indic_server_cpu)  |  - |
 | Text to Speech : TTS                  | [TTS Indic Server](https://github.com/slabstech/tts-indic-server)  | CPU-not suitable             | [App -Demo](https://huggingface.co/spaces/gaganyatri/tts_indic_local) |
-| Translation                           | [Indic Translate Server](https://github.com/slabstech/indic-translate-server) | [API Demo](https://huggingface.co/spaces/gaganyatri/translate_indic_server_cpu) // [App Demo](https://huggingface.co/spaces/gaganyatri/translate_indic_local)          |            |
-| Large Language Model                           | [LLM Indic Server](https://github.com/slabstech/llm-indic-server) | [API Demo](https://huggingface.co/spaces/gaganyatri/translate_indic_server_cpu) // [App Demo](https://huggingface.co/spaces/gaganyatri/llm_indic_local_2)         |            |
+| Translation                           | [Indic Translate Server](https://github.com/slabstech/indic-translate-server) | [API Demo](https://huggingface.co/spaces/gaganyatri/translate_indic_server_cpu)          |            |
+| Large Language Model                           | [LLM Indic Server](https://github.com/slabstech/llm-indic-server_cpu) | [API Demo](https://huggingface.co/spaces/gaganyatri/translate_indic_server_cpu)         |            |
 | Document Parser                           | [Indic Document Server](https://github.com/slabstech/docs-indic-server) | Not Suitable          |    -        |
-|All in One Server - ASR + TTS + Translate | [indic-all-server](server/indic_all/) | Not Suitable |  [API Demo ](https://gaganyatri-indic-all-server.hf.space/docs) // [TODO] |
+|All in One Server - ASR + TTS + Translate | [indic-all-server](server/indic_all/) | Not Suitable |  -- |
 
 ## Architecture
 

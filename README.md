@@ -12,15 +12,10 @@ Dhwani is a self-hosted GenAI platform designed to provide voice mode interactio
 
     
 
+[![Watch the video](https://img.youtube.com/vi/VqFdZAkR_a0/hqdefault.jpg)](https://youtube.com/shorts/VqFdZAkR_a0)
 
-<a href="https://youtube.com/shorts/VqFdZAkR_a0?feature=share" target="_blank">
-  <img src="https://img.youtube.com/vi/VqFdZAkR_a0/0.jpg" alt="Watch the video">
-</a>
+
   
-
-<a href="https://www.youtube.com/watch?v=VqFdZAkR_a0" target="_blank">
-  <img src="https://img.youtube.com/vi/VqFdZAkR_a0/0.jpg" alt="Watch the video">
-</a>
 
 - [Pitch Deck](https://docs.google.com/presentation/d/e/2PACX-1vQxLtbL_kXOqHgAHqcFTg8hDP7Dw3lt64U336J0f9CgYQPKDJVqONd3F4Js1XiCvk_LDpbijshQ5mM6/pub?start=false&loop=false&delayms=3000)
 

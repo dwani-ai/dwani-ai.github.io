@@ -10,8 +10,7 @@ Dhwani is a self-hosted GenAI platform designed to provide voice mode interactio
 - Develop and enhance a Kannada voice model that meets industry standards set by OpenAI, Google, ElevenLabs, xAI
 - Create robust voice solutions for Indian languages, with a specific emphasis on Kannada.
 
-    <iframe src="https://drive.google.com/file/d/1jBdS9E4TqWkhDpE1Fwr4ChpeUGgVg_-3/view?usp=drivesdk
-" ></iframe>
+    <iframe src="https://drive.google.com/file/d/1jBdS9E4TqWkhDpE1Fwr4ChpeUGgVg_-3/view?usp=drivesdk" ></iframe>
   
 
 - [Pitch Deck](https://docs.google.com/presentation/d/e/2PACX-1vQxLtbL_kXOqHgAHqcFTg8hDP7Dw3lt64U336J0f9CgYQPKDJVqONd3F4Js1XiCvk_LDpbijshQ5mM6/pub?start=false&loop=false&delayms=3000)

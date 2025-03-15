@@ -1,9 +1,9 @@
 {
-  "name": "sanjeevini_frontend",
+  "name": "dhwani",
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://slabstech.github.io/sanjeevini_frontend",
+  "homepage": "https://slabstech.github.io/dhwani",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

@@ -1,0 +1,28 @@
+/* Import Material Design V5 CSS */
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+@import url('https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css');
+
+/* Navigation bar styles */
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    justify-content: space-around;
+    background-color: #3f51b5; /* Primary color from Material Design V5 */
+}
+
+nav ul li a {
+    color: #ffffff; /* Text color for contrast */
+    text-decoration: none;
+    padding: 15px 20px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+nav ul li a:hover {
+    background-color: #303f9f; /* Darker primary color for hover effect */
+}

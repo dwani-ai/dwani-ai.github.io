@@ -1,7 +1,7 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
-    readonly VITE_SANJEEVINI_BACKEND_APP_API_URL: string;
+    readonly VITE_DHWANI_BACKEND_APP_API_URL: string;
     // more env variables...
   }
   

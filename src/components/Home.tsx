@@ -1,7 +1,5 @@
 import { Component } from 'react';
-import { Container, Grid, Typography, Divider } from '@mui/material';
-import VisionIntegration from './Integration/VisionIntegration';
-import VoiceIntegration from './Integration/VoiceIntegration';
+import { Container, Typography } from '@mui/material';
 interface AppState {
 }
 
@@ -32,22 +30,6 @@ class Home extends Component<HomeProps, AppState> {
         <Typography variant="h4" gutterBottom>
          Dhwani - Voice AI for Kannada
         </Typography>
-        <div style={{ display: 'none' }}>
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={6}>
-            <VisionIntegration serverUrl={this.serverBaseUrl} isOnline={this.isOnline} />
-          </Grid>
-          <Grid item xs={12}>
-            <Divider />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <VoiceIntegration serverUrl={this.serverBaseUrl} isOnline={this.isOnline} />
-          </Grid>
-          <Grid item xs={12}>
-            <Divider />
-          </Grid>
-        </Grid>
-        </div>
       </Container>
       </div>
       </div>

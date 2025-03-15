@@ -21,7 +21,6 @@ import AppTheme from './components/ux/shared-theme/AppTheme';
 import SignIn from './components/ux/sign-in/SignIn';
 import SignUp from './components/ux/sign-up/SignUp';
 import Blog from './components/ux/blog/Blog';
-import UserApp from './components/User/UserApp';
 
 const rootElement = document.getElementById('root');
 if (rootElement) {
@@ -34,7 +33,11 @@ if (rootElement) {
               <CssBaseline enableColorScheme />
               <AppAppBar />
               <Routes>
-                <Route path="/demo" element={<UserApp />} />
+                <Route path="/demo" element={<Blog />} />
+                <Route path="/signin" element={<SignIn />} />
+                <Route path="/signup" element={<SignUp />} />
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/faq" element={<FAQ />} />
                 <Route
                   path="/"
                   element={

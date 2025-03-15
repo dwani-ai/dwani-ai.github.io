@@ -15,8 +15,8 @@ function Copyright() {
   return (
     <Typography variant="body2" sx={{ color: 'text.secondary', mt: 1 }}>
       {'Copyright © '}
-      <Link color="text.secondary" href="https://sanjeevini.me/">
-        Sanjeevini
+      <Link color="text.secondary" href="https://slabstech.com/dhwani">
+        Dhwani
       </Link>
       &nbsp;
       {new Date().getFullYear()}
@@ -198,7 +198,7 @@ export default function Footer() {
           <IconButton
             color="inherit"
             size="small"
-            href="https://x.com/try_sanjeevini"
+            href="https://x.com/gaganyatri"
             aria-label="X"
             sx={{ alignSelf: 'center' }}
           >

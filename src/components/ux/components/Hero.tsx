@@ -77,7 +77,7 @@ export default function Hero() {
               fontSize: 'clamp(3rem, 10vw, 3.5rem)',
             }}
           >
-            Sanjeevini
+            Dhwani
           </Typography>
 
           <Typography
@@ -87,7 +87,7 @@ export default function Hero() {
               width: { sm: '100%', md: '80%' },
             }}
           >
-          A privacy-focused, local AI-powered medical translation agent for doctors.
+          Your Kannada-Speaking Voice Buddy
           </Typography>
           <Typography
             sx={{
@@ -97,7 +97,7 @@ export default function Hero() {
             }}
           >
           </Typography>
-         Enables accurate diagnosis across language barriers by processing sensitive patient data on-device.
+          Imagine chatting with your phone in Kannada—Dhwani makes it happen!
           <Stack
             direction={{ xs: 'column', sm: 'row' }}
             spacing={1}
@@ -110,7 +110,7 @@ export default function Hero() {
             <iframe
               width="560"
               height="315"
-              src="https://www.youtube.com/embed/KHK_jaB4D0g?rel=0"
+              src="https://www.youtube.com/embed/kqZZZjbeNVk?rel=0"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
@@ -120,6 +120,7 @@ export default function Hero() {
            
           </Grid>
           </div>
+          <div style={{ display: 'none' }}>
             <Grid container spacing={2}>
               <Grid size={{ xs: 12 }} >
                 <SpeechASR  />
@@ -131,6 +132,7 @@ export default function Hero() {
                 <SpeechLLM  />
               </Grid>
             </Grid>
+            </div>
             <div style={{ display: 'none' }}>
             <InputLabel htmlFor="email-hero" sx={visuallyHidden}>
               Email

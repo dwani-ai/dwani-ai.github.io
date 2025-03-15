@@ -35,10 +35,6 @@ if (rootElement) {
               <AppAppBar />
               <Routes>
                 <Route path="/demo" element={<UserApp />} />
-                <Route path="/signin" element={<SignIn />} />
-                <Route path="/signup" element={<SignUp />} />
-                <Route path="/blog" element={<Blog />} />
-                <Route path="/faq" element={<FAQ />} />
                 <Route
                   path="/"
                   element={

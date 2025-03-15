@@ -24,14 +24,15 @@ class Home extends Component<HomeProps, AppState> {
       <div style={{ minHeight: "80vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
       <Container>
         <Typography variant="h4" gutterBottom>
-          Sanjeevini - AI Health App
+          Dhwani - Voice AI for Kannada
         </Typography>
       </Container>
       <div  style={{ display: 'none' }} >
       <Container>
         <Typography variant="h4" gutterBottom>
-          Sanjeevini - AI Health App
+         Dhwani - Voice AI for Kannada
         </Typography>
+        <div style={{ display: 'none' }}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={6}>
             <VisionIntegration serverUrl={this.serverBaseUrl} isOnline={this.isOnline} />
@@ -46,6 +47,7 @@ class Home extends Component<HomeProps, AppState> {
             <Divider />
           </Grid>
         </Grid>
+        </div>
       </Container>
       </div>
       </div>

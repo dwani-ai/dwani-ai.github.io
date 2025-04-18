@@ -176,7 +176,7 @@ threadpoolctl==3.5.0
 tokenizers==0.20.3
 tomli==2.2.1
 tomlkit==0.13.2
-torch==2.4.0
+torch==2.6.0
 torch-stoi==0.2.3
 torchaudio==2.4.0
 tqdm==4.67.1

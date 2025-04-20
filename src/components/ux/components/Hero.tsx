@@ -9,6 +9,7 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid2';
 import { visuallyHidden } from '@mui/utils';
 import { styled } from '@mui/material/styles';
+import SpeechDemo from './speech/SpeechDemo';
 
 import Divider from '@mui/material/Divider';
 
@@ -78,6 +79,18 @@ export default function Hero() {
           >
             Dhwani
           </Typography>
+
+          <Box sx={{ width: '100%', maxWidth: { sm: '100%', md: '1700px' } }}>
+        <Grid container spacing={2} columns={12}>
+          <Grid size={{ xs: 12 }}>
+            <SpeechDemo serverUrl="http://209.20.158.215:7860"  />
+          </Grid>
+          <Grid size={{ xs: 12 }}>
+            <Divider />
+          </Grid>
+        </Grid>
+      </Box>
+
 
           <Typography
             sx={{

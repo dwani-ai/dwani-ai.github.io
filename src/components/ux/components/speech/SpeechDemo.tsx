@@ -19,6 +19,7 @@ type SpeechDemoProps = {
 const SpeechDemo = ({ serverUrl }: SpeechDemoProps) => {
   let serverBaseUrl = serverUrl || 'http://209.20.158.215:7860';
   const recorderRef = useRef<RecordRTC | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
   const [recordedUrl, setRecordedUrl] = useState('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [audioFile, setAudioFile] = useState<File | null>(null);
@@ -36,12 +37,13 @@ const SpeechDemo = ({ serverUrl }: SpeechDemoProps) => {
     dispatch(setErrorMessage(''));
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      streamRef.current = stream;
       recorderRef.current = new RecordRTC(stream, {
         type: 'audio',
         mimeType: 'audio/wav',
         recorderType: StereoAudioRecorder,
-        numberOfAudioChannels: 1, // Mono for smaller file size
-        desiredSampRate: 16000, // Common sample rate for speech
+        numberOfAudioChannels: 1,
+        desiredSampRate: 16000,
         disableLogs: true,
       });
       if (recorderRef.current) {
@@ -62,12 +64,14 @@ const SpeechDemo = ({ serverUrl }: SpeechDemoProps) => {
         const blob = recorderRef.current?.getBlob();
         if (blob) {
           const url = URL.createObjectURL(blob);
-          const file = new File([blob], 'recording.wav', { type: 'audio/wav' });
+          const file = new File([blob], 'recording.wav', { type: 'audio/x-wav' });
           setAudioFile(file);
           setRecordedUrl(url);
         }
-        // Clean up
-        recorderRef.current?.getTracks()?.forEach((track: MediaStreamTrack) => track.stop());
+        if (streamRef.current) {
+          streamRef.current.getTracks().forEach((track) => track.stop());
+          streamRef.current = null;
+        }
         recorderRef.current = null;
         setIsRecording(false);
       });
@@ -79,9 +83,8 @@ const SpeechDemo = ({ serverUrl }: SpeechDemoProps) => {
       setIsProduction(true);
     }
 
-    // Cleanup on unmount
     return () => {
-      if (recorderRef.current) {
+      if (recorderRef.current || streamRef.current) {
         stopRecording();
       }
       if (recordedUrl) {
@@ -114,6 +117,7 @@ const SpeechDemo = ({ serverUrl }: SpeechDemoProps) => {
       const response = await axios.post(serverEndpoint, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
+          'Accept': 'audio/wav',
         },
         responseType: 'blob',
       });
@@ -124,15 +128,19 @@ const SpeechDemo = ({ serverUrl }: SpeechDemoProps) => {
       return audioUrl;
     } catch (error) {
       const axiosError = error as AxiosError<Blob>;
-      console.error('Error processing speech:', axiosError.message);
+      console.error('Error processing speech:', axiosError);
       if (axiosError.response) {
         let responseText = 'Unknown server error';
         if (axiosError.response.data instanceof Blob) {
           responseText = await axiosError.response.data.text();
+        } else if (typeof axiosError.response.data === 'string') {
+          responseText = axiosError.response.data;
         }
         dispatch(setErrorMessage(`Server error: ${responseText || 'Invalid HTTP request received'}`));
+      } else if (axiosError.request) {
+        dispatch(setErrorMessage('CORS error or server unreachable. Please check server configuration.'));
       } else {
-        dispatch(setErrorMessage('Failed to connect to the server'));
+        dispatch(setErrorMessage(`Request setup error: ${axiosError.message}`));
       }
       setTableAIProgressLoading(false);
       throw error;

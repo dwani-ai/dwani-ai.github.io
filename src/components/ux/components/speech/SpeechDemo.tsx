@@ -17,7 +17,7 @@ type SpeechDemoProps = {
 };
 
 const SpeechDemo = ({ serverUrl }: SpeechDemoProps) => {
-  let serverBaseUrl = serverUrl || 'http://209.20.158.215:7860';
+  let serverBaseUrl = serverUrl || 'https://slabstech-dhwani-server.hf.space';
   const recorderRef = useRef<RecordRTC | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const [recordedUrl, setRecordedUrl] = useState('');
@@ -108,7 +108,7 @@ const SpeechDemo = ({ serverUrl }: SpeechDemoProps) => {
     }
     setTableAIProgressLoading(true);
     dispatch(setErrorMessage(''));
-    const serverEndpoint = `${serverBaseUrl}/v1/speech_to_speech?language=kannada`;
+    const serverEndpoint = `${serverBaseUrl}/v1/speech_to_speech_v2?language=kannada`;
 
     const formData = new FormData();
     formData.append('file', audioFile, 'recording.wav');
@@ -117,17 +117,21 @@ const SpeechDemo = ({ serverUrl }: SpeechDemoProps) => {
       const response = await axios.post(serverEndpoint, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          'Accept': 'audio/wav',
+          'Accept': 'application/json',
         },
-        responseType: 'blob',
       });
 
-      const audioUrl = window.URL.createObjectURL(new Blob([response.data], { type: 'audio/wav' }));
+      console.log('Server response:', response.data);
+      // Assuming the JSON response contains an audio URL or base64 data
+      const audioUrl = response.data.audioUrl || response.data.url; // Adjust based on actual response
+      if (!audioUrl) {
+        throw new Error('No audio URL in server response');
+      }
       dispatch(setAudioResponse(audioUrl));
       setTableAIProgressLoading(false);
       return audioUrl;
     } catch (error) {
-      const axiosError = error as AxiosError<Blob>;
+      const axiosError = error as AxiosError;
       console.error('Error processing speech:', axiosError);
       if (axiosError.response) {
         let responseText = 'Unknown server error';
@@ -135,10 +139,12 @@ const SpeechDemo = ({ serverUrl }: SpeechDemoProps) => {
           responseText = await axiosError.response.data.text();
         } else if (typeof axiosError.response.data === 'string') {
           responseText = axiosError.response.data;
+        } else if (axiosError.response.data) {
+          responseText = JSON.stringify(axiosError.response.data);
         }
         dispatch(setErrorMessage(`Server error: ${responseText || 'Invalid HTTP request received'}`));
       } else if (axiosError.request) {
-        dispatch(setErrorMessage('CORS error or server unreachable. Please check server configuration.'));
+        dispatch(setErrorMessage('CORS error or server unreachable. Please ensure the server allows requests from this origin.'));
       } else {
         dispatch(setErrorMessage(`Request setup error: ${axiosError.message}`));
       }

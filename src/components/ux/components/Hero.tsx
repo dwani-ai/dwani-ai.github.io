@@ -1,26 +1,24 @@
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
-import InputLabel from '@mui/material/InputLabel';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
-import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid2';
-import { visuallyHidden } from '@mui/utils';
-import { styled } from '@mui/material/styles';
 import Divider from '@mui/material/Divider';
+import { styled } from '@mui/material/styles';
+import Chip from '@mui/material/Chip';
 
 const StyledBox = styled('div')(({ theme }) => ({
   alignSelf: 'center',
   width: '100%',
   height: 400,
   marginTop: theme.spacing(8),
-  borderRadius: (theme).shape.borderRadius,
+  borderRadius: theme.shape.borderRadius,
   outline: '6px solid',
   outlineColor: 'hsla(220, 25%, 80%, 0.2)',
   border: '1px solid',
-  borderColor: (theme).palette.grey[200],
+  borderColor: theme.palette.grey[200],
   boxShadow: '0 0 12px 8px hsla(220, 25%, 80%, 0.2)',
   backgroundImage: `url(https://mui.com/static/screenshots/material-ui/getting-started/templates/dashboard.jpg)`,
   backgroundSize: 'cover',
@@ -32,261 +30,306 @@ const StyledBox = styled('div')(({ theme }) => ({
     boxShadow: '0 0 24px 12px hsla(210, 100%, 25%, 0.2)',
     backgroundImage: `url(https://mui.com/static/screenshots/material-ui/getting-started/templates/dashboard-dark.jpg)`,
     outlineColor: 'hsla(220, 20%, 42%, 0.1)',
-    borderColor: (theme).palette.grey[700],
+    borderColor: theme.palette.grey[700],
   }),
 }));
 
+const FeatureCard = styled(Box)(({ theme }) => ({
+  padding: theme.spacing(3),
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: theme.palette.background.paper,
+  boxShadow: theme.shadows[2],
+  textAlign: 'center',
+  transition: 'transform 0.3s ease-in-out',
+  '&:hover': {
+    transform: 'scale(1.05)',
+  },
+}));
+
 export default function Hero() {
+  const features = [
+    {
+      title: 'Kannada Voice AI',
+      description: 'Answer voice queries in Kannada using a powerful LLM.',
+      components: 'LLM',
+      hardware: 'CPU/GPU',
+    },
+    {
+      title: 'Voice to Voice Translation',
+      description: 'Convert spoken language to text, translate, and generate speech.',
+      components: 'ASR, Translation, TTS',
+      hardware: 'GPU',
+    },
+    {
+      title: 'Text to Speech',
+      description: 'Generate natural-sounding speech from text.',
+      components: 'TTS',
+      hardware: 'GPU',
+    },
+    {
+      title: 'PDF Translate',
+      description: 'Translate content from PDF documents seamlessly.',
+      components: 'Translation',
+      hardware: 'GPU',
+    },
+  ];
+
   return (
-    <Box
-      id="hero"
-      sx={(theme) => ({
-        width: '100%',
-        backgroundRepeat: 'no-repeat',
-        backgroundImage:
-          'radial-gradient(ellipse 80% 50% at 50% -20%, hsl(210, 100%, 90%), transparent)',
-        ...theme.applyStyles('dark', {
+    <>
+ 
+        <title>Dwani - Your Kannada-Speaking Voice Buddy</title>
+        <meta
+          name="description"
+          content="Dwani is a GenAI platform offering voice interaction in Kannada and other Indian languages. Download the app on Google Play and explore features like voice translation, text-to-speech, and more."
+        />
+        <meta name="keywords" content="Dwani, Kannada AI, voice assistant, Indian languages, GenAI, voice translation" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="canonical" href="https://dwani.ai" />
+
+      <Box
+        id="hero"
+        sx={(theme) => ({
+          width: '100%',
+          backgroundRepeat: 'no-repeat',
           backgroundImage:
-            'radial-gradient(ellipse 80% 50% at 50% -20%, hsl(210, 100%, 16%), transparent)',
-        }),
-      })}
-    >
-      <Container
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          pt: { xs: 14, sm: 20 },
-          pb: { xs: 8, sm: 12 },
-        }}
+            'radial-gradient(ellipse 80% 50% at 50% -20%, hsl(210, 100%, 90%), transparent)',
+          ...theme.applyStyles('dark', {
+            backgroundImage:
+              'radial-gradient(ellipse 80% 50% at 50% -20%, hsl(210, 100%, 16%), transparent)',
+          }),
+        })}
       >
-        <Stack
-          spacing={2}
-          useFlexGap
-          sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' } }}
+        <Container
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            pt: { xs: 14, sm: 20 },
+            pb: { xs: 8, sm: 12 },
+          }}
         >
-          <Typography
-            variant="h3"
-            sx={{
-              display: 'flex',
-              flexDirection: { xs: 'column', sm: 'row' },
-              alignItems: 'center',
-              fontSize: 'clamp(3rem, 10vw, 3.5rem)',
-            }}
-          >
-            Dwani
-          </Typography>
-
-          <Typography
-            sx={{
-              textAlign: 'center',
-              color: 'text.secondary',
-              width: { sm: '100%', md: '80%' },
-            }}
-          >
-            Your Kannada-Speaking Voice Buddy
-          </Typography>
-          <Typography
-            sx={{
-              textAlign: 'center',
-              color: 'text.secondary',
-              width: { sm: '100%', md: '80%' },
-            }}
-          >
-            Imagine chatting with your phone in Kannada—Dwani makes it happen!
-          </Typography>
-
+          {/* Hero Section */}
           <Stack
-            direction={{ xs: 'column', sm: 'row' }}
-            spacing={1}
+            spacing={2}
             useFlexGap
-            sx={{ pt: 2, width: { xs: '100%', sm: '350px' } }}
+            sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' } }}
           >
-            <Grid container spacing={2}>
-              <Grid size={{ xs: 12 }}>
+            <Typography
+              variant="h1"
+              sx={{
+                display: 'flex',
+                flexDirection: { xs: 'column', sm: 'row' },
+                alignItems: 'center',
+                fontSize: 'clamp(2.5rem, 8vw, 3.5rem)',
+                fontWeight: 'bold',
+                color: 'primary.main',
+              }}
+            >
+              Dwani
+            </Typography>
+            <Typography
+              variant="h6"
+              sx={{
+                textAlign: 'center',
+                color: 'text.secondary',
+                width: { sm: '100%', md: '80%' },
+              }}
+            >
+              Your Kannada-Speaking Voice Buddy
+            </Typography>
+            <Typography
+              sx={{
+                textAlign: 'center',
+                color: 'text.secondary',
+                width: { sm: '100%', md: '80%' },
+              }}
+            >
+              Chat in Kannada with Dwani’s GenAI-powered voice assistant, supporting multiple Indian languages.
+            </Typography>
+
+            <Button
+              variant="contained"
+              color="primary"
+              href="https://play.google.com/store/apps/details?id=com.slabstech.dhwani.voiceai&pcampaignid=web_share"
+              target="_blank"
+              size="large"
+              sx={{ mt: 2, px: 4, py: 1.5 }}
+              aria-label="Download Dwani on Google Play"
+            >
+              Download on Google Play
+            </Button>
+
+            <Grid container spacing={2} sx={{ mt: 2 }}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <iframe
-                  width="560"
+                  width="100%"
                   height="315"
                   src="https://www.youtube.com/embed/TbplM-lWSL4?rel=0"
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
-                  title="Watch the video"
+                  title="Dwani Android App Demo"
+                ></iframe>
+              </Grid>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <iframe
+                  width="100%"
+                  height="315"
+                  src="https://www.youtube.com/embed/kqZZZjbeNVk?rel=0"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  title="Introduction to Dwani Project"
                 ></iframe>
               </Grid>
             </Grid>
           </Stack>
 
-          {/* Added Google Play Button */}
-          <Button
-            variant="contained"
-            color="primary"
-            href="https://play.google.com/store/apps/details?id=com.slabstech.dhwani.voiceai&pcampaignid=web_share"
-            target="_blank"
-            sx={{ mt: 2 }}
+          {/* Features Section */}
+          <Stack
+            spacing={4}
+            useFlexGap
+            sx={{ alignItems: 'center', width: { xs: '100%', sm: '90%' }, mt: 8 }}
           >
-            Download on Google Play
-          </Button>
-
-          <Divider />
-
-          <div style={{ display: 'none' }}>
-            <InputLabel htmlFor="email-hero" sx={visuallyHidden}>
-              Email
-            </InputLabel>
-            <TextField
-              id="email-hero"
-              hiddenLabel
-              size="small"
-              variant="outlined"
-              aria-label="Enter your email address"
-              placeholder="Your email address"
-              fullWidth
-              slotProps={{
-                htmlInput: {
-                  autoComplete: 'off',
-                  'aria-label': 'Enter your email address',
-                },
-              }}
-            />
-            <Button
-              variant="contained"
-              color="primary"
-              size="small"
-              sx={{ minWidth: 'fit-content' }}
-            >
-              Start now
-            </Button>
-          </div>
-          
-          <div style={{ display: 'none' }}>
-            <Typography
-              variant="caption"
-              color="text.secondary"
-              sx={{ textAlign: 'center' }}
-            >
-              By clicking "Start now" you agree to our 
-              <Link href="#" color="primary">
-                Terms & Conditions
-              </Link>
-              .
+            <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
+              Key Features
             </Typography>
-          </div>
-        </Stack>
+            <Grid container spacing={3}>
+              {features.map((feature, index) => (
+                <Grid size={{ xs: 12, sm: 6, md: 3 }} key={index}>
+                  <FeatureCard>
+                    <Typography variant="h6" sx={{ fontWeight: 'medium' }}>
+                      {feature.title}
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: 'text.secondary', mt: 1 }}>
+                      {feature.description}
+                    </Typography>
+                    <Stack direction="row" spacing={1} sx={{ mt: 2, justifyContent: 'center' }}>
+                      <Chip label={feature.components} color="primary" variant="outlined" />
+                      <Chip label={feature.hardware} color="secondary" variant="outlined" />
+                    </Stack>
+                  </FeatureCard>
+                </Grid>
+              ))}
+            </Grid>
+          </Stack>
 
-        <Stack
-          spacing={2}
-          useFlexGap
-          sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' } }}
-        >
-          <Divider />
-          <Divider />
-          <Divider />
-
-          <Typography
-            sx={{
-              textAlign: 'center',
-              color: 'text.secondary',
-              width: { sm: '100%', md: '80%' },
-            }}
+          {/* Research Goals Section */}
+          <Stack
+            spacing={2}
+            useFlexGap
+            sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' }, mt: 8 }}
           >
-            Now Support 5 languages on Android. 
-            Email Us - TO get access to early user program
-          </Typography>
+            <Divider sx={{ width: '100%' }} />
+            <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
+              Research Goals
+            </Typography>
+            <Typography sx={{ textAlign: 'center', color: 'text.secondary' }}>
+              - Improve Time to First Token Generation (TTFTG) for ASR, Translation, and TTS systems.
+              <br />
+              - Develop a Kannada voice model meeting industry standards (OpenAI, Google, ElevenLabs, xAI).
+              <br />
+              - Create robust voice solutions for Indian languages, with a focus on Kannada.
+            </Typography>
+          </Stack>
 
-          <div>
+          {/* Models and Tools Section */}
+          <Stack
+            spacing={2}
+            useFlexGap
+            sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' }, mt: 8 }}
+          >
+            <Divider sx={{ width: '100%' }} />
+            <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
+              Models and Tools
+            </Typography>
+            <Typography sx={{ textAlign: 'center', color: 'text.secondary' }}>
+              Dwani leverages open-source tools for seamless performance:
+            </Typography>
             <Grid container spacing={2}>
-              <Grid size={{ xs: 12 }}>
-                <iframe
-                  width="560"
-                  height="315"
-                  src="https://www.youtube.com/embed/31jvakEM_TM?rel=0"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  title="Watch the video"
-                ></iframe>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <Typography variant="body1">
+                  - <Link href="https://github.com/slabstech/asr-indic-server" target="_blank">ASR Indic Server</Link>
+                  <br />
+                  - <Link href="https://github.com/slabstech/tts-indic-server" target="_blank">TTS Indic Server</Link>
+                  <br />
+                  - <Link href="https://github.com/slabstech/indic-translate-server" target="_blank">Indic Translate Server</Link>
+                </Typography>
+              </Grid>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <Typography variant="body1">
+                  - <Link href="https://github.com/slabstech/docs-indic-server" target="_blank">Indic Document Server</Link>
+                  <br />
+                  - <Link href="https://github.com/slabstech/dhwani-server" target="_blank">Dwani Server</Link>
+                  <br />
+                  - <Link href="https://github.com/slabstech/llm-indic-server_cpu" target="_blank">LLM Indic Server</Link>
+                </Typography>
               </Grid>
             </Grid>
-          </div>
-        </Stack>
+          </Stack>
 
-        <Stack
-          spacing={2}
-          useFlexGap
-          sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' } }}
-        >
-          <Divider />
-          <Divider />
-          <Divider />
-
-          <Typography
-            sx={{
-              textAlign: 'center',
-              color: 'text.secondary',
-              width: { sm: '100%', md: '80%' },
-            }}
+          {/* Workshop and API Section */}
+          <Stack
+            spacing={2}
+            useFlexGap
+            sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' }, mt: 8 }}
           >
-            How to use - Dwani AI - Workshop - 20th March, 2025
-          </Typography>
-
-          <div>
+            <Divider sx={{ width: '100%' }} />
+            <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
+              Learn More
+            </Typography>
+            <Typography sx={{ textAlign: 'center', color: 'text.secondary' }}>
+              Join our workshop on March 20, 2025, to explore Dwani AI.
+            </Typography>
             <Grid container spacing={2}>
               <Grid size={{ xs: 12 }}>
                 <iframe
-                  width="560"
+                  width="100%"
                   height="315"
                   src="https://www.youtube.com/embed/f5JkJLQJFGA?rel=0"
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
-                  title="Watch the video"
+                  title="Dwani AI Workshop"
                 ></iframe>
               </Grid>
             </Grid>
-          </div>
-        </Stack>
-
-        <Stack
-          spacing={2}
-          useFlexGap
-          sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' } }}
-        >
-          <Divider />
-          <Divider />
-          <Divider />
-
-          <Typography
-            sx={{
-              textAlign: 'center',
-              color: 'text.secondary',
-              width: { sm: '100%', md: '80%' },
-            }}
-          >
-            Access to Dwani AI - API
-          </Typography>
-
-          <div>
+            <Typography sx={{ textAlign: 'center', color: 'text.secondary', mt: 2 }}>
+              Access Dwani AI via our API for developers.
+            </Typography>
             <Grid container spacing={2}>
               <Grid size={{ xs: 12 }}>
                 <iframe
-                  width="560"
+                  width="100%"
                   height="315"
                   src="https://www.youtube.com/embed/RLIhG1bt8gw?rel=0"
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
-                  title="Watch the video"
+                  title="Dwani AI API"
                 ></iframe>
               </Grid>
             </Grid>
-          </div>
-        </Stack>
+          </Stack>
 
-        <div style={{ display: 'none' }}>
-          <StyledBox id="image" />
-        </div>
-      </Container>
-    </Box>
+          {/* Contact Section */}
+          <Stack
+            spacing={2}
+            useFlexGap
+            sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' }, mt: 8 }}
+          >
+            <Divider sx={{ width: '100%' }} />
+            <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
+              Get in Touch
+            </Typography>
+            <Typography sx={{ textAlign: 'center', color: 'text.secondary' }}>
+              For collaborations, join our <Link href="https://discord.gg/WZMCerEZ2P" target="_blank">Discord community</Link>.
+              <br />
+              Have questions? <Link href="https://github.com/slabstech/dhwani-server/issues" target="_blank">Open an issue on GitHub</Link>.
+            </Typography>
+          </Stack>
+        </Container>
+      </Box>
+    </>
   );
 }

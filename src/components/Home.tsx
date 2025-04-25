@@ -22,13 +22,13 @@ class Home extends Component<HomeProps, AppState> {
       <div style={{ minHeight: "80vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
       <Container>
         <Typography variant="h4" gutterBottom>
-          Dhwani - Voice AI for Kannada
+          dwani.ai - Voice AI for Kannada
         </Typography>
       </Container>
       <div  style={{ display: 'none' }} >
       <Container>
         <Typography variant="h4" gutterBottom>
-         Dhwani - Voice AI for Kannada
+         dwani.ai - Voice AI for Kannada
         </Typography>
       </Container>
       </div>

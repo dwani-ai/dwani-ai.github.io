@@ -1,12 +1,12 @@
 import { createSvgIcon } from '@mui/material/utils';
 
-const DhwaniIcon = createSvgIcon(
+const DwaniAIIcon = createSvgIcon(
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 50">
     <text x="10" y="35" fontFamily="Arial" fontSize="24" fill="currentColor">
-      Dhwani
+      dwani.ai
     </text>
   </svg>,
-  'Dhwani'
+  'Dwani'
 );
 
-export default DhwaniIcon;
+export default DwaniAIIcon;

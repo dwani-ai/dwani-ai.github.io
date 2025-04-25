@@ -13,7 +13,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Drawer from '@mui/material/Drawer';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
-import DhwaniIcon from './DhwaniIcon';
+import DwaniAIIcon from './DwaniAIIcon';
 import ColorModeIconDropdown from '../shared-theme/ColorModeIconDropdown';
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
@@ -78,7 +78,7 @@ export default function AppAppBar() {
       <Container maxWidth="lg">
         <StyledToolbar variant="dense" disableGutters>
           <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0 }}>
-            <DhwaniIcon />
+            <DwaniAIIcon />
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
               <Button variant="text" color="info" size="small" onClick={handleHomeClick}>
                 Features

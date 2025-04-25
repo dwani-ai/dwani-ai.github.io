@@ -10,13 +10,13 @@ import Typography from '@mui/material/Typography';
 import FacebookIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import TwitterIcon from '@mui/icons-material/X';
-import DhwaniIcon from './DhwaniIcon';
+import DwaniAIIcon from './DwaniAIIcon';
 function Copyright() {
   return (
     <Typography variant="body2" sx={{ color: 'text.secondary', mt: 1 }}>
       {'Copyright © '}
-      <Link color="text.secondary" href="https://dhwani-ai.com">
-        Dhwani
+      <Link color="text.secondary" href="https://dwani.ai">
+        dwani.ai
       </Link>
       &nbsp;
       {new Date().getFullYear()}
@@ -54,7 +54,7 @@ export default function Footer() {
           }}
         >
           <Box sx={{ width: { xs: '100%', sm: '60%' } }}>
-            <DhwaniIcon />
+            <DwaniAIIcon />
             <Typography variant="body2" gutterBottom sx={{ fontWeight: 600, mt: 2 }}>
               Join the newsletter
             </Typography>

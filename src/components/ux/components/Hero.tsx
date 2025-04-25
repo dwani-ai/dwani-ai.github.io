@@ -100,7 +100,7 @@ export default function Hero() {
                 color: 'primary.main',
               }}
             >
-              Dwani
+              dwani.ai
             </Typography>
             <Typography
               variant="h6"
@@ -119,7 +119,7 @@ export default function Hero() {
                 width: { sm: '100%', md: '80%' },
               }}
             >
-              Chat in Kannada with Dwani’s GenAI-powered voice assistant, supporting multiple Indian languages.
+              Chat in Kannada with dwani.ai's GenAI-powered voice assistant, supporting multiple Indian languages.
             </Typography>
 
             <Button
@@ -143,7 +143,7 @@ export default function Hero() {
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
-                  title="Dwani Android App Demo"
+                  title="dwani.ai Android App Demo"
                 ></iframe>
               </Grid>
               <Grid size={{ xs: 12, sm: 6 }}>
@@ -154,7 +154,7 @@ export default function Hero() {
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
-                  title="Introduction to Dwani Project"
+                  title="Introduction to dwani.ai Project"
                 ></iframe>
               </Grid>
             </Grid>
@@ -219,7 +219,7 @@ export default function Hero() {
               Models and Tools
             </Typography>
             <Typography sx={{ textAlign: 'center', color: 'text.secondary' }}>
-              Dwani leverages open-source tools for seamless performance:
+            dwani.ai leverages open-source tools for seamless performance:
             </Typography>
             <Grid container spacing={2}>
               <Grid size={{ xs: 12, sm: 6 }}>
@@ -235,7 +235,7 @@ export default function Hero() {
                 <Typography variant="body1">
                   - <Link href="https://github.com/slabstech/docs-indic-server" target="_blank">Indic Document Server</Link>
                   <br />
-                  - <Link href="https://github.com/slabstech/dhwani-server" target="_blank">Dwani Server</Link>
+                  - <Link href="https://github.com/slabstech/dhwani-server" target="_blank">dwani.ai Server</Link>
                   <br />
                   - <Link href="https://github.com/slabstech/llm-indic-server_cpu" target="_blank">LLM Indic Server</Link>
                 </Typography>
@@ -254,7 +254,7 @@ export default function Hero() {
               Learn More
             </Typography>
             <Typography sx={{ textAlign: 'center', color: 'text.secondary' }}>
-              Join our workshop on March 20, 2025, to explore Dwani AI.
+              Our workshop on March 20, 2025, to explore dwani.ai.
             </Typography>
             <Grid container spacing={2}>
               <Grid size={{ xs: 12 }}>
@@ -265,12 +265,12 @@ export default function Hero() {
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
-                  title="Dwani AI Workshop"
+                  title="dwani.ai Workshop"
                 ></iframe>
               </Grid>
             </Grid>
             <Typography sx={{ textAlign: 'center', color: 'text.secondary', mt: 2 }}>
-              Access Dwani AI via our API for developers.
+              Access dwani.ai via our API for developers.
             </Typography>
             <Grid container spacing={2}>
               <Grid size={{ xs: 12 }}>
@@ -281,7 +281,7 @@ export default function Hero() {
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
-                  title="Dwani AI API"
+                  title="dwani.ai API"
                 ></iframe>
               </Grid>
             </Grid>

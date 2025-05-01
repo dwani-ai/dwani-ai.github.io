@@ -86,13 +86,13 @@ export default function AppAppBar() {
           <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0 }}>
             <DwaniAIIcon />
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+              <Button variant="text" color="info" size="small" onClick={handleHomeClick}>
+                Home
+              </Button>
               <Button variant="text" color="info" size="small" onClick={handleDocsClick}>
                 Docs
               </Button>
               <div style={{ display: 'none' }}> 
-              <Button variant="text" color="info" size="small" onClick={handleHomeClick}>
-                Features
-              </Button>
               <Button variant="text" color="info" size="small" onClick={handleDemoClick}>
                 Demo
               </Button>
@@ -125,12 +125,14 @@ export default function AppAppBar() {
               alignItems: 'center',
             }}
           >
+            <div style={{ display: 'none' }}>
             <Button color="primary" variant="text" size="small" onClick={handleSignInClick}>
               Sign in
             </Button>
             <Button color="primary" variant="contained" size="small" onClick={handleSignUpClick}>
               Sign up
             </Button>
+            </div>
             <ColorModeIconDropdown />
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' }, gap: 1 }}>

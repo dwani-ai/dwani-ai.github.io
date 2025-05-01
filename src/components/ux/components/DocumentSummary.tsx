@@ -75,6 +75,7 @@ export default function DocumentSummary() {
         flexDirection: 'column',
         alignItems: 'center',
         p: { xs: 4, sm: 6 },
+        pt: { xs: 10, sm: 12 }, // Added top padding to clear app bar
         minHeight: '100vh',
         bgcolor: 'background.default',
       }}

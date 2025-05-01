@@ -8,6 +8,9 @@ import Grid from '@mui/material/Grid2';
 import Divider from '@mui/material/Divider';
 import { styled } from '@mui/material/styles';
 import Chip from '@mui/material/Chip';
+import { useState } from 'react';
+import CircularProgress from '@mui/material/CircularProgress';
+import Alert from '@mui/material/Alert';
 
 const FeatureCard = styled(Box)(({ theme }) => ({
   padding: theme.spacing(3),
@@ -22,6 +25,62 @@ const FeatureCard = styled(Box)(({ theme }) => ({
 }));
 
 export default function Hero() {
+  const [file, setFile] = useState(null);
+  const [summary, setSummary] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const handleFileChange = (event) => {
+    const selectedFile = event.target.files[0];
+    if (selectedFile && selectedFile.type === 'application/pdf') {
+      setFile(selectedFile);
+      setError(null);
+    } else {
+      setError('Please select a valid PDF file.');
+      setFile(null);
+    }
+  };
+
+  const handleSummarize = async () => {
+    if (!file) {
+      setError('Please upload a PDF file first.');
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('src_lang', 'eng_Latn');
+    formData.append('tgt_lang', 'eng_Latn');
+    formData.append('prompt', 'Summarize the document in 3 sentences.');
+
+    try {
+      const response = await fetch(
+        'https://slabstech-dhwani-server-workshop.hf.space/v1/document_summary',
+        {
+          method: 'POST',
+          headers: {
+            accept: 'application/json',
+          },
+          body: formData,
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch summary');
+      }
+
+      const data = await response.json();
+      setSummary(data.summary);
+    } catch (err) {
+      setError('Error fetching summary: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const features = [
     {
       title: 'Kannada Voice AI',
@@ -47,19 +106,27 @@ export default function Hero() {
       components: 'Translation',
       hardware: 'GPU',
     },
+    {
+      title: 'Document Summary',
+      description: 'Summarize PDF documents into concise text.',
+      components: 'LLM',
+      hardware: 'GPU',
+    },
   ];
 
   return (
     <>
- 
-        <title>Dwani - Your Kannada-Speaking Voice Buddy</title>
-        <meta
-          name="description"
-          content="Dwani is a GenAI platform offering voice interaction in Kannada and other Indian languages. Download the app on Google Play and explore features like voice translation, text-to-speech, and more."
-        />
-        <meta name="keywords" content="Dwani, Kannada AI, voice assistant, Indian languages, GenAI, voice translation" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="canonical" href="https://dwani.ai" />
+      <title>Dwani - Your Kannada-Speaking Voice Buddy</title>
+      <meta
+        name="description"
+        content="Dwani is a GenAI platform offering voice interaction in Kannada and other Indian languages. Download the app on Google Play and explore features like voice translation, text-to-speech, and document summarization."
+      />
+      <meta
+        name="keywords"
+        content="Dwani, Kannada AI, voice assistant, Indian languages, GenAI, voice translation, document summarization"
+      />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <link rel="canonical" href="https://dwani.ai" />
 
       <Box
         id="hero"
@@ -189,6 +256,61 @@ export default function Hero() {
             </Grid>
           </Stack>
 
+          {/* Document Summary Section */}
+          <Stack
+            spacing={2}
+            useFlexGap
+            sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' }, mt: 8 }}
+          >
+            <Divider sx={{ width: '100%' }} />
+            <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
+              Try Document Summarization
+            </Typography>
+            <Typography sx={{ textAlign: 'center', color: 'text.secondary' }}>
+              Upload a PDF document and get a concise summary in 3 sentences.
+            </Typography>
+            <Stack direction="row" spacing={2} sx={{ mt: 2, alignItems: 'center' }}>
+              <input
+                type="file"
+                accept="application/pdf"
+                onChange={handleFileChange}
+                style={{ display: 'none' }}
+                id="pdf-upload"
+              />
+              <label htmlFor="pdf-upload">
+                <Button variant="outlined" component="span">
+                  Upload PDF
+                </Button>
+              </label>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleSummarize}
+                disabled={loading || !file}
+              >
+                {loading ? <CircularProgress size={24} /> : 'Summarize'}
+              </Button>
+            </Stack>
+            {file && (
+              <Typography sx={{ mt: 1, color: 'text.secondary' }}>
+                Selected file: {file.name}
+              </Typography>
+            )}
+            {error && (
+              <Alert severity="error" sx={{ mt: 2, width: '100%' }}>
+                {error}
+              </Alert>
+            )}
+            {summary && (
+              <Box sx={{ mt: 2, p: 2, bgcolor: 'background.paper', borderRadius: 1, width: '100%' }}>
+                <Typography variant="h6" sx={{ fontWeight: 'medium' }}>
+                  Summary
+                </Typography>
+                <Typography sx={{ mt: 1, color: 'text.primary' }}>{summary}</Typography>
+              </Box>
+            )}
+          </Stack>
+
           {/* Research Goals Section */}
           <Stack
             spacing={2}
@@ -219,7 +341,7 @@ export default function Hero() {
               Models and Tools
             </Typography>
             <Typography sx={{ textAlign: 'center', color: 'text.secondary' }}>
-            dwani.ai leverages open-source tools for seamless performance:
+              dwani.ai leverages open-source tools for seamless performance:
             </Typography>
             <Grid container spacing={2}>
               <Grid size={{ xs: 12, sm: 6 }}>

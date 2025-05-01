@@ -205,85 +205,60 @@ export default function Hero() {
               Download on Google Play
             </Button>
 
-            <Grid container spacing={2} sx={{ mt: 2 }}>
-              <Grid size={{ xs: 12, sm: 6 }}>
-                <iframe
-                  width="100%"
-                  height="315"
-                  src="https://www.youtube.com/embed/TbplM-lWSL4?rel=0"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  title="dwani.ai Android App Demo"
-                ></iframe>
-              </Grid>
-              <Grid size={{ xs: 12, sm: 6 }}>
-                <iframe
-                  width="100%"
-                  height="315"
-                  src="https://www.youtube.com/embed/kqZZZjbeNVk?rel=0"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  title="Introduction to dwani.ai Project"
-                ></iframe>
-              </Grid>
-            </Grid>
-          </Stack>
-
-          {/* Document Summary Section */}
-          <Stack
-            spacing={2}
-            useFlexGap
-            sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' }, mt: 8 }}
-          >
-            <Divider sx={{ width: '100%' }} />
-            <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
-              Try Document Summarization
-            </Typography>
-            <Typography sx={{ textAlign: 'center', color: 'text.secondary' }}>
-              Upload a PDF document and get a concise summary in 3 sentences.
-            </Typography>
-            <Stack direction="row" spacing={2} sx={{ mt: 2, alignItems: 'center' }}>
-              <input
-                type="file"
-                accept="application/pdf"
-                onChange={handleFileChange}
-                style={{ display: 'none' }}
-                id="pdf-upload"
-              />
-              <label htmlFor="pdf-upload">
-                <Button variant="outlined" component="span">
-                  Upload PDF
-                </Button>
-              </label>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleSummarize}
-                disabled={loading || !file}
-              >
-                {loading ? <CircularProgress size={24} /> : 'Summarize'}
-              </Button>
-            </Stack>
-            {file && (
-              <Typography sx={{ mt: 1, color: 'text.secondary' }}>
-                Selected file: {file.name}
+            {/* Document Summary Section */}
+            <Stack
+              spacing={2}
+              useFlexGap
+              sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' }, mt: 4 }}
+            >
+              <Divider sx={{ width: '100%' }} />
+              <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
+                Try Document Summarization
               </Typography>
-            )}
-            {error && (
-              <Alert severity="error" sx={{ mt: 2, width: '100%' }}>
-                {error}
-              </Alert>
-            )}
-            {summary && (
-              <Box sx={{ mt: 2, p: 2, bgcolor: 'background.paper', borderRadius: 1, width: '100%' }}>
-                <Typography variant="h6" sx={{ fontWeight: 'medium' }}>
-                  Summary
+              <Typography sx={{ textAlign: 'center', color: 'text.secondary' }}>
+                Upload a PDF document and get a concise summary in 3 sentences.
+              </Typography>
+              <Stack direction="row" spacing={2} sx={{ mt: 2, alignItems: 'center' }}>
+                <input
+                  type="file"
+                  accept="application/pdf"
+                  onChange={handleFileChange}
+                  style={{ display: 'none' }}
+                  id="pdf-upload"
+                />
+                <label htmlFor="pdf-upload">
+                  <Button variant="outlined" component="span">
+                    Upload PDF
+                  </Button>
+                </label>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleSummarize}
+                  disabled={loading || !file}
+                >
+                  {loading ? <CircularProgress size={24} /> : 'Summarize'}
+                </Button>
+              </Stack>
+              {file && (
+                <Typography sx={{ mt: 1, color: 'text.secondary' }}>
+                  Selected file: {file.name}
                 </Typography>
-                <Typography sx={{ mt: 1, color: 'text.primary' }}>{summary}</Typography>
-              </Box>
-            )}
+              )}
+              {error && (
+                <Alert severity="error" sx={{ mt: 2, width: '100%' }}>
+                  {error}
+                </Alert>
+              )}
+              {summary && (
+                <Box sx={{ mt: 2, p: 2, bgcolor: 'background.paper', borderRadius: 1, width: '100%' }}>
+                  <Typography variant="h6" sx={{ fontWeight: 'medium' }}>
+                    Summary
+                  </Typography>
+                  <Typography sx={{ mt: 1, color: 'text.primary' }}>{summary}</Typography>
+                </Box>
+              )}
+            </Stack>
           </Stack>
 
           {/* Features Section */}
@@ -322,8 +297,7 @@ export default function Hero() {
             sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' }, mt: 8 }}
           >
             <Divider sx={{ width: '100%' }} />
-            <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}
-            >
+            <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
               Research Goals
             </Typography>
             <Typography sx={{ textAlign: 'center', color: 'text.secondary' }}>
@@ -333,6 +307,42 @@ export default function Hero() {
               <br />
               - Create robust voice solutions for Indian languages, with a focus on Kannada.
             </Typography>
+          </Stack>
+
+          {/* Videos Section (Moved Here) */}
+          <Stack
+            spacing={2}
+            useFlexGap
+            sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' }, mt: 8 }}
+          >
+            <Divider sx={{ width: '100%' }} />
+            <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
+              Explore dwani.ai
+            </Typography>
+            <Grid container spacing={2}>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <iframe
+                  width="100%"
+                  height="315"
+                  src="https://www.youtube.com/embed/TbplM-lWSL4?rel=0"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  title="dwani.ai Android App Demo"
+                ></iframe>
+              </Grid>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <iframe
+                  width="100%"
+                  height="315"
+                  src="https://www.youtube.com/embed/kqZZZjbeNVk?rel=0"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  title="Introduction to dwani.ai Project"
+                ></iframe>
+              </Grid>
+            </Grid>
           </Stack>
 
           {/* Models and Tools Section */}

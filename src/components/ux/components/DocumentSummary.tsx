@@ -41,7 +41,7 @@ export default function DocumentSummary() {
 
     try {
       const response = await fetch(
-        'https://slabstech-dhwani-server-workshop.hf.space/v1/document_summary',
+        'https://slabstech-dhwani-server-workshop.hf.space/v1/document_summary_v0',
         {
           method: 'POST',
           headers: {

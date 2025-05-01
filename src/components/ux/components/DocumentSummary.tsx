@@ -5,68 +5,10 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
-import { useState } from 'react';
+import { useDocumentSummary } from './useDocumentSummary'; // Adjust path as needed
 
 export default function DocumentSummary() {
-  const [file, setFile] = useState<File | null>(null);
-  const [summary, setSummary] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = event.target.files?.[0];
-    if (selectedFile && selectedFile.type === 'application/pdf') {
-      setFile(selectedFile);
-      setError(null);
-    } else {
-      setError('Please select a valid PDF file.');
-      setFile(null);
-    }
-  };
-
-  const handleSummarize = async () => {
-    if (!file) {
-      setError('Please upload a PDF file first.');
-      return;
-    }
-
-    setLoading(true);
-    setError(null);
-
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('src_lang', 'eng_Latn');
-    formData.append('tgt_lang', 'eng_Latn');
-    formData.append('prompt', 'Summarize the document in 3 sentences.');
-
-    try {
-      const response = await fetch(
-        'https://slabstech-dhwani-server-workshop.hf.space/v1/document_summary_v0',
-        {
-          method: 'POST',
-          headers: {
-            accept: 'application/json',
-          },
-          body: formData,
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch summary');
-      }
-
-      const data = await response.json();
-      setSummary(data.summary);
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError('Error fetching summary: ' + err.message);
-      } else {
-        setError('Error fetching summary: An unknown error occurred');
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { file, summary, loading, error, handleFileChange, handleSummarize } = useDocumentSummary();
 
   return (
     <Box
@@ -75,7 +17,7 @@ export default function DocumentSummary() {
         flexDirection: 'column',
         alignItems: 'center',
         p: { xs: 4, sm: 6 },
-        pt: { xs: 10, sm: 12 }, // Added top padding to clear app bar
+        pt: { xs: 10, sm: 12 },
         minHeight: '100vh',
         bgcolor: 'background.default',
       }}

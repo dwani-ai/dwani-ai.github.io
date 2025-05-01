@@ -25,13 +25,13 @@ const FeatureCard = styled(Box)(({ theme }) => ({
 }));
 
 export default function Hero() {
-  const [file, setFile] = useState(null);
+  const [file, setFile] = useState<File | null>(null);
   const [summary, setSummary] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleFileChange = (event) => {
-    const selectedFile = event.target.files[0];
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = event.target.files?.[0];
     if (selectedFile && selectedFile.type === 'application/pdf') {
       setFile(selectedFile);
       setError(null);
@@ -74,8 +74,12 @@ export default function Hero() {
 
       const data = await response.json();
       setSummary(data.summary);
-    } catch (err) {
-      setError('Error fetching summary: ' + err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError('Error fetching summary: ' + err.message);
+      } else {
+        setError('Error fetching summary: An unknown error occurred');
+      }
     } finally {
       setLoading(false);
     }
@@ -150,7 +154,6 @@ export default function Hero() {
             pb: { xs: 8, sm: 12 },
           }}
         >
-          
           {/* Hero Section */}
           <Stack
             spacing={2}
@@ -227,6 +230,7 @@ export default function Hero() {
               </Grid>
             </Grid>
           </Stack>
+
           {/* Document Summary Section */}
           <Stack
             spacing={2}
@@ -282,7 +286,6 @@ export default function Hero() {
             )}
           </Stack>
 
-
           {/* Features Section */}
           <Stack
             spacing={4}
@@ -312,7 +315,6 @@ export default function Hero() {
             </Grid>
           </Stack>
 
-
           {/* Research Goals Section */}
           <Stack
             spacing={2}
@@ -320,7 +322,8 @@ export default function Hero() {
             sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' }, mt: 8 }}
           >
             <Divider sx={{ width: '100%' }} />
-            <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
+            <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}
+            >
               Research Goals
             </Typography>
             <Typography sx={{ textAlign: 'center', color: 'text.secondary' }}>

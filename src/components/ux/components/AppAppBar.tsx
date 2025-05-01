@@ -38,6 +38,12 @@ export default function AppAppBar() {
     setOpen(newOpen);
   };
 
+  const handleDocsClick = () => {
+    navigate('/docs');
+    toggleDrawer(false)();
+  };
+
+
   const handleDemoClick = () => {
     navigate('/demo');
     toggleDrawer(false)();
@@ -81,11 +87,16 @@ export default function AppAppBar() {
             <DwaniAIIcon />
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
               <Button variant="text" color="info" size="small" onClick={handleHomeClick}>
-                Features
+                Home
               </Button>
+              <Button variant="text" color="info" size="small" onClick={handleDocsClick}>
+                Docs
+              </Button>
+              <div style={{ display: 'none' }}> 
               <Button variant="text" color="info" size="small" onClick={handleDemoClick}>
                 Demo
               </Button>
+              </div>
             <div style={{ display: 'none' }}>
               <Button variant="text" color="info" size="small">
                 Testimonials
@@ -97,12 +108,14 @@ export default function AppAppBar() {
                 Pricing
               </Button>
             </div>
+            <div style={{ display: 'none' }}>
               <Button variant="text" color="info" size="small" sx={{ minWidth: 0 }} onClick={handleFAQClick}>
                 FAQ
               </Button>
               <Button variant="text" color="info" size="small" sx={{ minWidth: 0 }} onClick={handleBlogClick}>
                 Blog
               </Button>
+              </div>
             </Box>
           </Box>
           <Box
@@ -112,12 +125,14 @@ export default function AppAppBar() {
               alignItems: 'center',
             }}
           >
+            <div style={{ display: 'none' }}>
             <Button color="primary" variant="text" size="small" onClick={handleSignInClick}>
               Sign in
             </Button>
             <Button color="primary" variant="contained" size="small" onClick={handleSignUpClick}>
               Sign up
             </Button>
+            </div>
             <ColorModeIconDropdown />
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' }, gap: 1 }}>

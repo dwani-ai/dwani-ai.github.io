@@ -150,6 +150,7 @@ export default function Hero() {
             pb: { xs: 8, sm: 12 },
           }}
         >
+          
           {/* Hero Section */}
           <Stack
             spacing={2}
@@ -226,36 +227,6 @@ export default function Hero() {
               </Grid>
             </Grid>
           </Stack>
-
-          {/* Features Section */}
-          <Stack
-            spacing={4}
-            useFlexGap
-            sx={{ alignItems: 'center', width: { xs: '100%', sm: '90%' }, mt: 8 }}
-          >
-            <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
-              Key Features
-            </Typography>
-            <Grid container spacing={3}>
-              {features.map((feature, index) => (
-                <Grid size={{ xs: 12, sm: 6, md: 3 }} key={index}>
-                  <FeatureCard>
-                    <Typography variant="h6" sx={{ fontWeight: 'medium' }}>
-                      {feature.title}
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: 'text.secondary', mt: 1 }}>
-                      {feature.description}
-                    </Typography>
-                    <Stack direction="row" spacing={1} sx={{ mt: 2, justifyContent: 'center' }}>
-                      <Chip label={feature.components} color="primary" variant="outlined" />
-                      <Chip label={feature.hardware} color="secondary" variant="outlined" />
-                    </Stack>
-                  </FeatureCard>
-                </Grid>
-              ))}
-            </Grid>
-          </Stack>
-
           {/* Document Summary Section */}
           <Stack
             spacing={2}
@@ -310,6 +281,37 @@ export default function Hero() {
               </Box>
             )}
           </Stack>
+
+
+          {/* Features Section */}
+          <Stack
+            spacing={4}
+            useFlexGap
+            sx={{ alignItems: 'center', width: { xs: '100%', sm: '90%' }, mt: 8 }}
+          >
+            <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
+              Key Features
+            </Typography>
+            <Grid container spacing={3}>
+              {features.map((feature, index) => (
+                <Grid size={{ xs: 12, sm: 6, md: 3 }} key={index}>
+                  <FeatureCard>
+                    <Typography variant="h6" sx={{ fontWeight: 'medium' }}>
+                      {feature.title}
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: 'text.secondary', mt: 1 }}>
+                      {feature.description}
+                    </Typography>
+                    <Stack direction="row" spacing={1} sx={{ mt: 2, justifyContent: 'center' }}>
+                      <Chip label={feature.components} color="primary" variant="outlined" />
+                      <Chip label={feature.hardware} color="secondary" variant="outlined" />
+                    </Stack>
+                  </FeatureCard>
+                </Grid>
+              ))}
+            </Grid>
+          </Stack>
+
 
           {/* Research Goals Section */}
           <Stack

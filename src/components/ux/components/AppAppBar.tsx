@@ -38,6 +38,12 @@ export default function AppAppBar() {
     setOpen(newOpen);
   };
 
+  const handleDocsClick = () => {
+    navigate('/docs');
+    toggleDrawer(false)();
+  };
+
+
   const handleDemoClick = () => {
     navigate('/demo');
     toggleDrawer(false)();
@@ -80,12 +86,17 @@ export default function AppAppBar() {
           <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0 }}>
             <DwaniAIIcon />
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+              <Button variant="text" color="info" size="small" onClick={handleDocsClick}>
+                Docs
+              </Button>
+              <div style={{ display: 'none' }}> 
               <Button variant="text" color="info" size="small" onClick={handleHomeClick}>
                 Features
               </Button>
               <Button variant="text" color="info" size="small" onClick={handleDemoClick}>
                 Demo
               </Button>
+              </div>
             <div style={{ display: 'none' }}>
               <Button variant="text" color="info" size="small">
                 Testimonials
@@ -97,12 +108,14 @@ export default function AppAppBar() {
                 Pricing
               </Button>
             </div>
+            <div style={{ display: 'none' }}>
               <Button variant="text" color="info" size="small" sx={{ minWidth: 0 }} onClick={handleFAQClick}>
                 FAQ
               </Button>
               <Button variant="text" color="info" size="small" sx={{ minWidth: 0 }} onClick={handleBlogClick}>
                 Blog
               </Button>
+              </div>
             </Box>
           </Box>
           <Box

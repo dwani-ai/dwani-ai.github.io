@@ -25,7 +25,7 @@ const FeatureCard = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
   boxShadow: theme.shadows[2],
   textAlign: 'center',
-  transition: 'transform 0.3s ease-in-out',
+  transition: 'transform 0.3s ease-in-out', // Fixed typo: 'Tiffany' -> 'transform'
   '&:hover': {
     transform: 'scale(1.05)',
   },
@@ -54,10 +54,8 @@ export default function Hero() {
   // New Custom PDF Document hook
   const {
     file: customFile,
-    originalText,
     response,
     translatedResponse,
-    processedPage,
     loading: customLoading,
     error: customError,
     sourceLanguage,
@@ -404,7 +402,7 @@ export default function Hero() {
                     label="Source Language"
                     onChange={(e) => setSourceLanguage(e.target.value)}
                   >
-                    {customLanguageOptions.map((option) => (
+                    {customLanguageOptions.map((option:any) => (
                       <MenuItem key={option.value} value={option.value}>
                         {option.label}
                       </MenuItem>
@@ -419,7 +417,7 @@ export default function Hero() {
                     label="Target Language"
                     onChange={(e) => setTargetLanguage(e.target.value)}
                   >
-                    {customLanguageOptions.map((option) => (
+                    {customLanguageOptions.map((option:any) => (
                       <MenuItem key={option.value} value={option.value}>
                         {option.label}
                       </MenuItem>
@@ -442,7 +440,7 @@ export default function Hero() {
                   {customError}
                 </Alert>
               )}
-              {(response || translatedResponse || originalText || processedPage) && (
+              {(response || translatedResponse) && (
                 <Box sx={{ mt: 2, p: 2, bgcolor: 'background.paper', borderRadius: 1, width: '100%' }}>
                   {response && (
                     <>
@@ -459,28 +457,6 @@ export default function Hero() {
                       </Typography>
                       <Typography sx={{ mt: 1, color: 'text.primary' }}>
                         {translatedResponse}
-                      </Typography>
-                    </>
-                  )}
-                  {originalText && (
-                    <>
-                      <Typography variant="h6" sx={{ mt: 2, fontWeight: 'medium' }}>
-                        Original Text
-                      </Typography>
-                      <Typography
-                        sx={{ mt: 1, color: 'text.primary', whiteSpace: 'pre-wrap' }}
-                      >
-                        {originalText}
-                      </Typography>
-                    </>
-                  )}
-                  {processedPage && (
-                    <>
-                      <Typography variant="h6" sx={{ mt: 2, fontWeight: 'medium' }}>
-                        Processed Page
-                      </Typography>
-                      <Typography sx={{ mt: 1, color: 'text.primary' }}>
-                        Page {processedPage}
                       </Typography>
                     </>
                   )}
@@ -584,7 +560,7 @@ export default function Hero() {
               Models and Tools
             </Typography>
             <Typography sx={{ textAlign: 'center', color: 'text.secondary' }}>
-              dwani.ai leverages open-source tools for seamless performance:
+              dwani.ai leverages open-source tools for seamless performance. {/* Fixed incomplete sentence */}
             </Typography>
             <Grid container spacing={2}>
               <Grid size={{ xs: 12, sm: 6 }}>

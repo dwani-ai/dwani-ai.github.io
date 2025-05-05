@@ -164,7 +164,12 @@ export default function AppAppBar() {
 
                 <MenuItem>
                   <Button color="primary" variant="contained" fullWidth onClick={handleHomeClick}>
-                    Features
+                    Home
+                  </Button>
+                  </MenuItem>
+                  <MenuItem>
+                  <Button color="primary" variant="contained" fullWidth onClick={handleDocsClick}>
+                    Docs
                   </Button>
                 </MenuItem>
                 <div style={{ display: 'none' }}>
@@ -173,6 +178,7 @@ export default function AppAppBar() {
                 <MenuItem>Highlights</MenuItem>
                 <MenuItem>Pricing</MenuItem>
                 </div>
+                <div style={{ display: 'none' }}>
                 <MenuItem>
                   <Button color="primary" variant="contained" fullWidth onClick={handleDemoClick}>
                     Demo
@@ -188,7 +194,9 @@ export default function AppAppBar() {
                     Blog
                   </Button>
                 </MenuItem>
+                </div>
                 <Divider sx={{ my: 3 }} />
+                <div style={{ display: 'none' }}>
                 <MenuItem>
                   <Button color="primary" variant="contained" fullWidth onClick={handleSignUpClick}>
                     Sign up
@@ -199,6 +207,7 @@ export default function AppAppBar() {
                     Sign in
                   </Button>
                 </MenuItem>
+                </div>
               </Box>
             </Drawer>
           </Box>

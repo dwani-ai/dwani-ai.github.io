@@ -10,7 +10,12 @@ import { styled } from '@mui/material/styles';
 import Chip from '@mui/material/Chip';
 import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 import { useDocumentSummary } from './useDocumentSummary'; // Adjust path as needed
+import { useTranslationDocumentSummary } from './useTranslationDocumentSummary'; // Adjust path as needed
 
 const FeatureCard = styled(Box)(({ theme }) => ({
   padding: theme.spacing(3),
@@ -25,7 +30,26 @@ const FeatureCard = styled(Box)(({ theme }) => ({
 }));
 
 export default function Hero() {
+  // Existing Document Summary hook
   const { file, summary, loading, error, handleFileChange, handleSummarize } = useDocumentSummary();
+
+  // New Translation Document Summary hook
+  const {
+    file: transFile,
+    summary: transSummary,
+    translatedSummary,
+    originalText,
+    processedPage,
+    loading: transLoading,
+    error: transError,
+    srcLang,
+    tgtLang,
+    languageOptions,
+    setSrcLang,
+    setTgtLang,
+    handleFileChange: handleTransFileChange,
+    handleSummarize: handleTransSummarize,
+  } = useTranslationDocumentSummary();
 
   const features = [
     {
@@ -147,7 +171,7 @@ export default function Hero() {
               Download on Google Play
             </Button>
 
-            {/* Document Summary Section */}
+            {/* Existing Document Summary Section */}
             <Stack
               spacing={2}
               useFlexGap
@@ -198,6 +222,133 @@ export default function Hero() {
                     Summary
                   </Typography>
                   <Typography sx={{ mt: 1, color: 'text.primary' }}>{summary}</Typography>
+                </Box>
+              )}
+            </Stack>
+
+            {/* New Document Summary with Translation Section */}
+            <Stack
+              spacing={2}
+              useFlexGap
+              sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' }, mt: 4 }}
+            >
+              <Divider sx={{ width: '100%' }} />
+              <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
+                Try Document Summarization with Translation
+              </Typography>
+              <Typography sx={{ textAlign: 'center', color: 'text.secondary' }}>
+                Upload a PDF document, select languages, and get a concise summary with its translation.
+              </Typography>
+              <Stack direction="row" spacing={2} sx={{ mt: 2, alignItems: 'center' }}>
+                <input
+                  type="file"
+                  accept="application/pdf"
+                  onChange={handleTransFileChange}
+                  style={{ display: 'none' }}
+                  id="trans-pdf-upload"
+                />
+                <label htmlFor="trans-pdf-upload">
+                  <Button variant="outlined" component="span">
+                    Upload PDF
+                  </Button>
+                </label>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleTransSummarize}
+                  disabled={transLoading || !transFile}
+                >
+                  {transLoading ? <CircularProgress size={24} /> : 'Summarize & Translate'}
+                </Button>
+              </Stack>
+              {transFile && (
+                <Typography sx={{ mt: 1, color: 'text.secondary' }}>
+                  Selected file: {transFile.name}
+                </Typography>
+              )}
+              <Stack
+                direction={{ xs: 'column', sm: 'row' }}
+                spacing={2}
+                sx={{ mt: 2, width: '100%', justifyContent: 'center' }}
+              >
+                <FormControl sx={{ minWidth: 150 }}>
+                  <InputLabel id="source-language-label">Source Language</InputLabel>
+                  <Select
+                    labelId="source-language-label"
+                    value={srcLang}
+                    label="Source Language"
+                    onChange={(e) => setSrcLang(e.target.value)}
+                  >
+                    {languageOptions.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <FormControl sx={{ minWidth: 150 }}>
+                  <InputLabel id="target-language-label">Target Language</InputLabel>
+                  <Select
+                    labelId="target-language-label"
+                    value={tgtLang}
+                    label="Target Language"
+                    onChange={(e) => setTgtLang(e.target.value)}
+                  >
+                    {languageOptions.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Stack>
+              {transError && (
+                <Alert severity="error" sx={{ mt: 2, width: '100%' }}>
+                  {transError}
+                </Alert>
+              )}
+              {(transSummary || translatedSummary || originalText || processedPage) && (
+                <Box sx={{ mt: 2, p: 2, bgcolor: 'background.paper', borderRadius: 1, width: '100%' }}>
+                  {transSummary && (
+                    <>
+                      <Typography variant="h6" sx={{ fontWeight: 'medium' }}>
+                        Summary
+                      </Typography>
+                      <Typography sx={{ mt: 1, color: 'text.primary' }}>{transSummary}</Typography>
+                    </>
+                  )}
+                  {translatedSummary && (
+                    <>
+                      <Typography variant="h6" sx={{ mt: 2, fontWeight: 'medium' }}>
+                        Translated Summary
+                      </Typography>
+                      <Typography sx={{ mt: 1, color: 'text.primary' }}>
+                        {translatedSummary}
+                      </Typography>
+                    </>
+                  )}
+                  {originalText && (
+                    <>
+                      <Typography variant="h6" sx={{ mt: 2, fontWeight: 'medium' }}>
+                        Original Text
+                      </Typography>
+                      <Typography
+                        sx={{ mt: 1, color: 'text.primary', whiteSpace: 'pre-wrap' }}
+                      >
+                        {originalText}
+                      </Typography>
+                    </>
+                  )}
+                  {processedPage && (
+                    <>
+                      <Typography variant="h6" sx={{ mt: 2, fontWeight: 'medium' }}>
+                        Processed Page
+                      </Typography>
+                      <Typography sx={{ mt: 1, color: 'text.primary' }}>
+                        Page {processedPage}
+                      </Typography>
+                    </>
+                  )}
                 </Box>
               )}
             </Stack>

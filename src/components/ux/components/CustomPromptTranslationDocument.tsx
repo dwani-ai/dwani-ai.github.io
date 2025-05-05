@@ -10,7 +10,7 @@ import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
-import { useCustomPromptDocument } from './useCustomPromptTranslationDocument'; // Adjust path as needed
+import { useCustomPromptDocument } from './useCustomPromptDocument'; // Adjust path as needed
 
 export default function CustomPromptDocument() {
   const {

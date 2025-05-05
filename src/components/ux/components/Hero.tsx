@@ -38,8 +38,6 @@ export default function Hero() {
     file: transFile,
     summary: transSummary,
     translatedSummary,
-    originalText,
-    processedPage,
     loading: transLoading,
     error: transError,
     srcLang,
@@ -307,7 +305,7 @@ export default function Hero() {
                   {transError}
                 </Alert>
               )}
-              {(transSummary || translatedSummary || originalText || processedPage) && (
+              {(transSummary || translatedSummary) && (
                 <Box sx={{ mt: 2, p: 2, bgcolor: 'background.paper', borderRadius: 1, width: '100%' }}>
                   {transSummary && (
                     <>
@@ -324,28 +322,6 @@ export default function Hero() {
                       </Typography>
                       <Typography sx={{ mt: 1, color: 'text.primary' }}>
                         {translatedSummary}
-                      </Typography>
-                    </>
-                  )}
-                  {originalText && (
-                    <>
-                      <Typography variant="h6" sx={{ mt: 2, fontWeight: 'medium' }}>
-                        Original Text
-                      </Typography>
-                      <Typography
-                        sx={{ mt: 1, color: 'text.primary', whiteSpace: 'pre-wrap' }}
-                      >
-                        {originalText}
-                      </Typography>
-                    </>
-                  )}
-                  {processedPage && (
-                    <>
-                      <Typography variant="h6" sx={{ mt: 2, fontWeight: 'medium' }}>
-                        Processed Page
-                      </Typography>
-                      <Typography sx={{ mt: 1, color: 'text.primary' }}>
-                        Page {processedPage}
                       </Typography>
                     </>
                   )}

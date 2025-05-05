@@ -3,6 +3,8 @@ import { useState } from 'react';
 export const useDocumentSummary = () => {
   const [file, setFile] = useState<File | null>(null);
   const [summary, setSummary] = useState('');
+  const [originalText, setOriginalText] = useState('');
+  const [processedPage, setProcessedPage] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -28,13 +30,11 @@ export const useDocumentSummary = () => {
 
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('src_lang', 'eng_Latn');
-    formData.append('tgt_lang', 'eng_Latn');
-    formData.append('prompt', 'Summarize the document in 3 sentences.');
+    formData.append('page_number', '1');
 
     try {
       const response = await fetch(
-        'https://slabstech-dhwani-server-workshop.hf.space/v1/document_summary_v0',
+        'https://slabstech-dhwani-server-workshop.hf.space/v1/summarize-pdf',
         {
           method: 'POST',
           headers: {
@@ -50,6 +50,8 @@ export const useDocumentSummary = () => {
 
       const data = await response.json();
       setSummary(data.summary);
+      setOriginalText(data.original_text);
+      setProcessedPage(data.processed_page);
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError('Error fetching summary: ' + err.message);
@@ -61,5 +63,14 @@ export const useDocumentSummary = () => {
     }
   };
 
-  return { file, summary, loading, error, handleFileChange, handleSummarize };
+  return {
+    file,
+    summary,
+    originalText,
+    processedPage,
+    loading,
+    error,
+    handleFileChange,
+    handleSummarize,
+  };
 };

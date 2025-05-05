@@ -8,7 +8,16 @@ import Alert from '@mui/material/Alert';
 import { useDocumentSummary } from './useDocumentSummary'; // Adjust path as needed
 
 export default function DocumentSummary() {
-  const { file, summary, loading, error, handleFileChange, handleSummarize } = useDocumentSummary();
+  const {
+    file,
+    summary,
+    originalText,
+    processedPage,
+    loading,
+    error,
+    handleFileChange,
+    handleSummarize,
+  } = useDocumentSummary();
 
   return (
     <Box
@@ -66,12 +75,38 @@ export default function DocumentSummary() {
             {error}
           </Alert>
         )}
-        {summary && (
+        {(summary || originalText || processedPage) && (
           <Box sx={{ mt: 2, p: 2, bgcolor: 'background.paper', borderRadius: 1, width: '100%' }}>
-            <Typography variant="h6" sx={{ fontWeight: 'medium' }}>
-              Summary
-            </Typography>
-            <Typography sx={{ mt: 1, color: 'text.primary' }}>{summary}</Typography>
+            {summary && (
+              <>
+                <Typography variant="h6" sx={{ fontWeight: 'medium' }}>
+                  Summary
+                </Typography>
+                <Typography sx={{ mt: 1, color: 'text.primary' }}>{summary}</Typography>
+              </>
+            )}
+            {originalText && (
+              <>
+                <Typography variant="h6" sx={{ mt: 2, fontWeight: 'medium' }}>
+                  Original Text
+                </Typography>
+                <Typography
+                  sx={{ mt: 1, color: 'text.primary', whiteSpace: 'pre-wrap' }}
+                >
+                  {originalText}
+                </Typography>
+              </>
+            )}
+            {processedPage && (
+              <>
+                <Typography variant="h6" sx={{ mt: 2, fontWeight: 'medium' }}>
+                  Processed Page
+                </Typography>
+                <Typography sx={{ mt: 1, color: 'text.primary' }}>
+                  Page {processedPage}
+                </Typography>
+              </>
+            )}
           </Box>
         )}
       </Stack>

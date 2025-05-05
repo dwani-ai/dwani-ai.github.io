@@ -25,7 +25,16 @@ const FeatureCard = styled(Box)(({ theme }) => ({
 }));
 
 export default function Hero() {
-  const { file, summary, loading, error, handleFileChange, handleSummarize } = useDocumentSummary();
+  const {
+    file,
+    summary,
+    originalText,
+    processedPage,
+    loading,
+    error,
+    handleFileChange,
+    handleSummarize,
+  } = useDocumentSummary();
 
   const features = [
     {
@@ -301,7 +310,7 @@ export default function Hero() {
               dwani.ai leverages open-source tools for seamless performance:
             </Typography>
             <Grid container spacing={2}>
-              <Grid size={{ xs: 12, sm: 6 }}>
+              <Grid size={{ xs: 12, sm: 6 | undefined }}>
                 <Typography variant="body1">
                   - <Link href="https://github.com/slabstech/asr-indic-server" target="_blank">ASR Indic Server</Link>
                   <br />
@@ -310,7 +319,7 @@ export default function Hero() {
                   - <Link href="https://github.com/slabstech/indic-translate-server" target="_blank">Indic Translate Server</Link>
                 </Typography>
               </Grid>
-              <Grid size={{ xs: 12, sm: 6 }}>
+              <Grid size={{ xs: 12, sm: 6 | undefined }}>
                 <Typography variant="body1">
                   - <Link href="https://github.com/slabstech/docs-indic-server" target="_blank">Indic Document Server</Link>
                   <br />
@@ -336,7 +345,7 @@ export default function Hero() {
               Our workshop on March 20, 2025, to explore dwani.ai.
             </Typography>
             <Grid container spacing={2}>
-              <Grid size={{ xs: 12 }}>
+              <Grid size={{ xs: 12 | undefined }}>
                 <iframe
                   width="100%"
                   height="315"
@@ -352,7 +361,7 @@ export default function Hero() {
               Access dwani.ai via our API for developers.
             </Typography>
             <Grid container spacing={2}>
-              <Grid size={{ xs: 12 }}>
+              <Grid size={{ xs: 12 | undefined }}>
                 <iframe
                   width="100%"
                   height="315"

@@ -40,14 +40,16 @@ export const useTranslationDocumentSummary = () => {
     setLoading(true);
     setError(null);
 
-    // Step 1: Summarize the PDF
+    // Prepare form data for the unified API
     const formData = new FormData();
     formData.append('file', file);
     formData.append('page_number', '1');
+    formData.append('src_lang', srcLang);
+    formData.append('tgt_lang', tgtLang);
 
     try {
-      const summaryResponse = await fetch(
-        'https://slabstech-dhwani-server-workshop.hf.space/v1/summarize-pdf',
+      const response = await fetch(
+        'https://slabstech-dhwani-server-workshop.hf.space/v1/indic-summarize-pdf',
         {
           method: 'POST',
           headers: {
@@ -57,40 +59,15 @@ export const useTranslationDocumentSummary = () => {
         }
       );
 
-      if (!summaryResponse.ok) {
-        throw new Error('Failed to fetch summary');
+      if (!response.ok) {
+        throw new Error('Failed to process PDF summarization and translation');
       }
 
-      const summaryData = await summaryResponse.json();
-      setSummary(summaryData.summary);
-      setOriginalText(summaryData.original_text);
-      setProcessedPage(summaryData.processed_page);
-
-      // Step 2: Translate the summary
-      const translationPayload = {
-        sentences: [summaryData.summary],
-        src_lang: srcLang,
-        tgt_lang: tgtLang,
-      };
-
-      const translationResponse = await fetch(
-        'https://slabstech-dhwani-server-workshop.hf.space/v1/translate',
-        {
-          method: 'POST',
-          headers: {
-            accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(translationPayload),
-        }
-      );
-
-      if (!translationResponse.ok) {
-        throw new Error('Failed to fetch translation');
-      }
-
-      const translationData = await translationResponse.json();
-      setTranslatedSummary(translationData.translations[0]);
+      const data = await response.json();
+      setSummary(data.summary);
+      setTranslatedSummary(data.translated_summary);
+      setOriginalText(data.original_text);
+      setProcessedPage(data.processed_page);
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError('Error processing request: ' + err.message);

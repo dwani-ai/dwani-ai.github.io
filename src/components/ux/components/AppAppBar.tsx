@@ -43,6 +43,10 @@ export default function AppAppBar() {
     toggleDrawer(false)();
   };
 
+  const handleTutorialsClick = () => {
+    navigate('/tutorials');
+    toggleDrawer(false)();
+  };
 
   const handleDemoClick = () => {
     navigate('/demo');
@@ -91,6 +95,9 @@ export default function AppAppBar() {
               </Button>
               <Button variant="text" color="info" size="small" onClick={handleDocsClick}>
                 Docs
+              </Button>
+              <Button variant="text" color="info" size="small" onClick={handleTutorialsClick}>
+                Tutorials
               </Button>
               <div style={{ display: 'none' }}> 
               <Button variant="text" color="info" size="small" onClick={handleDemoClick}>
@@ -164,7 +171,17 @@ export default function AppAppBar() {
 
                 <MenuItem>
                   <Button color="primary" variant="contained" fullWidth onClick={handleHomeClick}>
-                    Features
+                    Home
+                  </Button>
+                  </MenuItem>
+                  <MenuItem>
+                  <Button color="primary" variant="contained" fullWidth onClick={handleDocsClick}>
+                    Docs
+                  </Button>
+                </MenuItem>
+                <MenuItem>
+                  <Button color="primary" variant="contained" fullWidth onClick={handleTutorialsClick}>
+                    Tutorials
                   </Button>
                 </MenuItem>
                 <div style={{ display: 'none' }}>
@@ -173,6 +190,7 @@ export default function AppAppBar() {
                 <MenuItem>Highlights</MenuItem>
                 <MenuItem>Pricing</MenuItem>
                 </div>
+                <div style={{ display: 'none' }}>
                 <MenuItem>
                   <Button color="primary" variant="contained" fullWidth onClick={handleDemoClick}>
                     Demo
@@ -188,7 +206,9 @@ export default function AppAppBar() {
                     Blog
                   </Button>
                 </MenuItem>
+                </div>
                 <Divider sx={{ my: 3 }} />
+                <div style={{ display: 'none' }}>
                 <MenuItem>
                   <Button color="primary" variant="contained" fullWidth onClick={handleSignUpClick}>
                     Sign up
@@ -199,6 +219,7 @@ export default function AppAppBar() {
                     Sign in
                   </Button>
                 </MenuItem>
+                </div>
               </Box>
             </Drawer>
           </Box>

@@ -8,9 +8,15 @@ import Grid from '@mui/material/Grid2';
 import Divider from '@mui/material/Divider';
 import { styled } from '@mui/material/styles';
 import Chip from '@mui/material/Chip';
-import { useState } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
+import { useTranslationDocumentSummary } from './useTranslationDocumentSummary'; // Adjust path as needed
+import { useCustomPromptDocument } from './useCustomPromptDocument'; // Adjust path as needed
 
 const FeatureCard = styled(Box)(({ theme }) => ({
   padding: theme.spacing(3),
@@ -18,72 +24,47 @@ const FeatureCard = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
   boxShadow: theme.shadows[2],
   textAlign: 'center',
-  transition: 'transform 0.3s ease-in-out',
+  transition: 'transform 0.3s ease-in-out', // Fixed typo: 'Tiffany' -> 'transform'
   '&:hover': {
     transform: 'scale(1.05)',
   },
 }));
 
 export default function Hero() {
-  const [file, setFile] = useState<File | null>(null);
-  const [summary, setSummary] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = event.target.files?.[0];
-    if (selectedFile && selectedFile.type === 'application/pdf') {
-      setFile(selectedFile);
-      setError(null);
-    } else {
-      setError('Please select a valid PDF file.');
-      setFile(null);
-    }
-  };
+  // Existing Translation Document Summary hook
+  const {
+    file: transFile,
+    summary: transSummary,
+    translatedSummary,
+    loading: transLoading,
+    error: transError,
+    srcLang,
+    tgtLang,
+    languageOptions,
+    setSrcLang,
+    setTgtLang,
+    handleFileChange: handleTransFileChange,
+    handleSummarize: handleTransSummarize,
+  } = useTranslationDocumentSummary();
 
-  const handleSummarize = async () => {
-    if (!file) {
-      setError('Please upload a PDF file first.');
-      return;
-    }
-
-    setLoading(true);
-    setError(null);
-
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('src_lang', 'eng_Latn');
-    formData.append('tgt_lang', 'eng_Latn');
-    formData.append('prompt', 'Summarize the document in 3 sentences.');
-
-    try {
-      const response = await fetch(
-        'https://slabstech-dhwani-server-workshop.hf.space/v1/document_summary',
-        {
-          method: 'POST',
-          headers: {
-            accept: 'application/json',
-          },
-          body: formData,
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch summary');
-      }
-
-      const data = await response.json();
-      setSummary(data.summary);
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError('Error fetching summary: ' + err.message);
-      } else {
-        setError('Error fetching summary: An unknown error occurred');
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
+  // New Custom PDF Document hook
+  const {
+    file: customFile,
+    response,
+    translatedResponse,
+    loading: customLoading,
+    error: customError,
+    sourceLanguage,
+    targetLanguage,
+    prompt,
+    languageOptions: customLanguageOptions,
+    setSourceLanguage,
+    setTargetLanguage,
+    setPrompt,
+    handleFileChange: handleCustomFileChange,
+    handleProcessDocument,
+  } = useCustomPromptDocument();
 
   const features = [
     {
@@ -205,7 +186,7 @@ export default function Hero() {
               Download on Google Play
             </Button>
 
-            {/* Document Summary Section */}
+            {/* Existing Document Summary with Translation Section */}
             <Stack
               spacing={2}
               useFlexGap
@@ -213,20 +194,20 @@ export default function Hero() {
             >
               <Divider sx={{ width: '100%' }} />
               <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
-                Try Document Summarization
+                Try Document Summarization with Translation
               </Typography>
               <Typography sx={{ textAlign: 'center', color: 'text.secondary' }}>
-                Upload a PDF document and get a concise summary in 3 sentences.
+                Upload a PDF document, select languages, and get a concise summary with its translation.
               </Typography>
               <Stack direction="row" spacing={2} sx={{ mt: 2, alignItems: 'center' }}>
                 <input
                   type="file"
                   accept="application/pdf"
-                  onChange={handleFileChange}
+                  onChange={handleTransFileChange}
                   style={{ display: 'none' }}
-                  id="pdf-upload"
+                  id="trans-pdf-upload"
                 />
-                <label htmlFor="pdf-upload">
+                <label htmlFor="trans-pdf-upload">
                   <Button variant="outlined" component="span">
                     Upload PDF
                   </Button>
@@ -234,28 +215,193 @@ export default function Hero() {
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={handleSummarize}
-                  disabled={loading || !file}
+                  onClick={handleTransSummarize}
+                  disabled={transLoading || !transFile}
                 >
-                  {loading ? <CircularProgress size={24} /> : 'Summarize'}
+                  {transLoading ? <CircularProgress size={24} /> : 'Summarize & Translate'}
                 </Button>
               </Stack>
-              {file && (
+              {transFile && (
                 <Typography sx={{ mt: 1, color: 'text.secondary' }}>
-                  Selected file: {file.name}
+                  Selected file: {transFile.name}
                 </Typography>
               )}
-              {error && (
+              <Stack
+                direction={{ xs: 'column', sm: 'row' }}
+                spacing={2}
+                sx={{ mt: 2, width: '100%', justifyContent: 'center' }}
+              >
+                <FormControl sx={{ minWidth: 150 }}>
+                  <InputLabel id="source-language-label">Source Language</InputLabel>
+                  <Select
+                    labelId="source-language-label"
+                    value={srcLang}
+                    label="Source Language"
+                    onChange={(e) => setSrcLang(e.target.value)}
+                  >
+                    {languageOptions.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <FormControl sx={{ minWidth: 150 }}>
+                  <InputLabel id="target-language-label">Target Language</InputLabel>
+                  <Select
+                    labelId="target-language-label"
+                    value={tgtLang}
+                    label="Target Language"
+                    onChange={(e) => setTgtLang(e.target.value)}
+                  >
+                    {languageOptions.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Stack>
+              {transError && (
                 <Alert severity="error" sx={{ mt: 2, width: '100%' }}>
-                  {error}
+                  {transError}
                 </Alert>
               )}
-              {summary && (
+              {(transSummary || translatedSummary) && (
                 <Box sx={{ mt: 2, p: 2, bgcolor: 'background.paper', borderRadius: 1, width: '100%' }}>
-                  <Typography variant="h6" sx={{ fontWeight: 'medium' }}>
-                    Summary
-                  </Typography>
-                  <Typography sx={{ mt: 1, color: 'text.primary' }}>{summary}</Typography>
+                  {transSummary && (
+                    <>
+                      <Typography variant="h6" sx={{ fontWeight: 'medium' }}>
+                        Summary
+                      </Typography>
+                      <Typography sx={{ mt: 1, color: 'text.primary' }}>{transSummary}</Typography>
+                    </>
+                  )}
+                  {translatedSummary && (
+                    <>
+                      <Typography variant="h6" sx={{ mt: 2, fontWeight: 'medium' }}>
+                        Translated Summary
+                      </Typography>
+                      <Typography sx={{ mt: 1, color: 'text.primary' }}>
+                        {translatedSummary}
+                      </Typography>
+                    </>
+                  )}
+                </Box>
+              )}
+            </Stack>
+
+            {/* New Custom PDF Document Processing Section */}
+            <Stack
+              spacing={2}
+              useFlexGap
+              sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' }, mt: 4 }}
+            >
+              <Divider sx={{ width: '100%' }} />
+              <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
+                Try Custom PDF Processing
+              </Typography>
+              <Typography sx={{ textAlign: 'center', color: 'text.secondary' }}>
+                Upload a PDF, specify a custom prompt, select languages, and get a tailored response with translation.
+              </Typography>
+              <Stack direction="row" spacing={2} sx={{ mt: 2, alignItems: 'center' }}>
+                <input
+                  type="file"
+                  accept="application/pdf"
+                  onChange={handleCustomFileChange}
+                  style={{ display: 'none' }}
+                  id="custom-pdf-upload"
+                />
+                <label htmlFor="custom-pdf-upload">
+                  <Button variant="outlined" component="span">
+                    Upload PDF
+                  </Button>
+                </label>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleProcessDocument}
+                  disabled={customLoading || !customFile || !prompt}
+                >
+                  {customLoading ? <CircularProgress size={24} /> : 'Process & Translate'}
+                </Button>
+              </Stack>
+              {customFile && (
+                <Typography sx={{ mt: 1, color: 'text.secondary' }}>
+                  Selected file: {customFile.name}
+                </Typography>
+              )}
+              <Stack
+                direction={{ xs: 'column', sm: 'row' }}
+                spacing={2}
+                sx={{ mt: 2, width: '100%', justifyContent: 'center' }}
+              >
+                <FormControl sx={{ minWidth: 150 }}>
+                  <InputLabel id="custom-source-language-label">Source Language</InputLabel>
+                  <Select
+                    labelId="custom-source-language-label"
+                    value={sourceLanguage}
+                    label="Source Language"
+                    onChange={(e) => setSourceLanguage(e.target.value)}
+                  >
+                    {customLanguageOptions.map((option:any) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <FormControl sx={{ minWidth: 150 }}>
+                  <InputLabel id="custom-target-language-label">Target Language</InputLabel>
+                  <Select
+                    labelId="custom-target-language-label"
+                    value={targetLanguage}
+                    label="Target Language"
+                    onChange={(e) => setTargetLanguage(e.target.value)}
+                  >
+                    {customLanguageOptions.map((option:any) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Stack>
+              <TextField
+                label="Custom Prompt"
+                value={prompt}
+                onChange={(e) => setPrompt(e.target.value)}
+                fullWidth
+                sx={{ mt: 2 }}
+                placeholder="e.g., list the key points"
+                error={!prompt && !!customError}
+                helperText={!prompt && customError ? 'Please enter a prompt.' : ''}
+              />
+              {customError && (
+                <Alert severity="error" sx={{ mt: 2, width: '100%' }}>
+                  {customError}
+                </Alert>
+              )}
+              {(response || translatedResponse) && (
+                <Box sx={{ mt: 2, p: 2, bgcolor: 'background.paper', borderRadius: 1, width: '100%' }}>
+                  {response && (
+                    <>
+                      <Typography variant="h6" sx={{ fontWeight: 'medium' }}>
+                        Response
+                      </Typography>
+                      <Typography sx={{ mt: 1, color: 'text.primary' }}>{response}</Typography>
+                    </>
+                  )}
+                  {translatedResponse && (
+                    <>
+                      <Typography variant="h6" sx={{ mt: 2, fontWeight: 'medium' }}>
+                        Translated Response
+                      </Typography>
+                      <Typography sx={{ mt: 1, color: 'text.primary' }}>
+                        {translatedResponse}
+                      </Typography>
+                    </>
+                  )}
                 </Box>
               )}
             </Stack>
@@ -309,42 +455,6 @@ export default function Hero() {
             </Typography>
           </Stack>
 
-          {/* Videos Section (Moved Here) */}
-          <Stack
-            spacing={2}
-            useFlexGap
-            sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' }, mt: 8 }}
-          >
-            <Divider sx={{ width: '100%' }} />
-            <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
-              Explore dwani.ai
-            </Typography>
-            <Grid container spacing={2}>
-              <Grid size={{ xs: 12, sm: 6 }}>
-                <iframe
-                  width="100%"
-                  height="315"
-                  src="https://www.youtube.com/embed/TbplM-lWSL4?rel=0"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  title="dwani.ai Android App Demo"
-                ></iframe>
-              </Grid>
-              <Grid size={{ xs: 12, sm: 6 }}>
-                <iframe
-                  width="100%"
-                  height="315"
-                  src="https://www.youtube.com/embed/kqZZZjbeNVk?rel=0"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  title="Introduction to dwani.ai Project"
-                ></iframe>
-              </Grid>
-            </Grid>
-          </Stack>
-
           {/* Models and Tools Section */}
           <Stack
             spacing={2}
@@ -356,7 +466,7 @@ export default function Hero() {
               Models and Tools
             </Typography>
             <Typography sx={{ textAlign: 'center', color: 'text.secondary' }}>
-              dwani.ai leverages open-source tools for seamless performance:
+              dwani.ai leverages open-source tools for seamless performance. {/* Fixed incomplete sentence */}
             </Typography>
             <Grid container spacing={2}>
               <Grid size={{ xs: 12, sm: 6 }}>
@@ -376,50 +486,6 @@ export default function Hero() {
                   <br />
                   - <Link href="https://github.com/slabstech/llm-indic-server_cpu" target="_blank">LLM Indic Server</Link>
                 </Typography>
-              </Grid>
-            </Grid>
-          </Stack>
-
-          {/* Workshop and API Section */}
-          <Stack
-            spacing={2}
-            useFlexGap
-            sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' }, mt: 8 }}
-          >
-            <Divider sx={{ width: '100%' }} />
-            <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
-              Learn More
-            </Typography>
-            <Typography sx={{ textAlign: 'center', color: 'text.secondary' }}>
-              Our workshop on March 20, 2025, to explore dwani.ai.
-            </Typography>
-            <Grid container spacing={2}>
-              <Grid size={{ xs: 12 }}>
-                <iframe
-                  width="100%"
-                  height="315"
-                  src="https://www.youtube.com/embed/f5JkJLQJFGA?rel=0"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  title="dwani.ai Workshop"
-                ></iframe>
-              </Grid>
-            </Grid>
-            <Typography sx={{ textAlign: 'center', color: 'text.secondary', mt: 2 }}>
-              Access dwani.ai via our API for developers.
-            </Typography>
-            <Grid container spacing={2}>
-              <Grid size={{ xs: 12 }}>
-                <iframe
-                  width="100%"
-                  height="315"
-                  src="https://www.youtube.com/embed/RLIhG1bt8gw?rel=0"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  title="dwani.ai API"
-                ></iframe>
               </Grid>
             </Grid>
           </Stack>

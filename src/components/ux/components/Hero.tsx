@@ -15,7 +15,6 @@ import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
-import { useDocumentSummary } from './useDocumentSummary'; // Adjust path as needed
 import { useTranslationDocumentSummary } from './useTranslationDocumentSummary'; // Adjust path as needed
 import { useCustomPromptDocument } from './useCustomPromptDocument'; // Adjust path as needed
 

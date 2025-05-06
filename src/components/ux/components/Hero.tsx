@@ -455,42 +455,6 @@ export default function Hero() {
             </Typography>
           </Stack>
 
-          {/* Videos Section */}
-          <Stack
-            spacing={2}
-            useFlexGap
-            sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' }, mt: 8 }}
-          >
-            <Divider sx={{ width: '100%' }} />
-            <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
-              Explore dwani.ai
-            </Typography>
-            <Grid container spacing={2}>
-              <Grid size={{ xs: 12, sm: 6 }}>
-                <iframe
-                  width="100%"
-                  height="315"
-                  src="https://www.youtube.com/embed/TbplM-lWSL4?rel=0"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  title="dwani.ai Android App Demo"
-                ></iframe>
-              </Grid>
-              <Grid size={{ xs: 12, sm: 6 }}>
-                <iframe
-                  width="100%"
-                  height="315"
-                  src="https://www.youtube.com/embed/kqZZZjbeNVk?rel=0"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  title="Introduction to dwani.ai Project"
-                ></iframe>
-              </Grid>
-            </Grid>
-          </Stack>
-
           {/* Models and Tools Section */}
           <Stack
             spacing={2}
@@ -522,50 +486,6 @@ export default function Hero() {
                   <br />
                   - <Link href="https://github.com/slabstech/llm-indic-server_cpu" target="_blank">LLM Indic Server</Link>
                 </Typography>
-              </Grid>
-            </Grid>
-          </Stack>
-
-          {/* Workshop and API Section */}
-          <Stack
-            spacing={2}
-            useFlexGap
-            sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' }, mt: 8 }}
-          >
-            <Divider sx={{ width: '100%' }} />
-            <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
-              Learn More
-            </Typography>
-            <Typography sx={{ textAlign: 'center', color: 'text.secondary' }}>
-              Our workshop on March 20, 2025, to explore dwani.ai.
-            </Typography>
-            <Grid container spacing={2}>
-              <Grid size={{ xs: 12 }}>
-                <iframe
-                  width="100%"
-                  height="315"
-                  src="https://www.youtube.com/embed/f5JkJLQJFGA?rel=0"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  title="dwani.ai Workshop"
-                ></iframe>
-              </Grid>
-            </Grid>
-            <Typography sx={{ textAlign: 'center', color: 'text.secondary', mt: 2 }}>
-              Access dwani.ai via our API for developers.
-            </Typography>
-            <Grid container spacing={2}>
-              <Grid size={{ xs: 12 }}>
-                <iframe
-                  width="100%"
-                  height="315"
-                  src="https://www.youtube.com/embed/RLIhG1bt8gw?rel=0"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  title="dwani.ai API"
-                ></iframe>
               </Grid>
             </Grid>
           </Stack>

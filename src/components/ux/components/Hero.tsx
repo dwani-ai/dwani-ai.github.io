@@ -16,7 +16,7 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import { useTranslationDocumentSummary } from './useTranslationDocumentSummary'; // Adjust path as needed
-import { useCustomPromptDocument } from './useCustomPromptDocument'; // Adjust path as needed
+import { useKannadaPDFQuery } from './useKannadaPdfQuery'; // Adjust path as needed
 
 const FeatureCard = styled(Box)(({ theme }) => ({
   padding: theme.spacing(3),
@@ -24,15 +24,13 @@ const FeatureCard = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
   boxShadow: theme.shadows[2],
   textAlign: 'center',
-  transition: 'transform 0.3s ease-in-out', // Fixed typo: 'Tiffany' -> 'transform'
+  transition: 'transform 0.3s ease-in-out',
   '&:hover': {
     transform: 'scale(1.05)',
   },
 }));
 
 export default function Hero() {
-
-  // Existing Translation Document Summary hook
   const {
     file: transFile,
     summary: transSummary,
@@ -48,23 +46,25 @@ export default function Hero() {
     handleSummarize: handleTransSummarize,
   } = useTranslationDocumentSummary();
 
-  // New Custom PDF Document hook
   const {
-    file: customFile,
-    response,
-    translatedResponse,
-    loading: customLoading,
-    error: customError,
-    sourceLanguage,
-    targetLanguage,
-    prompt,
-    languageOptions: customLanguageOptions,
-    setSourceLanguage,
-    setTargetLanguage,
-    setPrompt,
-    handleFileChange: handleCustomFileChange,
-    handleProcessDocument,
-  } = useCustomPromptDocument();
+    file: kannadaFile,
+    pageNumber,
+    prompt: kannadaPrompt,
+    srcLang: kannadaSrcLang,
+    inputInfo,
+    outputInfo,
+    inputImage,
+    outputImage,
+    outputPDF,
+    loading: kannadaLoading,
+    error: kannadaError,
+    languageOptions: kannadaLanguageOptions,
+    setPageNumber,
+    setPrompt: setKannadaPrompt,
+    setSrcLang: setKannadaSrcLang,
+    handleFileChange: handleKannadaFileChange,
+    handleProcessPDF,
+  } = useKannadaPDFQuery();
 
   const features = [
     {
@@ -98,6 +98,20 @@ export default function Hero() {
       hardware: 'GPU',
     },
   ];
+
+  // Function to handle PDF download
+  const handleDownloadPDF = () => {
+    if (outputPDF) {
+      const url = window.URL.createObjectURL(outputPDF);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'translated_kannada_output.pdf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    }
+  };
 
   return (
     <>
@@ -135,7 +149,6 @@ export default function Hero() {
             pb: { xs: 8, sm: 12 },
           }}
         >
-          {/* Hero Section */}
           <Stack
             spacing={2}
             useFlexGap
@@ -173,7 +186,6 @@ export default function Hero() {
             >
               Chat in Kannada with dwani.ai's GenAI-powered voice assistant, supporting multiple Indian languages.
             </Typography>
-
             <Button
               variant="contained"
               color="primary"
@@ -186,7 +198,7 @@ export default function Hero() {
               Download on Google Play
             </Button>
 
-            {/* Existing Document Summary with Translation Section */}
+            {/* Document Summary with Translation Section */}
             <Stack
               spacing={2}
               useFlexGap
@@ -217,6 +229,15 @@ export default function Hero() {
                   color="primary"
                   onClick={handleTransSummarize}
                   disabled={transLoading || !transFile}
+                  sx={{
+                    px: 4,
+                    py: 1.5,
+                    '&.Mui-disabled': {
+                      backgroundColor: 'rgba(0, 0, 0, 0.3)', // Darker background for disabled state
+                      color: 'rgba(255, 255, 255, 0.5)', // Lighter text color for contrast
+                      opacity: 0.6, // Slightly reduce opacity
+                    },
+                  }}
                 >
                   {transLoading ? <CircularProgress size={24} /> : 'Summarize & Translate'}
                 </Button>
@@ -291,7 +312,7 @@ export default function Hero() {
               )}
             </Stack>
 
-            {/* New Custom PDF Document Processing Section */}
+            {/* Kannada PDF Query and Translation Section */}
             <Stack
               spacing={2}
               useFlexGap
@@ -299,20 +320,20 @@ export default function Hero() {
             >
               <Divider sx={{ width: '100%' }} />
               <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
-                Try Custom PDF Processing
+                Kannada PDF Query, Translation, and PDF Creation
               </Typography>
               <Typography sx={{ textAlign: 'center', color: 'text.secondary' }}>
-                Upload a PDF, specify a custom prompt, select languages, and get a tailored response with translation.
+                Upload a PDF, specify a page number, prompt, and source language to query and translate content.
               </Typography>
               <Stack direction="row" spacing={2} sx={{ mt: 2, alignItems: 'center' }}>
                 <input
                   type="file"
                   accept="application/pdf"
-                  onChange={handleCustomFileChange}
+                  onChange={handleKannadaFileChange}
                   style={{ display: 'none' }}
-                  id="custom-pdf-upload"
+                  id="kannada-pdf-upload"
                 />
-                <label htmlFor="custom-pdf-upload">
+                <label htmlFor="kannada-pdf-upload">
                   <Button variant="outlined" component="span">
                     Upload PDF
                   </Button>
@@ -320,15 +341,24 @@ export default function Hero() {
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={handleProcessDocument}
-                  disabled={customLoading || !customFile || !prompt}
+                  onClick={handleProcessPDF}
+                  disabled={kannadaLoading || !kannadaFile || !kannadaPrompt}
+                  sx={{
+                    px: 4,
+                    py: 1.5,
+                    '&.Mui-disabled': {
+                      backgroundColor: 'rgba(0, 0, 0, 0.3)', // Darker background for disabled state
+                      color: 'rgba(255, 255, 255, 0.5)', // Lighter text color for contrast
+                      opacity: 0.6, // Slightly reduce opacity
+                    },
+                  }}
                 >
-                  {customLoading ? <CircularProgress size={24} /> : 'Process & Translate'}
+                  {kannadaLoading ? <CircularProgress size={24} /> : 'Process PDF'}
                 </Button>
               </Stack>
-              {customFile && (
+              {kannadaFile && (
                 <Typography sx={{ mt: 1, color: 'text.secondary' }}>
-                  Selected file: {customFile.name}
+                  Selected file: {kannadaFile.name}
                 </Typography>
               )}
               <Stack
@@ -336,30 +366,23 @@ export default function Hero() {
                 spacing={2}
                 sx={{ mt: 2, width: '100%', justifyContent: 'center' }}
               >
+                <TextField
+                  label="Page Number"
+                  type="number"
+                  value={pageNumber}
+                  onChange={(e) => setPageNumber(parseInt(e.target.value) || 1)}
+                  sx={{ minWidth: 150 }}
+                  inputProps={{ min: 1 }}
+                />
                 <FormControl sx={{ minWidth: 150 }}>
-                  <InputLabel id="custom-source-language-label">Source Language</InputLabel>
+                  <InputLabel id="kannada-source-language-label">Source Language</InputLabel>
                   <Select
-                    labelId="custom-source-language-label"
-                    value={sourceLanguage}
+                    labelId="kannada-source-language-label" // Corrected typo: removed "uities"
+                    value={kannadaSrcLang}
                     label="Source Language"
-                    onChange={(e) => setSourceLanguage(e.target.value)}
+                    onChange={(e) => setKannadaSrcLang(e.target.value)}
                   >
-                    {customLanguageOptions.map((option:any) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-                <FormControl sx={{ minWidth: 150 }}>
-                  <InputLabel id="custom-target-language-label">Target Language</InputLabel>
-                  <Select
-                    labelId="custom-target-language-label"
-                    value={targetLanguage}
-                    label="Target Language"
-                    onChange={(e) => setTargetLanguage(e.target.value)}
-                  >
-                    {customLanguageOptions.map((option:any) => (
+                    {kannadaLanguageOptions.map((option) => ( // Removed unnecessary "any" type annotation
                       <MenuItem key={option.value} value={option.value}>
                         {option.label}
                       </MenuItem>
@@ -368,39 +391,71 @@ export default function Hero() {
                 </FormControl>
               </Stack>
               <TextField
-                label="Custom Prompt"
-                value={prompt}
-                onChange={(e) => setPrompt(e.target.value)}
+                label="Prompt"
+                value={kannadaPrompt}
+                onChange={(e) => setKannadaPrompt(e.target.value)}
                 fullWidth
                 sx={{ mt: 2 }}
-                placeholder="e.g., list the key points"
-                error={!prompt && !!customError}
-                helperText={!prompt && customError ? 'Please enter a prompt.' : ''}
+                placeholder="e.g., list the points"
+                error={!kannadaPrompt && !!kannadaError}
+                helperText={!kannadaPrompt && kannadaError ? 'Please enter a prompt.' : ''}
               />
-              {customError && (
+              {kannadaError && (
                 <Alert severity="error" sx={{ mt: 2, width: '100%' }}>
-                  {customError}
+                  {kannadaError}
                 </Alert>
               )}
-              {(response || translatedResponse) && (
+              {(inputInfo || inputImage || outputInfo || outputImage) && (
                 <Box sx={{ mt: 2, p: 2, bgcolor: 'background.paper', borderRadius: 1, width: '100%' }}>
-                  {response && (
+                  {inputInfo && (
                     <>
                       <Typography variant="h6" sx={{ fontWeight: 'medium' }}>
-                        Response
+                        Input PDF Information
                       </Typography>
-                      <Typography sx={{ mt: 1, color: 'text.primary' }}>{response}</Typography>
+                      <Typography sx={{ mt: 1, color: 'text.primary', whiteSpace: 'pre-wrap' }}>
+                        {inputInfo}
+                      </Typography>
                     </>
                   )}
-                  {translatedResponse && (
+                  {inputImage && (
                     <>
                       <Typography variant="h6" sx={{ mt: 2, fontWeight: 'medium' }}>
-                        Translated Response
+                        Input PDF Preview (First Page)
                       </Typography>
-                      <Typography sx={{ mt: 1, color: 'text.primary' }}>
-                        {translatedResponse}
+                      <Box sx={{ mt: 1, display: 'flex', justifyContent: 'center' }}>
+                        <img src={inputImage} alt="Input PDF Preview" style={{ maxWidth: '100%', maxHeight: 400 }} />
+                      </Box>
+                    </>
+                  )}
+                  {outputInfo && (
+                    <>
+                      <Typography variant="h6" sx={{ mt: 2, fontWeight: 'medium' }}>
+                        Output PDF Information
+                      </Typography>
+                      <Typography sx={{ mt: 1, color: 'text.primary', whiteSpace: 'pre-wrap' }}>
+                        {outputInfo}
                       </Typography>
                     </>
+                  )}
+                  {outputImage && (
+                    <>
+                      <Typography variant="h6" sx={{ mt: 2, fontWeight: 'medium' }}>
+                        Output PDF Preview (First Page)
+                      </Typography>
+                      <Box sx={{ mt: 1, display: 'flex', justifyContent: 'center' }}>
+                        <img src={outputImage} alt="Output PDF Preview" style={{ maxWidth: '100%', maxHeight: 400 }} />
+                      </Box>
+                    </>
+                  )}
+                  {outputPDF && (
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleDownloadPDF}
+                      sx={{ mt: 2 }}
+                    >
+                      Download Translated PDF
+                    </Button>
                   )}
                 </Box>
               )}
@@ -466,7 +521,7 @@ export default function Hero() {
               Models and Tools
             </Typography>
             <Typography sx={{ textAlign: 'center', color: 'text.secondary' }}>
-              dwani.ai leverages open-source tools for seamless performance. {/* Fixed incomplete sentence */}
+              dwani.ai leverages open-source tools for seamless performance.
             </Typography>
             <Grid container spacing={2}>
               <Grid size={{ xs: 12, sm: 6 }}>

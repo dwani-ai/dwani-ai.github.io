@@ -16,7 +16,7 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import { useTranslationDocumentSummary } from './useTranslationDocumentSummary'; // Adjust path as needed
-import { useCustomPromptDocument } from './useCustomPromptDocument'; // Adjust path as needed
+import { useKannadaPDFQuery } from './useKannadaPdfQuery'; // Adjust path as needed
 
 const FeatureCard = styled(Box)(({ theme }) => ({
   padding: theme.spacing(3),
@@ -48,23 +48,25 @@ export default function Hero() {
     handleSummarize: handleTransSummarize,
   } = useTranslationDocumentSummary();
 
-  // New Custom PDF Document hook
+
   const {
-    file: customFile,
-    response,
-    translatedResponse,
-    loading: customLoading,
-    error: customError,
-    sourceLanguage,
-    targetLanguage,
-    prompt,
-    languageOptions: customLanguageOptions,
-    setSourceLanguage,
-    setTargetLanguage,
-    setPrompt,
-    handleFileChange: handleCustomFileChange,
-    handleProcessDocument,
-  } = useCustomPromptDocument();
+    file: kannadaFile,
+    pageNumber,
+    prompt: kannadaPrompt,
+    srcLang: kannadaSrcLang,
+    inputInfo,
+    outputInfo,
+    inputImage,
+    outputImage,
+    loading: kannadaLoading,
+    error: kannadaError,
+    languageOptions: kannadaLanguageOptions,
+    setPageNumber,
+    setPrompt: setKannadaPrompt,
+    setSrcLang: setKannadaSrcLang,
+    handleFileChange: handleKannadaFileChange,
+    handleProcessPDF,
+  } = useKannadaPDFQuery();
 
   const features = [
     {
@@ -291,120 +293,135 @@ export default function Hero() {
               )}
             </Stack>
 
-            {/* New Custom PDF Document Processing Section */}
-            <Stack
-              spacing={2}
-              useFlexGap
-              sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' }, mt: 4 }}
-            >
-              <Divider sx={{ width: '100%' }} />
-              <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
-                Try Custom PDF Processing
-              </Typography>
-              <Typography sx={{ textAlign: 'center', color: 'text.secondary' }}>
-                Upload a PDF, specify a custom prompt, select languages, and get a tailored response with translation.
-              </Typography>
-              <Stack direction="row" spacing={2} sx={{ mt: 2, alignItems: 'center' }}>
-                <input
-                  type="file"
-                  accept="application/pdf"
-                  onChange={handleCustomFileChange}
-                  style={{ display: 'none' }}
-                  id="custom-pdf-upload"
-                />
-                <label htmlFor="custom-pdf-upload">
-                  <Button variant="outlined" component="span">
-                    Upload PDF
-                  </Button>
-                </label>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleProcessDocument}
-                  disabled={customLoading || !customFile || !prompt}
-                >
-                  {customLoading ? <CircularProgress size={24} /> : 'Process & Translate'}
-                </Button>
-              </Stack>
-              {customFile && (
-                <Typography sx={{ mt: 1, color: 'text.secondary' }}>
-                  Selected file: {customFile.name}
-                </Typography>
-              )}
-              <Stack
-                direction={{ xs: 'column', sm: 'row' }}
-                spacing={2}
-                sx={{ mt: 2, width: '100%', justifyContent: 'center' }}
-              >
-                <FormControl sx={{ minWidth: 150 }}>
-                  <InputLabel id="custom-source-language-label">Source Language</InputLabel>
-                  <Select
-                    labelId="custom-source-language-label"
-                    value={sourceLanguage}
-                    label="Source Language"
-                    onChange={(e) => setSourceLanguage(e.target.value)}
+                        {/* New Kannada PDF Query and Translation Section */}
+                        <Stack
+                    spacing={2}
+                    useFlexGap
+                    sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' }, mt: 4 }}
                   >
-                    {customLanguageOptions.map((option:any) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-                <FormControl sx={{ minWidth: 150 }}>
-                  <InputLabel id="custom-target-language-label">Target Language</InputLabel>
-                  <Select
-                    labelId="custom-target-language-label"
-                    value={targetLanguage}
-                    label="Target Language"
-                    onChange={(e) => setTargetLanguage(e.target.value)}
-                  >
-                    {customLanguageOptions.map((option:any) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Stack>
-              <TextField
-                label="Custom Prompt"
-                value={prompt}
-                onChange={(e) => setPrompt(e.target.value)}
-                fullWidth
-                sx={{ mt: 2 }}
-                placeholder="e.g., list the key points"
-                error={!prompt && !!customError}
-                helperText={!prompt && customError ? 'Please enter a prompt.' : ''}
-              />
-              {customError && (
-                <Alert severity="error" sx={{ mt: 2, width: '100%' }}>
-                  {customError}
-                </Alert>
-              )}
-              {(response || translatedResponse) && (
-                <Box sx={{ mt: 2, p: 2, bgcolor: 'background.paper', borderRadius: 1, width: '100%' }}>
-                  {response && (
-                    <>
-                      <Typography variant="h6" sx={{ fontWeight: 'medium' }}>
-                        Response
+                    <Divider sx={{ width: '100%' }} />
+                    <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
+                      Kannada PDF Query,Translation and PDF creation
+                    </Typography>
+                    <Typography sx={{ textAlign: 'center', color: 'text.secondary' }}>
+                      Upload a PDF, specify a page number, prompt, and source language to query and translate content.
+                    </Typography>
+                    <Stack direction="row" spacing={2} sx={{ mt: 2, alignItems: 'center' }}>
+                      <input
+                        type="file"
+                        accept="application/pdf"
+                        onChange={handleKannadaFileChange}
+                        style={{ display: 'none' }}
+                        id="kannada-pdf-upload"
+                      />
+                      <label htmlFor="kannada-pdf-upload">
+                        <Button variant="outlined" component="span">
+                          Upload PDF
+                        </Button>
+                      </label>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleProcessPDF}
+                        disabled={kannadaLoading || !kannadaFile || !kannadaPrompt}
+                      >
+                        {kannadaLoading ? <CircularProgress size={24} /> : 'Process PDF'}
+                      </Button>
+                    </Stack>
+                    {kannadaFile && (
+                      <Typography sx={{ mt: 1, color: 'text.secondary' }}>
+                        Selected file: {kannadaFile.name}
                       </Typography>
-                      <Typography sx={{ mt: 1, color: 'text.primary' }}>{response}</Typography>
-                    </>
-                  )}
-                  {translatedResponse && (
-                    <>
-                      <Typography variant="h6" sx={{ mt: 2, fontWeight: 'medium' }}>
-                        Translated Response
-                      </Typography>
-                      <Typography sx={{ mt: 1, color: 'text.primary' }}>
-                        {translatedResponse}
-                      </Typography>
-                    </>
-                  )}
-                </Box>
-              )}
-            </Stack>
+                    )}
+                    <Stack
+                      direction={{ xs: 'column', sm: 'row' }}
+                      spacing={2}
+                      sx={{ mt: 2, width: '100%', justifyContent: 'center' }}
+                    >
+                      <TextField
+                        label="Page Number"
+                        type="number"
+                        value={pageNumber}
+                        onChange={(e) => setPageNumber(parseInt(e.target.value) || 1)}
+                        sx={{ minWidth: 150 }}
+                        inputProps={{ min: 1 }}
+                      />
+                      <FormControl sx={{ minWidth: 150 }}>
+                        <InputLabel id="kannada-source-language-label">Source Language</InputLabel>
+                        <Select
+                          labelId="kannada-source-language-label"
+                          value={kannadaSrcLang}
+                          label="Source Language"
+                          onChange={(e) => setKannadaSrcLang(e.target.value)}
+                        >
+                          {kannadaLanguageOptions.map((option:any) => (
+                            <MenuItem key={option.value} value={option.value}>
+                              {option.label}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </Stack>
+                    <TextField
+                      label="Prompt"
+                      value={kannadaPrompt}
+                      onChange={(e) => setKannadaPrompt(e.target.value)}
+                      fullWidth
+                      sx={{ mt: 2 }}
+                      placeholder="e.g., list the points"
+                      error={!kannadaPrompt && !!kannadaError}
+                      helperText={!kannadaPrompt && kannadaError ? 'Please enter a prompt.' : ''}
+                    />
+                    {kannadaError && (
+                      <Alert severity="error" sx={{ mt: 2, width: '100%' }}>
+                        {kannadaError}
+                      </Alert>
+                    )}
+                    {(inputInfo || inputImage || outputInfo || outputImage) && (
+                      <Box sx={{ mt: 2, p: 2, bgcolor: 'background.paper', borderRadius: 1, width: '100%' }}>
+                        {inputInfo && (
+                          <>
+                            <Typography variant="h6" sx={{ fontWeight: 'medium' }}>
+                              Input PDF Information
+                            </Typography>
+                            <Typography sx={{ mt: 1, color: 'text.primary', whiteSpace: 'pre-wrap' }}>
+                              {inputInfo}
+                            </Typography>
+                          </>
+                        )}
+                        {inputImage && (
+                          <>
+                            <Typography variant="h6" sx={{ mt: 2, fontWeight: 'medium' }}>
+                              Input PDF Preview (First Page)
+                            </Typography>
+                            <Box sx={{ mt: 1, display: 'flex', justifyContent: 'center' }}>
+                              <img src={inputImage} alt="Input PDF Preview" style={{ maxWidth: '100%', maxHeight: 400 }} />
+                            </Box>
+                          </>
+                        )}
+                        {outputInfo && (
+                          <>
+                            <Typography variant="h6" sx={{ mt: 2, fontWeight: 'medium' }}>
+                              Output PDF Information
+                            </Typography>
+                            <Typography sx={{ mt: 1, color: 'text.primary', whiteSpace: 'pre-wrap' }}>
+                              {outputInfo}
+                            </Typography>
+                          </>
+                        )}
+                        {outputImage && (
+                          <>
+                            <Typography variant="h6" sx={{ mt: 2, fontWeight: 'medium' }}>
+                              Output PDF Preview (First Page)
+                            </Typography>
+                            <Box sx={{ mt: 1, display: 'flex', justifyContent: 'center' }}>
+                              <img src={outputImage} alt="Output PDF Preview" style={{ maxWidth: '100%', maxHeight: 400 }} />
+                            </Box>
+                          </>
+                        )}
+                      </Box>
+                    )}
+                  </Stack>
           </Stack>
 
           {/* Features Section */}

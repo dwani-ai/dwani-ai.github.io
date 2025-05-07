@@ -24,15 +24,13 @@ const FeatureCard = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
   boxShadow: theme.shadows[2],
   textAlign: 'center',
-  transition: 'transform 0.3s ease-in-out', // Fixed typo: 'Tiffany' -> 'transform'
+  transition: 'transform 0.3s ease-in-out',
   '&:hover': {
     transform: 'scale(1.05)',
   },
 }));
 
 export default function Hero() {
-
-  // Existing Translation Document Summary hook
   const {
     file: transFile,
     summary: transSummary,
@@ -48,7 +46,6 @@ export default function Hero() {
     handleSummarize: handleTransSummarize,
   } = useTranslationDocumentSummary();
 
-
   const {
     file: kannadaFile,
     pageNumber,
@@ -58,6 +55,7 @@ export default function Hero() {
     outputInfo,
     inputImage,
     outputImage,
+    outputPDF, // New property for the generated PDF
     loading: kannadaLoading,
     error: kannadaError,
     languageOptions: kannadaLanguageOptions,
@@ -101,17 +99,25 @@ export default function Hero() {
     },
   ];
 
+  // Function to handle PDF download
+  const handleDownloadPDF = () => {
+    if (outputPDF) {
+      const url = window.URL.createObjectURL(outputPDF);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'translated_kannada_output.pdf'; // Set the download file name
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url); // Clean up the URL
+    }
+  };
+
   return (
     <>
       <title>Dwani - Your Kannada-Speaking Voice Buddy</title>
-      <meta
-        name="description"
-        content="Dwani is a GenAI platform offering voice interaction in Kannada and other Indian languages. Download the app on Google Play and explore features like voice translation, text-to-speech, and document summarization."
-      />
-      <meta
-        name="keywords"
-        content="Dwani, Kannada AI, voice assistant, Indian languages, GenAI, voice translation, document summarization"
-      />
+      <meta name="description" content="Dwani is a GenAI platform offering voice interaction in Kannada and other Indian languages. Download the app on Google Play and explore features like voice translation, text-to-speech, and document summarization." />
+      <meta name="keywords" content="Dwani, Kannada AI, voice assistant, Indian languages, GenAI, voice translation, document summarization" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <link rel="canonical" href="https://dwani.ai" />
 
@@ -120,11 +126,9 @@ export default function Hero() {
         sx={(theme) => ({
           width: '100%',
           backgroundRepeat: 'no-repeat',
-          backgroundImage:
-            'radial-gradient(ellipse 80% 50% at 50% -20%, hsl(210, 100%, 90%), transparent)',
+          backgroundImage: 'radial-gradient(ellipse 80% 50% at 50% -20%, hsl(210, 100%, 90%), transparent)',
           ...theme.applyStyles('dark', {
-            backgroundImage:
-              'radial-gradient(ellipse 80% 50% at 50% -20%, hsl(210, 100%, 16%), transparent)',
+            backgroundImage: 'radial-gradient(ellipse 80% 50% at 50% -20%, hsl(210, 100%, 16%), transparent)',
           }),
         })}
       >
@@ -137,45 +141,16 @@ export default function Hero() {
             pb: { xs: 8, sm: 12 },
           }}
         >
-          {/* Hero Section */}
-          <Stack
-            spacing={2}
-            useFlexGap
-            sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' } }}
-          >
-            <Typography
-              variant="h1"
-              sx={{
-                display: 'flex',
-                flexDirection: { xs: 'column', sm: 'row' },
-                alignItems: 'center',
-                fontSize: 'clamp(2.5rem, 8vw, 3.5rem)',
-                fontWeight: 'bold',
-                color: 'primary.main',
-              }}
-            >
+          <Stack spacing={2} useFlexGap sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' } }}>
+            <Typography variant="h1" sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: 'center', fontSize: 'clamp(2.5rem, 8vw, 3.5rem)', fontWeight: 'bold', color: 'primary.main' }}>
               dwani.ai
             </Typography>
-            <Typography
-              variant="h6"
-              sx={{
-                textAlign: 'center',
-                color: 'text.secondary',
-                width: { sm: '100%', md: '80%' },
-              }}
-            >
+            <Typography variant="h6" sx={{ textAlign: 'center', color: 'text.secondary', width: { sm: '100%', md: '80%' } }}>
               Your Kannada-Speaking Voice Buddy
             </Typography>
-            <Typography
-              sx={{
-                textAlign: 'center',
-                color: 'text.secondary',
-                width: { sm: '100%', md: '80%' },
-              }}
-            >
+            <Typography sx={{ textAlign: 'center', color: 'text.secondary', width: { sm: '100%', md: '80%' } }}>
               Chat in Kannada with dwani.ai's GenAI-powered voice assistant, supporting multiple Indian languages.
             </Typography>
-
             <Button
               variant="contained"
               color="primary"
@@ -188,12 +163,8 @@ export default function Hero() {
               Download on Google Play
             </Button>
 
-            {/* Existing Document Summary with Translation Section */}
-            <Stack
-              spacing={2}
-              useFlexGap
-              sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' }, mt: 4 }}
-            >
+            {/* Document Summary with Translation Section */}
+            <Stack spacing={2} useFlexGap sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' }, mt: 4 }}>
               <Divider sx={{ width: '100%' }} />
               <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
                 Try Document Summarization with Translation
@@ -202,14 +173,9 @@ export default function Hero() {
                 Upload a PDF document, select languages, and get a concise summary with its translation.
               </Typography>
               <Stack direction="row" spacing={2} sx={{ mt: 2, alignItems: 'center' }}>
-                <input
-                  type="file"
-                  accept="application/pdf"
-                  onChange={handleTransFileChange}
-                  style={{ display: 'none' }}
-                  id="trans-pdf-upload"
-                />
+                <input type="file" accept="application/pdf" onChange={handleTransFileChange} style={{ display: 'none' }} id="trans-pdf-upload" />
                 <label htmlFor="trans-pdf-upload">
+proved
                   <Button variant="outlined" component="span">
                     Upload PDF
                   </Button>
@@ -228,11 +194,7 @@ export default function Hero() {
                   Selected file: {transFile.name}
                 </Typography>
               )}
-              <Stack
-                direction={{ xs: 'column', sm: 'row' }}
-                spacing={2}
-                sx={{ mt: 2, width: '100%', justifyContent: 'center' }}
-              >
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mt: 2, width: '100%', justifyContent: 'center' }}>
                 <FormControl sx={{ minWidth: 150 }}>
                   <InputLabel id="source-language-label">Source Language</InputLabel>
                   <Select
@@ -293,143 +255,135 @@ export default function Hero() {
               )}
             </Stack>
 
-                        {/* New Kannada PDF Query and Translation Section */}
-                        <Stack
-                    spacing={2}
-                    useFlexGap
-                    sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' }, mt: 4 }}
+            {/* Kannada PDF Query and Translation Section */}
+            <Stack spacing={2} useFlexGap sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' }, mt: 4 }}>
+              <Divider sx={{ width: '100%' }} />
+              <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
+                Kannada PDF Query, Translation, and PDF Creation
+              </Typography>
+              <Typography sx={{ textAlign: 'center', color: 'text.secondary' }}>
+                Upload a PDF, specify a page number, prompt, and source language to query and translate content.
+              </Typography>
+              <Stack direction="row" spacing={2} sx={{ mt: 2, alignItems: 'center' }}>
+                <input type="file" accept="application/pdf" onChange={handleKannadaFileChange} style={{ display: 'none' }} id="kannada-pdf-upload" />
+                <label htmlFor="kannada-pdf-upload">
+                  <Button variant="outlined" component="span">
+                    Upload PDF
+                  </Button>
+                </label>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleProcessPDF}
+                  disabled={kannadaLoading || !kannadaFile || !kannadaPrompt}
+                >
+                  {kannadaLoading ? <CircularProgress size={24} /> : 'Process PDF'}
+                </Button>
+              </Stack>
+              {kannadaFile && (
+                <Typography sx={{ mt: 1, color: 'text.secondary' }}>
+                  Selected file: {kannadaFile.name}
+                </Typography>
+              )}
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mt: 2, width: '100%', justifyContent: 'center' }}>
+                <TextField
+                  label="Page Number"
+                  type="number"
+                  value={pageNumber}
+                  onChange={(e) => setPageNumber(parseInt(e.target.value) || 1)}
+                  sx={{ minWidth: 150 }}
+                  inputProps={{ min: 1 }}
+                />
+                <FormControl sx={{ minWidth: 150 }}>
+                  <InputLabel id="kannada-source-language-label">Source Language</InputLabel>
+                  <Select
+                    labelId="kannada-source-language-label"
+                    value={kannadaSrcLang}
+                    label="Source Language"
+                    onChange={(e) => setKannadaSrcLang(e.target.value)}
                   >
-                    <Divider sx={{ width: '100%' }} />
-                    <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
-                      Kannada PDF Query,Translation and PDF creation
-                    </Typography>
-                    <Typography sx={{ textAlign: 'center', color: 'text.secondary' }}>
-                      Upload a PDF, specify a page number, prompt, and source language to query and translate content.
-                    </Typography>
-                    <Stack direction="row" spacing={2} sx={{ mt: 2, alignItems: 'center' }}>
-                      <input
-                        type="file"
-                        accept="application/pdf"
-                        onChange={handleKannadaFileChange}
-                        style={{ display: 'none' }}
-                        id="kannada-pdf-upload"
-                      />
-                      <label htmlFor="kannada-pdf-upload">
-                        <Button variant="outlined" component="span">
-                          Upload PDF
-                        </Button>
-                      </label>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={handleProcessPDF}
-                        disabled={kannadaLoading || !kannadaFile || !kannadaPrompt}
-                      >
-                        {kannadaLoading ? <CircularProgress size={24} /> : 'Process PDF'}
-                      </Button>
-                    </Stack>
-                    {kannadaFile && (
-                      <Typography sx={{ mt: 1, color: 'text.secondary' }}>
-                        Selected file: {kannadaFile.name}
+                    {kannadaLanguageOptions.map((option: any) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Stack>
+              <TextField
+                label="Prompt"
+                value={kannadaPrompt}
+                onChange={(e) => setKannadaPrompt(e.target.value)}
+                fullWidth
+                sx={{ mt: 2 }}
+                placeholder="e.g., list the points"
+                error={!kannadaPrompt && !!kannadaError}
+                helperText={!kannadaPrompt && kannadaError ? 'Please enter a prompt.' : ''}
+              />
+              {kannadaError && (
+                <Alert severity="error" sx={{ mt: 2, width: '100%' }}>
+                  {kannadaError}
+                </Alert>
+              )}
+              {(inputInfo || inputImage || outputInfo || outputImage) && (
+                <Box sx={{ mt: 2, p: 2, bgcolor: 'background.paper', borderRadius: 1, width: '100%' }}>
+                  {inputInfo && (
+                    <>
+                      <Typography variant="h6" sx={{ fontWeight: 'medium' }}>
+                        Input PDF Information
                       </Typography>
-                    )}
-                    <Stack
-                      direction={{ xs: 'column', sm: 'row' }}
-                      spacing={2}
-                      sx={{ mt: 2, width: '100%', justifyContent: 'center' }}
-                    >
-                      <TextField
-                        label="Page Number"
-                        type="number"
-                        value={pageNumber}
-                        onChange={(e) => setPageNumber(parseInt(e.target.value) || 1)}
-                        sx={{ minWidth: 150 }}
-                        inputProps={{ min: 1 }}
-                      />
-                      <FormControl sx={{ minWidth: 150 }}>
-                        <InputLabel id="kannada-source-language-label">Source Language</InputLabel>
-                        <Select
-                          labelId="kannada-source-language-label"
-                          value={kannadaSrcLang}
-                          label="Source Language"
-                          onChange={(e) => setKannadaSrcLang(e.target.value)}
-                        >
-                          {kannadaLanguageOptions.map((option:any) => (
-                            <MenuItem key={option.value} value={option.value}>
-                              {option.label}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                    </Stack>
-                    <TextField
-                      label="Prompt"
-                      value={kannadaPrompt}
-                      onChange={(e) => setKannadaPrompt(e.target.value)}
-                      fullWidth
-                      sx={{ mt: 2 }}
-                      placeholder="e.g., list the points"
-                      error={!kannadaPrompt && !!kannadaError}
-                      helperText={!kannadaPrompt && kannadaError ? 'Please enter a prompt.' : ''}
-                    />
-                    {kannadaError && (
-                      <Alert severity="error" sx={{ mt: 2, width: '100%' }}>
-                        {kannadaError}
-                      </Alert>
-                    )}
-                    {(inputInfo || inputImage || outputInfo || outputImage) && (
-                      <Box sx={{ mt: 2, p: 2, bgcolor: 'background.paper', borderRadius: 1, width: '100%' }}>
-                        {inputInfo && (
-                          <>
-                            <Typography variant="h6" sx={{ fontWeight: 'medium' }}>
-                              Input PDF Information
-                            </Typography>
-                            <Typography sx={{ mt: 1, color: 'text.primary', whiteSpace: 'pre-wrap' }}>
-                              {inputInfo}
-                            </Typography>
-                          </>
-                        )}
-                        {inputImage && (
-                          <>
-                            <Typography variant="h6" sx={{ mt: 2, fontWeight: 'medium' }}>
-                              Input PDF Preview (First Page)
-                            </Typography>
-                            <Box sx={{ mt: 1, display: 'flex', justifyContent: 'center' }}>
-                              <img src={inputImage} alt="Input PDF Preview" style={{ maxWidth: '100%', maxHeight: 400 }} />
-                            </Box>
-                          </>
-                        )}
-                        {outputInfo && (
-                          <>
-                            <Typography variant="h6" sx={{ mt: 2, fontWeight: 'medium' }}>
-                              Output PDF Information
-                            </Typography>
-                            <Typography sx={{ mt: 1, color: 'text.primary', whiteSpace: 'pre-wrap' }}>
-                              {outputInfo}
-                            </Typography>
-                          </>
-                        )}
-                        {outputImage && (
-                          <>
-                            <Typography variant="h6" sx={{ mt: 2, fontWeight: 'medium' }}>
-                              Output PDF Preview (First Page)
-                            </Typography>
-                            <Box sx={{ mt: 1, display: 'flex', justifyContent: 'center' }}>
-                              <img src={outputImage} alt="Output PDF Preview" style={{ maxWidth: '100%', maxHeight: 400 }} />
-                            </Box>
-                          </>
-                        )}
+                      <Typography sx={{ mt: 1, color: 'text.primary', whiteSpace: 'pre-wrap' }}>
+                        {inputInfo}
+                      </Typography>
+                    </>
+                  )}
+                  {inputImage && (
+                    <>
+                      <Typography variant="h6" sx={{ mt: 2, fontWeight: 'medium' }}>
+                        Input PDF Preview (First Page)
+                      </Typography>
+                      <Box sx={{ mt: 1, display: 'flex', justifyContent: 'center' }}>
+                        <img src={inputImage} alt="Input PDF Preview" style={{ maxWidth: '100%', maxHeight: 400 }} />
                       </Box>
-                    )}
-                  </Stack>
+                    </>
+                  )}
+                  {outputInfo && (
+                    <>
+                      <Typography variant="h6" sx={{ mt: 2, fontWeight: 'medium' }}>
+                        Output PDF Information
+                      </Typography>
+                      <Typography sx={{ mt: 1, color: 'text.primary', whiteSpace: 'pre-wrap' }}>
+                        {outputInfo}
+                      </Typography>
+                    </>
+                  )}
+                  {outputImage && (
+                    <>
+                      <Typography variant="h6" sx={{ mt: 2, fontWeight: 'medium' }}>
+                        Output PDF Preview (First Page)
+                      </Typography>
+                      <Box sx={{ mt: 1, display: 'flex', justifyContent: 'center' }}>
+                        <img src={outputImage} alt="Output PDF Preview" style={{ maxWidth: '100%', maxHeight: 400 }} />
+                      </Box>
+                    </>
+                  )}
+                  {outputPDF && (
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleDownloadPDF}
+                      sx={{ mt: 2 }}
+                    >
+                      Download Translated PDF
+                    </Button>
+                  )}
+                </Box>
+              )}
+            </Stack>
           </Stack>
 
           {/* Features Section */}
-          <Stack
-            spacing={4}
-            useFlexGap
-            sx={{ alignItems: 'center', width: { xs: '100%', sm: '90%' }, mt: 8 }}
-          >
+          <Stack spacing={4} useFlexGap sx={{ alignItems: 'center', width: { xs: '100%', sm: '90%' }, mt: 8 }}>
             <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
               Key Features
             </Typography>
@@ -454,11 +408,7 @@ export default function Hero() {
           </Stack>
 
           {/* Research Goals Section */}
-          <Stack
-            spacing={2}
-            useFlexGap
-            sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' }, mt: 8 }}
-          >
+          <Stack spacing={2} useFlexGap sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' }, mt: 8 }}>
             <Divider sx={{ width: '100%' }} />
             <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
               Research Goals
@@ -473,17 +423,13 @@ export default function Hero() {
           </Stack>
 
           {/* Models and Tools Section */}
-          <Stack
-            spacing={2}
-            useFlexGap
-            sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' }, mt: 8 }}
-          >
+          <Stack spacing={2} useFlexGap sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' }, mt: 8 }}>
             <Divider sx={{ width: '100%' }} />
             <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
               Models and Tools
             </Typography>
             <Typography sx={{ textAlign: 'center', color: 'text.secondary' }}>
-              dwani.ai leverages open-source tools for seamless performance. {/* Fixed incomplete sentence */}
+              dwani.ai leverages open-source tools for seamless performance.
             </Typography>
             <Grid container spacing={2}>
               <Grid size={{ xs: 12, sm: 6 }}>
@@ -508,11 +454,7 @@ export default function Hero() {
           </Stack>
 
           {/* Contact Section */}
-          <Stack
-            spacing={2}
-            useFlexGap
-            sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' }, mt: 8 }}
-          >
+          <Stack spacing={2} useFlexGap sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' }, mt: 8 }}>
             <Divider sx={{ width: '100%' }} />
             <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
               Get in Touch

@@ -15,6 +15,7 @@ export const useKannadaPDFQuery = () => {
   const [outputInfo, setOutputInfo] = useState<string>('');
   const [inputImage, setInputImage] = useState<string | null>(null);
   const [outputImage, setOutputImage] = useState<string | null>(null);
+  const [outputPDF, setOutputPDF] = useState<Blob | null>(null); // New state for output PDF Blob
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -81,6 +82,7 @@ export const useKannadaPDFQuery = () => {
     setInputInfo('');
     setOutputInfo('');
     setOutputImage(null);
+    setOutputPDF(null); // Reset output PDF
 
     try {
       const formData = new FormData();
@@ -89,8 +91,7 @@ export const useKannadaPDFQuery = () => {
       formData.append('prompt', prompt);
       formData.append('src_lang', srcLang);
 
-      //const baseUrl = process.env.REACT_APP_DWANI_AI_API_BASE_URL || 'https://api.example.com';
-      const baseUrl = 'https://slabstech-dhwani-server-workshop.hf.space'
+      const baseUrl = 'https://slabstech-dhwani-server-workshop.hf.space';
       const response = await axios.post(`${baseUrl}/v1/indic-custom-prompt-kannada-pdf`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         responseType: 'blob',
@@ -102,6 +103,7 @@ export const useKannadaPDFQuery = () => {
 
       // Output PDF Info
       const outputBlob = new Blob([response.data], { type: 'application/pdf' });
+      setOutputPDF(outputBlob); // Store the output PDF Blob
       const outputInfoText = `Output PDF Info:\n- Number of pages: ${await getPDFPageCount(outputBlob)}`;
       setOutputInfo(outputInfoText);
 
@@ -136,6 +138,7 @@ export const useKannadaPDFQuery = () => {
     outputInfo,
     inputImage,
     outputImage,
+    outputPDF, // Return the output PDF Blob
     loading,
     error,
     languageOptions,

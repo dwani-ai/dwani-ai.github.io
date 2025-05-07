@@ -68,6 +68,7 @@ export default function IndicDocumentFeatures() {
     outputInfo,
     inputImage,
     outputImage,
+    outputPDF, // Added for download functionality
     loading: kannadaLoading,
     error: kannadaError,
     languageOptions: kannadaLanguageOptions,
@@ -77,6 +78,20 @@ export default function IndicDocumentFeatures() {
     handleFileChange: handleKannadaFileChange,
     handleProcessPDF,
   } = useKannadaPDFQuery();
+
+  // Function to handle PDF download
+  const handleDownloadPDF = () => {
+    if (outputPDF) {
+      const url = window.URL.createObjectURL(outputPDF);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'translated_kannada_output.pdf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    }
+  };
 
   return (
     <Box
@@ -90,15 +105,15 @@ export default function IndicDocumentFeatures() {
         bgcolor: 'background.default',
       }}
     >
-            {/* New Kannada PDF Query and Translation Section */}
-            <Stack
+      {/* Kannada PDF Query and Translation Section */}
+      <Stack
         spacing={2}
         useFlexGap
         sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' }, mt: 4 }}
       >
         <Divider sx={{ width: '100%' }} />
         <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
-          Kannada PDF Query,Translation and PDF creation
+          Kannada PDF Query, Translation, and PDF Creation
         </Typography>
         <Typography sx={{ textAlign: 'center', color: 'text.secondary' }}>
           Upload a PDF, specify a page number, prompt, and source language to query and translate content.
@@ -121,6 +136,15 @@ export default function IndicDocumentFeatures() {
             color="primary"
             onClick={handleProcessPDF}
             disabled={kannadaLoading || !kannadaFile || !kannadaPrompt}
+            sx={{
+              px: 4,
+              py: 1.5,
+              '&.Mui-disabled': {
+                backgroundColor: 'rgba(0, 0, 0, 0.3)', // Darker background for disabled state
+                color: 'rgba(255, 255, 255, 0.5)', // Lighter text color for contrast
+                opacity: 0.6, // Slightly reduce opacity
+              },
+            }}
           >
             {kannadaLoading ? <CircularProgress size={24} /> : 'Process PDF'}
           </Button>
@@ -151,7 +175,7 @@ export default function IndicDocumentFeatures() {
               label="Source Language"
               onChange={(e) => setKannadaSrcLang(e.target.value)}
             >
-              {kannadaLanguageOptions.map((option:any) => (
+              {kannadaLanguageOptions.map((option) => ( // Removed unnecessary "any" type annotation
                 <MenuItem key={option.value} value={option.value}>
                   {option.label}
                 </MenuItem>
@@ -216,16 +240,26 @@ export default function IndicDocumentFeatures() {
                 </Box>
               </>
             )}
+            {outputPDF && ( // Added download button for Kannada PDF
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleDownloadPDF}
+                sx={{ mt: 2 }}
+              >
+                Download Translated PDF
+              </Button>
+            )}
           </Box>
         )}
       </Stack>
- 
+
+      {/* Existing Document Summarization Section */}
       <Stack
         spacing={2}
         useFlexGap
         sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' } }}
       >
-        {/* Existing Document Summarization Section */}
         <Divider sx={{ width: '100%' }} />
         <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
           Try Document Summarization
@@ -251,6 +285,15 @@ export default function IndicDocumentFeatures() {
             color="primary"
             onClick={handleSummarize}
             disabled={loading || !file}
+            sx={{
+              px: 4,
+              py: 1.5,
+              '&.Mui-disabled': {
+                backgroundColor: 'rgba(0, 0, 0, 0.3)', // Darker background for disabled state
+                color: 'rgba(255, 255, 255, 0.5)', // Lighter text color for contrast
+                opacity: 0.6, // Slightly reduce opacity
+              },
+            }}
           >
             {loading ? <CircularProgress size={24} /> : 'Summarize'}
           </Button>
@@ -330,6 +373,15 @@ export default function IndicDocumentFeatures() {
             color="primary"
             onClick={handleTransSummarize}
             disabled={transLoading || !transFile}
+            sx={{
+              px: 4,
+              py: 1.5,
+              '&.Mui-disabled': {
+                backgroundColor: 'rgba(0, 0, 0, 0.3)', // Darker background for disabled state
+                color: 'rgba(255, 255, 255, 0.5)', // Lighter text color for contrast
+                opacity: 0.6, // Slightly reduce opacity
+              },
+            }}
           >
             {transLoading ? <CircularProgress size={24} /> : 'Summarize & Translate'}
           </Button>
@@ -435,6 +487,15 @@ export default function IndicDocumentFeatures() {
             color="primary"
             onClick={handleProcessDocument}
             disabled={customLoading || !customFile || !prompt}
+            sx={{
+              px: 4,
+              py: 1.5,
+              '&.Mui-disabled': {
+                backgroundColor: 'rgba(0, 0, 0, 0.3)', // Darker background for disabled state
+                color: 'rgba(255, 255, 255, 0.5)', // Lighter text color for contrast
+                opacity: 0.6, // Slightly reduce opacity
+              },
+            }}
           >
             {customLoading ? <CircularProgress size={24} /> : 'Process & Translate'}
           </Button>
@@ -457,7 +518,7 @@ export default function IndicDocumentFeatures() {
               label="Source Language"
               onChange={(e) => setSourceLanguage(e.target.value)}
             >
-              {customLanguageOptions.map((option: any) => (
+              {customLanguageOptions.map((option) => ( // Removed unnecessary "any" type annotation
                 <MenuItem key={option.value} value={option.value}>
                   {option.label}
                 </MenuItem>
@@ -472,8 +533,8 @@ export default function IndicDocumentFeatures() {
               label="Target Language"
               onChange={(e) => setTargetLanguage(e.target.value)}
             >
-              {customLanguageOptions.map((option: any) => (
-                <MenuItem key={option.value} value={option}>
+              {customLanguageOptions.map((option) => (
+                <MenuItem key={option.value} value={option.value}> {/* Corrected value from option to option.value */}
                   {option.label}
                 </MenuItem>
               ))}
@@ -518,7 +579,6 @@ export default function IndicDocumentFeatures() {
           </Box>
         )}
       </Stack>
-
-   </Box>
+    </Box>
   );
 }

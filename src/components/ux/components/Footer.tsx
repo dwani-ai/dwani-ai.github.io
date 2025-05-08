@@ -189,7 +189,7 @@ export default function Footer() {
           <IconButton
             color="inherit"
             size="small"
-            href="https://github.com/slabstech"
+            href="https://github.com/dwani-ai"
             aria-label="GitHub"
             sx={{ alignSelf: 'center' }}
           >

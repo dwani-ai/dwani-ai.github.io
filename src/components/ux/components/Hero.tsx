@@ -526,20 +526,20 @@ export default function Hero() {
             <Grid container spacing={2}>
               <Grid size={{ xs: 12, sm: 6 }}>
                 <Typography variant="body1">
-                  - <Link href="https://github.com/slabstech/asr-indic-server" target="_blank">ASR Indic Server</Link>
+                  - <Link href="https://github.com/dwani-ai/asr-indic-server" target="_blank">ASR Indic Server</Link>
                   <br />
-                  - <Link href="https://github.com/slabstech/tts-indic-server" target="_blank">TTS Indic Server</Link>
+                  - <Link href="https://github.com/dwani-ai/tts-indic-server" target="_blank">TTS Indic Server</Link>
                   <br />
-                  - <Link href="https://github.com/slabstech/indic-translate-server" target="_blank">Indic Translate Server</Link>
+                  - <Link href="https://github.com/dwani-ai/indic-translate-server" target="_blank">Indic Translate Server</Link>
                 </Typography>
               </Grid>
               <Grid size={{ xs: 12, sm: 6 }}>
                 <Typography variant="body1">
-                  - <Link href="https://github.com/slabstech/docs-indic-server" target="_blank">Indic Document Server</Link>
+                  - <Link href="https://github.com/dwani-ai/docs-indic-server" target="_blank">Indic Document Server</Link>
                   <br />
-                  - <Link href="https://github.com/slabstech/dhwani-server" target="_blank">dwani.ai Server</Link>
+                  - <Link href="https://github.com/dwani-ai/dhwani-server" target="_blank">dwani.ai Server</Link>
                   <br />
-                  - <Link href="https://github.com/slabstech/llm-indic-server_cpu" target="_blank">LLM Indic Server</Link>
+                  - <Link href="https://github.com/dwani-ai/llm-indic-server_cpu" target="_blank">LLM Indic Server</Link>
                 </Typography>
               </Grid>
             </Grid>
@@ -558,7 +558,7 @@ export default function Hero() {
             <Typography sx={{ textAlign: 'center', color: 'text.secondary' }}>
               For collaborations, join our <Link href="https://discord.gg/WZMCerEZ2P" target="_blank">Discord community</Link>.
               <br />
-              Have questions? <Link href="https://github.com/slabstech/dhwani-server/issues" target="_blank">Open an issue on GitHub</Link>.
+              Have questions? <Link href="https://github.com/dwani-ai/dhwani-server/issues" target="_blank">Open an issue on GitHub</Link>.
             </Typography>
           </Stack>
         </Container>

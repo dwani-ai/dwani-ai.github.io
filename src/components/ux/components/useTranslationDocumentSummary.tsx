@@ -49,7 +49,7 @@ export const useTranslationDocumentSummary = () => {
 
     try {
       const response = await fetch(
-        'https://slabstech-dhwani-server-workshop.hf.space/v1/indic-summarize-pdf',
+        'https://dwani-dwani-server-workshop.hf.space/v1/indic-summarize-pdf',
         {
           method: 'POST',
           headers: {

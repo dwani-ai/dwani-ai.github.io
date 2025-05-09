@@ -34,7 +34,7 @@ export const useDocumentSummary = () => {
 
     try {
       const response = await fetch(
-        'https://slabstech-dhwani-server-workshop.hf.space/v1/summarize-pdf',
+        'https://dwani-dwani-server-workshop.hf.space/v1/summarize-pdf',
         {
           method: 'POST',
           headers: {

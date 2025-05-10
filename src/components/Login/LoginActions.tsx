@@ -1,5 +1,5 @@
 import axios from "axios";
-import { push } from "connected-react-router";
+//import { push } from "connected-react-router";
 import { toast } from "react-toastify";
 import { SET_TOKEN, SET_CURRENT_USER, UNSET_CURRENT_USER } from "./LoginTypes";
 import { setAxiosAuthToken, toastOnError } from "../utils/Utils";
@@ -44,7 +44,7 @@ export const setCurrentUser = (user:any, redirectTo:any) => (dispatch:any) => {
 
   console.log("set user" + redirectTo);
   if (redirectTo !== "") {
-    dispatch(push(redirectTo));
+  //  dispatch(push(redirectTo));
   }
 };
 
@@ -72,7 +72,7 @@ export const logout = () => (dispatch:any) => {
     .then(response => {
       console.log(response);
       dispatch(unsetCurrentUser());
-      dispatch(push("/"));
+    //  dispatch(push("/"));
       toast.success("Logout successful.");
     })
     .catch(error => {

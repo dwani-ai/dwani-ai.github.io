@@ -15,7 +15,7 @@ import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
-import { useTranslationDocumentSummary } from './useTranslationDocumentSummary'; // Adjust path as needed
+import { SiGoogleplay } from 'react-icons/si';
 import { useKannadaPDFQuery } from './useKannadaPdfQuery'; // Adjust path as needed
 
 const FeatureCard = styled(Box)(({ theme }) => ({
@@ -31,21 +31,6 @@ const FeatureCard = styled(Box)(({ theme }) => ({
 }));
 
 export default function Hero() {
-  const {
-    file: transFile,
-    summary: transSummary,
-    translatedSummary,
-    loading: transLoading,
-    error: transError,
-    srcLang,
-    tgtLang,
-    languageOptions,
-    setSrcLang,
-    setTgtLang,
-    handleFileChange: handleTransFileChange,
-    handleSummarize: handleTransSummarize,
-  } = useTranslationDocumentSummary();
-
   const {
     file: kannadaFile,
     pageNumber,
@@ -194,123 +179,10 @@ export default function Hero() {
               size="large"
               sx={{ mt: 2, px: 4, py: 1.5 }}
               aria-label="Download Dwani on Google Play"
+              startIcon={<SiGoogleplay size={24} />}
             >
               Download on Google Play
             </Button>
-
-            {/* Document Summary with Translation Section */}
-            <Stack
-              spacing={2}
-              useFlexGap
-              sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' }, mt: 4 }}
-            >
-              <Divider sx={{ width: '100%' }} />
-              <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
-                Try Document Summarization with Translation
-              </Typography>
-              <Typography sx={{ textAlign: 'center', color: 'text.secondary' }}>
-                Upload a PDF document, select languages, and get a concise summary with its translation.
-              </Typography>
-              <Stack direction="row" spacing={2} sx={{ mt: 2, alignItems: 'center' }}>
-                <input
-                  type="file"
-                  accept="application/pdf"
-                  onChange={handleTransFileChange}
-                  style={{ display: 'none' }}
-                  id="trans-pdf-upload"
-                />
-                <label htmlFor="trans-pdf-upload">
-                  <Button variant="outlined" component="span">
-                    Upload PDF
-                  </Button>
-                </label>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleTransSummarize}
-                  disabled={transLoading || !transFile}
-                  sx={{
-                    px: 4,
-                    py: 1.5,
-                    '&.Mui-disabled': {
-                      backgroundColor: 'rgba(0, 0, 0, 0.3)', // Darker background for disabled state
-                      color: 'rgba(255, 255, 255, 0.5)', // Lighter text color for contrast
-                      opacity: 0.6, // Slightly reduce opacity
-                    },
-                  }}
-                >
-                  {transLoading ? <CircularProgress size={24} /> : 'Summarize & Translate'}
-                </Button>
-              </Stack>
-              {transFile && (
-                <Typography sx={{ mt: 1, color: 'text.secondary' }}>
-                  Selected file: {transFile.name}
-                </Typography>
-              )}
-              <Stack
-                direction={{ xs: 'column', sm: 'row' }}
-                spacing={2}
-                sx={{ mt: 2, width: '100%', justifyContent: 'center' }}
-              >
-                <FormControl sx={{ minWidth: 150 }}>
-                  <InputLabel id="source-language-label">Source Language</InputLabel>
-                  <Select
-                    labelId="source-language-label"
-                    value={srcLang}
-                    label="Source Language"
-                    onChange={(e) => setSrcLang(e.target.value)}
-                  >
-                    {languageOptions.map((option) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-                <FormControl sx={{ minWidth: 150 }}>
-                  <InputLabel id="target-language-label">Target Language</InputLabel>
-                  <Select
-                    labelId="target-language-label"
-                    value={tgtLang}
-                    label="Target Language"
-                    onChange={(e) => setTgtLang(e.target.value)}
-                  >
-                    {languageOptions.map((option) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Stack>
-              {transError && (
-                <Alert severity="error" sx={{ mt: 2, width: '100%' }}>
-                  {transError}
-                </Alert>
-              )}
-              {(transSummary || translatedSummary) && (
-                <Box sx={{ mt: 2, p: 2, bgcolor: 'background.paper', borderRadius: 1, width: '100%' }}>
-                  {transSummary && (
-                    <>
-                      <Typography variant="h6" sx={{ fontWeight: 'medium' }}>
-                        Summary
-                      </Typography>
-                      <Typography sx={{ mt: 1, color: 'text.primary' }}>{transSummary}</Typography>
-                    </>
-                  )}
-                  {translatedSummary && (
-                    <>
-                      <Typography variant="h6" sx={{ mt: 2, fontWeight: 'medium' }}>
-                        Translated Summary
-                      </Typography>
-                      <Typography sx={{ mt: 1, color: 'text.primary' }}>
-                        {translatedSummary}
-                      </Typography>
-                    </>
-                  )}
-                </Box>
-              )}
-            </Stack>
 
             {/* Kannada PDF Query and Translation Section */}
             <Stack

@@ -23,6 +23,8 @@ import SignUp from './components/ux/sign-up/SignUp';
 import Blog from './components/ux/blog/Blog';
 import Tutorials from './components/ux/components/Tutorials';
 import IndicDocumentFeatures from './components/ux/components/IndicDocumentFeatures';
+import Research from './components/ux/components/Research';
+import API from './components/ux/components/API';
 
 const rootElement = document.getElementById('root');
 if (rootElement) {
@@ -37,6 +39,8 @@ if (rootElement) {
               <Routes>
                 <Route path="/docs" element={<IndicDocumentFeatures />} />
                 <Route path="/tutorials" element={<Tutorials />} />
+                <Route path="/research" element={<Research />} />
+                <Route path="/api" element={<API />} />
                 <Route path="/demo" element={<Blog />} />
                 <Route path="/signin" element={<SignIn />} />
                 <Route path="/signup" element={<SignUp />} />

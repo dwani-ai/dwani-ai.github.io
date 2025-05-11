@@ -192,12 +192,22 @@ export default function AppAppBar() {
                   </MenuItem>
                   <MenuItem>
                   <Button color="primary" variant="contained" fullWidth onClick={handleDocsClick}>
-                    Docs
+                    Demo
                   </Button>
                 </MenuItem>
                 <MenuItem>
                   <Button color="primary" variant="contained" fullWidth onClick={handleTutorialsClick}>
                     Tutorials
+                  </Button>
+                </MenuItem>
+                <MenuItem>
+                  <Button color="primary" variant="contained" fullWidth onClick={handleResearchClick}>
+                    Research
+                  </Button>
+                </MenuItem>
+                <MenuItem>
+                  <Button color="primary" variant="contained" fullWidth onClick={handleAPIClick}>
+                    API
                   </Button>
                 </MenuItem>
                 <div style={{ display: 'none' }}>

@@ -4,67 +4,9 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid2';
-import { styled } from '@mui/material/styles';
-
-const VideoCard = styled(Box)(({ theme }) => ({
-  position: 'relative',
-  overflow: 'hidden',
-  borderRadius: theme.shape.borderRadius,
-  boxShadow: theme.shadows[4],
-  transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
-  '&:hover': {
-    transform: 'scale(1.03)',
-    boxShadow: theme.shadows[8],
-  },
-  '& iframe': {
-    width: '100%',
-    height: '315px',
-    border: 'none',
-    borderRadius: theme.shape.borderRadius,
-  },
-  [theme.breakpoints.down('sm')]: {
-    '& iframe': {
-      height: '200px',
-    },
-  },
-}));
-
-const VideoTitle = styled(Typography)(({ theme }) => ({
-  position: 'absolute',
-  bottom: 0,
-  left: 0,
-  right: 0,
-  background: 'rgba(0, 0, 0, 0.7)',
-  color: theme.palette.common.white,
-  padding: theme.spacing(1),
-  textAlign: 'center',
-  fontWeight: 'medium',
-  opacity: 0,
-  transition: 'opacity 0.3s ease-in-out',
-  '.MuiBox-root:hover &': {
-    opacity: 1,
-  },
-}));
+import Link from '@mui/material/Link';
 
 export default function Research() {
-  const videos = [
-    {
-      title: 'dwani.ai Android App Demo',
-      src: 'https://www.youtube.com/embed/TbplM-lWSL4?rel=0',
-    },
-    {
-      title: 'Introduction to dwani.ai Project',
-      src: 'https://www.youtube.com/embed/kqZZZjbeNVk?rel=0',
-    },
-    {
-      title: 'dwani.ai Workshop',
-      src: 'https://www.youtube.com/embed/f5JkJLQJFGA?rel=0',
-    },
-    {
-      title: 'dwani.ai API',
-      src: 'https://www.youtube.com/embed/RLIhG1bt8gw?rel=0',
-    },
-  ];
 
   return (
     <>
@@ -147,52 +89,61 @@ export default function Research() {
             </Typography>
           </Stack>
 
-          {/* Videos Section */}
+          {/* Research Goals Section */}
           <Stack
-            spacing={4}
+            spacing={2}
             useFlexGap
-            sx={{ alignItems: 'center', width: { xs: '100%', sm: '90%' }, mt: 8 }}
+            sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' }, mt: 8 }}
           >
-            <Divider sx={{ width: '100%', borderColor: 'primary.main', borderWidth: 2 }} />
-            <Typography
-              variant="h4"
-              sx={{
-                textAlign: 'center',
-                fontWeight: 'bold',
-                color: 'text.primary',
-                letterSpacing: '0.03em',
-              }}
-            >
-              Explore dwani.ai Tutorials
+            <Divider sx={{ width: '100%' }} />
+            <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
+              Research Goals
             </Typography>
-            <Typography
-              sx={{
-                textAlign: 'center',
-                color: 'text.secondary',
-                fontSize: '1.1rem',
-                maxWidth: '600px',
-              }}
-            >
-              Watch our videos to learn about dwani.ai's features, from the Android app to API integration.
+            <Typography sx={{ textAlign: 'center', color: 'text.secondary' }}>
+              - Improve Time to First Token Generation (TTFTG) for ASR, Translation, and TTS systems.
+              <br />
+              - Develop a Kannada voice model meeting industry standards (OpenAI, Google, ElevenLabs, xAI).
+              <br />
+              - Create robust voice solutions for Indian languages, with a focus on Kannada.
             </Typography>
-            <Grid container spacing={3}>
-              {videos.map((video, index) => (
-                <Grid size={{ xs: 12, sm: 6 }} key={index}>
-                  <VideoCard>
-                    <iframe
-                      src={video.src}
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                      title={video.title}
-                    ></iframe>
-                    <VideoTitle variant="body2">{video.title}</VideoTitle>
-                  </VideoCard>
-                </Grid>
-              ))}
+          </Stack>
+
+          {/* Models and Tools Section */}
+          <Stack
+            spacing={2}
+            useFlexGap
+            sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' }, mt: 8 }}
+          >
+            <Divider sx={{ width: '100%' }} />
+            <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
+              Models and Tools
+            </Typography>
+            <Typography sx={{ textAlign: 'center', color: 'text.secondary' }}>
+              dwani.ai leverages open-source tools for seamless performance.
+            </Typography>
+            <Grid container spacing={2}>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <Typography variant="body1">
+                  - <Link href="https://github.com/dwani-ai/asr-indic-server" target="_blank">ASR Indic Server</Link>
+                  <br />
+                  - <Link href="https://github.com/dwani-ai/tts-indic-server" target="_blank">TTS Indic Server</Link>
+                  <br />
+                  - <Link href="https://github.com/dwani-ai/indic-translate-server" target="_blank">Indic Translate Server</Link>
+                </Typography>
+              </Grid>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <Typography variant="body1">
+                  - <Link href="https://github.com/dwani-ai/docs-indic-server" target="_blank">Indic Document Server</Link>
+                  <br />
+                  - <Link href="https://github.com/dwani-ai/dhwani-server" target="_blank">dwani.ai Server</Link>
+                  <br />
+                  - <Link href="https://github.com/dwani-ai/llm-indic-server_cpu" target="_blank">LLM Indic Server</Link>
+                </Typography>
+              </Grid>
             </Grid>
           </Stack>
-        </Container>
+          
+       </Container>
       </Box>
     </>
   );

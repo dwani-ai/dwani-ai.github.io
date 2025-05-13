@@ -68,7 +68,7 @@ export default function Tutorials() {
 
   return (
     <>
-      <title>Dwani - Your Kannada-Speaking Voice Buddy</title>
+      <title>dwani.ai - Knowledge through Voice</title>
       <meta
         name="description"
         content="Dwani is a GenAI platform offering voice interaction in Kannada and other Indian languages. Watch our video tutorials to explore the dwani.ai project and its features."
@@ -118,7 +118,7 @@ export default function Tutorials() {
                 fontSize: 'clamp(2.5rem, 8vw, 3.5rem)',
                 fontWeight: 'bold',
                 color: 'primary.main',
-                textTransform: 'uppercase',
+                textTransform: 'smallcase',
                 letterSpacing: '0.05em',
               }}
             >
@@ -133,7 +133,7 @@ export default function Tutorials() {
                 fontWeight: 'medium',
               }}
             >
-              Your Kannada-Speaking Voice Buddy
+              Knowledge through Voice
             </Typography>
             <Typography
               sx={{

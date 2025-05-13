@@ -10,7 +10,7 @@ export default function Research() {
 
   return (
     <>
-      <title>Dwani - Your Kannada-Speaking Voice Buddy</title>
+      <title>dwani.ai - Knowledge through Voice</title>
       <meta
         name="description"
         content="Dwani is a GenAI platform offering voice interaction in Kannada and other Indian languages. Watch our video tutorials to explore the dwani.ai project and its features."
@@ -60,7 +60,7 @@ export default function Research() {
                 fontSize: 'clamp(2.5rem, 8vw, 3.5rem)',
                 fontWeight: 'bold',
                 color: 'primary.main',
-                textTransform: 'uppercase',
+                textTransform: 'smallcase',
                 letterSpacing: '0.05em',
               }}
             >
@@ -75,18 +75,9 @@ export default function Research() {
                 fontWeight: 'medium',
               }}
             >
-              Your Kannada-Speaking Voice Buddy
+              Knowledge through Voice
             </Typography>
-            <Typography
-              sx={{
-                textAlign: 'center',
-                color: 'text.secondary',
-                width: { sm: '100%', md: '80%' },
-                fontSize: '1.1rem',
-              }}
-            >
-              Discover dwani.ai's GenAI-powered voice assistant through our engaging video tutorials.
-            </Typography>
+
           </Stack>
 
           {/* Research Goals Section */}

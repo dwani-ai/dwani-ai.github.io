@@ -30,6 +30,35 @@ const FeatureCard = styled(Box)(({ theme }) => ({
   },
 }));
 
+interface MuiCodeBlockProps {
+  code: string;
+  language?: string;
+}
+
+function MuiCodeBlock({ code, language = 'python' }: MuiCodeBlockProps) {
+  return (
+    <Box
+      component="pre"
+      sx={{
+        backgroundColor: theme => theme.palette.grey[900],
+        color: theme => theme.palette.common.white,
+        p: 2,
+        borderRadius: 1,
+        overflow: 'auto',
+        fontSize: '1rem',
+        fontFamily: 'Fira Mono, monospace',
+        mb: 2,
+        width: '100%',
+      }}
+    >
+      <code className={`language-${language}`}>
+        {code}
+      </code>
+    </Box>
+  );
+}
+
+
 export default function Hero() {
   const {
     file: kannadaFile,
@@ -154,7 +183,7 @@ export default function Hero() {
                 width: { sm: '100%', md: '80%' },
               }}
             >
-              Voice Assistant for All
+              Knowledge through Voice
             </Typography>
             <Typography
               sx={{
@@ -357,7 +386,29 @@ export default function Hero() {
             </Grid>
           </Stack>
 
+          <Stack
+            spacing={2}
+            useFlexGap
+            sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' }, mt: 8 }}
+          >
+            <Divider sx={{ width: '100%' }} />
+            <Typography sx={{ textAlign: 'center', color: 'text.secondary' }}>
+            dwani.ai – Python SDK  .<br />
+            </Typography>
+            <Divider sx={{ width: '100%' }} />
+            <MuiCodeBlock code={
+              `
+      pip install dwani
 
+      import dwani
+
+      resp = dwani.Chat.create(
+        prompt="Hello!", src_lang="eng_Latn", tgt_lang="kan_Knda")
+      print(resp)`
+            } language="python" />
+            <MuiCodeBlock code={`{'response': 'ನಮಸ್ತೆ! ಭಾರತ ಮತ್ತು ಕರ್ನಾಟಕವನ್ನು ಗಮನದಲ್ಲಿಟ್ಟುಕೊಂಡು ಇಂದು ನಿಮ್ಮ ಪ್ರಶ್ನೆಗಳಿಗೆ ನಾನು ನಿಮಗೆ ಹೇಗೆ ಸಹಾಯ ಮಾಡಲಿ?'}`} language="json" />
+            <Divider sx={{ width: '100%' }} />
+          </Stack>
           {/* Contact Section */}
           <Stack
             spacing={2}

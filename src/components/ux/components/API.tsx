@@ -3,75 +3,44 @@ import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
-import Grid from '@mui/material/Grid2';
-import { styled } from '@mui/material/styles';
+import Link from '@mui/material/Link';
 
-const VideoCard = styled(Box)(({ theme }) => ({
-  position: 'relative',
-  overflow: 'hidden',
-  borderRadius: theme.shape.borderRadius,
-  boxShadow: theme.shadows[4],
-  transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
-  '&:hover': {
-    transform: 'scale(1.03)',
-    boxShadow: theme.shadows[8],
-  },
-  '& iframe': {
-    width: '100%',
-    height: '315px',
-    border: 'none',
-    borderRadius: theme.shape.borderRadius,
-  },
-  [theme.breakpoints.down('sm')]: {
-    '& iframe': {
-      height: '200px',
-    },
-  },
-}));
+interface MuiCodeBlockProps {
+  code: string;
+  language?: string;
+}
 
-const VideoTitle = styled(Typography)(({ theme }) => ({
-  position: 'absolute',
-  bottom: 0,
-  left: 0,
-  right: 0,
-  background: 'rgba(0, 0, 0, 0.7)',
-  color: theme.palette.common.white,
-  padding: theme.spacing(1),
-  textAlign: 'center',
-  fontWeight: 'medium',
-  opacity: 0,
-  transition: 'opacity 0.3s ease-in-out',
-  '.MuiBox-root:hover &': {
-    opacity: 1,
-  },
-}));
+
+function MuiCodeBlock({ code, language = 'python' }: MuiCodeBlockProps) {
+  return (
+    <Box
+      component="pre"
+      sx={{
+        backgroundColor: theme => theme.palette.grey[900],
+        color: theme => theme.palette.common.white,
+        p: 2,
+        borderRadius: 1,
+        overflow: 'auto',
+        fontSize: '1rem',
+        fontFamily: 'Fira Mono, monospace',
+        mb: 2,
+        width: '100%',
+      }}
+    >
+      <code className={`language-${language}`}>
+        {code}
+      </code>
+    </Box>
+  );
+}
 
 export default function API() {
-  const videos = [
-    {
-      title: 'dwani.ai Android App Demo',
-      src: 'https://www.youtube.com/embed/TbplM-lWSL4?rel=0',
-    },
-    {
-      title: 'Introduction to dwani.ai Project',
-      src: 'https://www.youtube.com/embed/kqZZZjbeNVk?rel=0',
-    },
-    {
-      title: 'dwani.ai Workshop',
-      src: 'https://www.youtube.com/embed/f5JkJLQJFGA?rel=0',
-    },
-    {
-      title: 'dwani.ai API',
-      src: 'https://www.youtube.com/embed/RLIhG1bt8gw?rel=0',
-    },
-  ];
-
   return (
     <>
-      <title>Dwani - Your Kannada-Speaking Voice Buddy</title>
+      <title>dwani.ai - Knowledge through Voice</title>
       <meta
         name="description"
-        content="Dwani is a GenAI platform offering voice interaction in Kannada and other Indian languages. Watch our video tutorials to explore the dwani.ai project and its features."
+        content="dwani.ai is a GenAI platform offering voice interaction in Kannada and other Indian languages."
       />
       <meta
         name="keywords"
@@ -118,7 +87,7 @@ export default function API() {
                 fontSize: 'clamp(2.5rem, 8vw, 3.5rem)',
                 fontWeight: 'bold',
                 color: 'primary.main',
-                textTransform: 'uppercase',
+                textTransform: 'smallcase',
                 letterSpacing: '0.05em',
               }}
             >
@@ -133,66 +102,117 @@ export default function API() {
                 fontWeight: 'medium',
               }}
             >
-              Your Kannada-Speaking Voice Buddy
+              Knowledge through Voice
             </Typography>
-            <Typography
-              sx={{
-                textAlign: 'center',
-                color: 'text.secondary',
-                width: { sm: '100%', md: '80%' },
-                fontSize: '1.1rem',
-              }}
-            >
-              Discover dwani.ai's GenAI-powered voice assistant through our engaging video tutorials.
-            </Typography>
+
           </Stack>
 
-          {/* Videos Section */}
           <Stack
-            spacing={4}
-            useFlexGap
-            sx={{ alignItems: 'center', width: { xs: '100%', sm: '90%' }, mt: 8 }}
-          >
-            <Divider sx={{ width: '100%', borderColor: 'primary.main', borderWidth: 2 }} />
-            <Typography
-              variant="h4"
-              sx={{
-                textAlign: 'center',
-                fontWeight: 'bold',
-                color: 'text.primary',
-                letterSpacing: '0.03em',
-              }}
-            >
-              Explore dwani.ai Tutorials
-            </Typography>
-            <Typography
-              sx={{
-                textAlign: 'center',
-                color: 'text.secondary',
-                fontSize: '1.1rem',
-                maxWidth: '600px',
-              }}
-            >
-              Watch our videos to learn about dwani.ai's features, from the Android app to API integration.
-            </Typography>
-            <Grid container spacing={3}>
-              {videos.map((video, index) => (
-                <Grid size={{ xs: 12, sm: 6 }} key={index}>
-                  <VideoCard>
-                    <iframe
-                      src={video.src}
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                      title={video.title}
-                    ></iframe>
-                    <VideoTitle variant="body2">{video.title}</VideoTitle>
-                  </VideoCard>
-                </Grid>
-              ))}
-            </Grid>
-          </Stack>
-        </Container>
+      spacing={2}
+      useFlexGap
+      sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' }, mt: 8 }}
+    >
+      <Divider sx={{ width: '100%' }} />
+      <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
+        dwani.ai – Python Library
+      </Typography>
+      <Typography sx={{ textAlign: 'center', color: 'text.secondary' }}>
+        Easily integrate multilingual voice and vision AI into your projects.<br />
+        <Link href="https://dwani.ai" target="_blank">Website</Link>
+      </Typography>
+
+      <Divider sx={{ width: '100%' }} />
+
+      <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+        Install the library
+      </Typography>
+      <MuiCodeBlock code={`pip install dwani`} language="bash" />
+
+      <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+        Setup the credentials
+      </Typography>
+      <MuiCodeBlock code={
+`import dwani
+import os
+
+dwani.api_key = os.getenv("DWANI_API_KEY")
+dwani.api_base = os.getenv("DWANI_API_BASE_URL")`
+      } language="python" />
+
+      <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+        Examples
+      </Typography>
+
+      <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+        Text Query
+      </Typography>
+      <MuiCodeBlock code={
+`resp = dwani.Chat.create(prompt="Hello!", src_lang="eng_Latn", tgt_lang="kan_Knda")
+print(resp)`
+      } language="python" />
+      <MuiCodeBlock code={`{'response': 'ನಮಸ್ತೆ! ಭಾರತ ಮತ್ತು ಕರ್ನಾಟಕವನ್ನು ಗಮನದಲ್ಲಿಟ್ಟುಕೊಂಡು ಇಂದು ನಿಮ್ಮ ಪ್ರಶ್ನೆಗಳಿಗೆ ನಾನು ನಿಮಗೆ ಹೇಗೆ ಸಹಾಯ ಮಾಡಲಿ?'}`} language="json" />
+
+      <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+        Vision Query
+      </Typography>
+      <MuiCodeBlock code={
+`result = dwani.Vision.caption(
+    file_path="image.png",
+    query="Describe this logo",
+    src_lang="eng_Latn",
+    tgt_lang="kan_Knda"
+)
+print(result)`
+      } language="python" />
+      <MuiCodeBlock code={`{'answer': 'ಒಂದು ವಾಕ್ಯದಲ್ಲಿ ಚಿತ್ರದ ಸಾರಾಂಶವನ್ನು ಇಲ್ಲಿ ನೀಡಲಾಗಿದೆಃ ...'}`} language="json" />
+
+      <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+        Speech to Text (ASR)
+      </Typography>
+      <MuiCodeBlock code={
+`result = dwani.ASR.transcribe(file_path="kannada_sample.wav", language="kannada")
+print(result)`
+      } language="python" />
+      <MuiCodeBlock code={`{'text': 'ಕರ್ನಾಟಕ ದ ರಾಜಧಾನಿ ಯಾವುದು'}`} language="json" />
+
+      <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+        Translate
+      </Typography>
+      <MuiCodeBlock code={
+`resp = dwani.Translate.run_translate(sentences=["hi"], src_lang="eng_Latn", tgt_lang="kan_Knda")
+print(resp)`
+      } language="python" />
+      <MuiCodeBlock code={`{'translations': ['ಹಾಯ್']}`} language="json" />
+
+      <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+        Text to Speech (Speech Synthesis)
+      </Typography>
+      <MuiCodeBlock code={
+`response = dwani.Audio.speech(input="ಕರ್ನಾಟಕ ದ ರಾಜಧಾನಿ ಯಾವುದು", response_format="mp3")
+with open("output.mp3", "wb") as f:
+    f.write(response)`
+      } language="python" />
+
+      <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+        Document – Extract Text
+      </Typography>
+      <MuiCodeBlock code={
+`result = dwani.Documents.run_extract(
+    file_path="dwani-workshop.pdf",
+    page_number=1,
+    src_lang="eng_Latn",
+    tgt_lang="kan_Knda"
+)
+print(result)`
+      } language="python" />
+      <MuiCodeBlock code={
+`{'pages': [{'processed_page': 1, 'page_content': 'a plain text representation of the document', 'translated_content': 'ಡಾಕ್ಯುಮೆಂಟ್ನ ಸರಳ ಪಠ್ಯ ಪ್ರಾತಿನಿಧ್ಯವನ್ನು ಇಲ್ಲಿ ನೀಡಲಾಗಿದೆ, ಅದನ್ನು ಸ್ವಾಭಾವಿಕವಾಗಿ ಓದುವಂತೆಃ'}]}`
+      } language="json" />
+
+
+    </Stack>
+
+       </Container>
       </Box>
     </>
   );

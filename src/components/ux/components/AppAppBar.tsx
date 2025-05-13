@@ -48,6 +48,16 @@ export default function AppAppBar() {
     toggleDrawer(false)();
   };
 
+
+  const handleResearchClick = () => {
+    navigate('/research');
+    toggleDrawer(false)();
+  };
+
+  const handleAPIClick = () => {
+    navigate('/api');
+    toggleDrawer(false)();
+  };
   const handleDemoClick = () => {
     navigate('/demo');
     toggleDrawer(false)();
@@ -94,10 +104,16 @@ export default function AppAppBar() {
                 Home
               </Button>
               <Button variant="text" color="info" size="small" onClick={handleDocsClick}>
-                Docs
+                Demo
               </Button>
               <Button variant="text" color="info" size="small" onClick={handleTutorialsClick}>
                 Tutorials
+              </Button>
+              <Button variant="text" color="info" size="small" onClick={handleResearchClick}>
+                Research
+              </Button>
+              <Button variant="text" color="info" size="small" onClick={handleAPIClick}>
+                API
               </Button>
               <div style={{ display: 'none' }}> 
               <Button variant="text" color="info" size="small" onClick={handleDemoClick}>
@@ -176,12 +192,22 @@ export default function AppAppBar() {
                   </MenuItem>
                   <MenuItem>
                   <Button color="primary" variant="contained" fullWidth onClick={handleDocsClick}>
-                    Docs
+                    Demo
                   </Button>
                 </MenuItem>
                 <MenuItem>
                   <Button color="primary" variant="contained" fullWidth onClick={handleTutorialsClick}>
                     Tutorials
+                  </Button>
+                </MenuItem>
+                <MenuItem>
+                  <Button color="primary" variant="contained" fullWidth onClick={handleResearchClick}>
+                    Research
+                  </Button>
+                </MenuItem>
+                <MenuItem>
+                  <Button color="primary" variant="contained" fullWidth onClick={handleAPIClick}>
+                    API
                   </Button>
                 </MenuItem>
                 <div style={{ display: 'none' }}>

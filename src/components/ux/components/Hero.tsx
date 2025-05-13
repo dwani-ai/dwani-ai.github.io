@@ -30,6 +30,35 @@ const FeatureCard = styled(Box)(({ theme }) => ({
   },
 }));
 
+interface MuiCodeBlockProps {
+  code: string;
+  language?: string;
+}
+
+function MuiCodeBlock({ code, language = 'python' }: MuiCodeBlockProps) {
+  return (
+    <Box
+      component="pre"
+      sx={{
+        backgroundColor: theme => theme.palette.grey[900],
+        color: theme => theme.palette.common.white,
+        p: 2,
+        borderRadius: 1,
+        overflow: 'auto',
+        fontSize: '1rem',
+        fontFamily: 'Fira Mono, monospace',
+        mb: 2,
+        width: '100%',
+      }}
+    >
+      <code className={`language-${language}`}>
+        {code}
+      </code>
+    </Box>
+  );
+}
+
+
 export default function Hero() {
   const {
     file: kannadaFile,
@@ -54,15 +83,9 @@ export default function Hero() {
   const features = [
     {
       title: 'Kannada Voice AI',
-      description: 'Answer voice queries in Kannada using a powerful LLM.',
+      description: 'Answer voice queries in Kannada',
       components: 'LLM',
       hardware: 'CPU/GPU',
-    },
-    {
-      title: 'Voice to Voice Translation',
-      description: 'Convert spoken language to text, translate, and generate speech.',
-      components: 'ASR, Translation, TTS',
-      hardware: 'GPU',
     },
     {
       title: 'Text to Speech',
@@ -71,17 +94,17 @@ export default function Hero() {
       hardware: 'GPU',
     },
     {
-      title: 'PDF Translate',
-      description: 'Translate content from PDF documents seamlessly.',
+      title: 'PDF Query',
+      description: 'Query content from PDF documents seamlessly.',
       components: 'Translation',
       hardware: 'GPU',
     },
     {
-      title: 'Document Summary',
-      description: 'Summarize PDF documents into concise text.',
-      components: 'LLM',
+      title: 'Image Query',
+      description: 'Query content from Images',
+      components: 'Vision',
       hardware: 'GPU',
-    },
+    }
   ];
 
   // Function to handle PDF download
@@ -100,14 +123,14 @@ export default function Hero() {
 
   return (
     <>
-      <title>Dwani - Your Kannada-Speaking Voice Buddy</title>
+      <title>dwani.ai</title>
       <meta
         name="description"
-        content="Dwani is a GenAI platform offering voice interaction in Kannada and other Indian languages. Download the app on Google Play and explore features like voice translation, text-to-speech, and document summarization."
+        content="dwani.ai is a GenAI platform offering voice interaction in Kannada and other Indian languages. Download the app on Google Play and explore features like voice translation, text-to-speech, and document summarization."
       />
       <meta
         name="keywords"
-        content="Dwani, Kannada AI, voice assistant, Indian languages, GenAI, voice translation, document summarization"
+        content="dwani, dwani.ai, Kannada AI, voice assistant, Indian languages, GenAI, voice translation, document summarization"
       />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <link rel="canonical" href="https://dwani.ai" />
@@ -160,7 +183,7 @@ export default function Hero() {
                 width: { sm: '100%', md: '80%' },
               }}
             >
-              Your Kannada-Speaking Voice Buddy
+              Knowledge through Voice
             </Typography>
             <Typography
               sx={{
@@ -169,7 +192,7 @@ export default function Hero() {
                 width: { sm: '100%', md: '80%' },
               }}
             >
-              Chat in Kannada with dwani.ai's GenAI-powered voice assistant, supporting multiple Indian languages.
+              Chat in Kannada/Indian languages with dwani.ai's GenAI-powered voice assistant.
             </Typography>
             <Button
               variant="contained"
@@ -178,10 +201,10 @@ export default function Hero() {
               target="_blank"
               size="large"
               sx={{ mt: 2, px: 4, py: 1.5 }}
-              aria-label="Download Dwani on Google Play"
+              aria-label="Download dwani.ai on Google Play"
               startIcon={<SiGoogleplay size={24} />}
             >
-              Download on Google Play
+              Google Play
             </Button>
 
             {/* Kannada PDF Query and Translation Section */}
@@ -363,60 +386,29 @@ export default function Hero() {
             </Grid>
           </Stack>
 
-          {/* Research Goals Section */}
           <Stack
             spacing={2}
             useFlexGap
             sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' }, mt: 8 }}
           >
             <Divider sx={{ width: '100%' }} />
-            <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
-              Research Goals
-            </Typography>
             <Typography sx={{ textAlign: 'center', color: 'text.secondary' }}>
-              - Improve Time to First Token Generation (TTFTG) for ASR, Translation, and TTS systems.
-              <br />
-              - Develop a Kannada voice model meeting industry standards (OpenAI, Google, ElevenLabs, xAI).
-              <br />
-              - Create robust voice solutions for Indian languages, with a focus on Kannada.
+            dwani.ai – Python SDK  .<br />
             </Typography>
-          </Stack>
-
-          {/* Models and Tools Section */}
-          <Stack
-            spacing={2}
-            useFlexGap
-            sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' }, mt: 8 }}
-          >
             <Divider sx={{ width: '100%' }} />
-            <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
-              Models and Tools
-            </Typography>
-            <Typography sx={{ textAlign: 'center', color: 'text.secondary' }}>
-              dwani.ai leverages open-source tools for seamless performance.
-            </Typography>
-            <Grid container spacing={2}>
-              <Grid size={{ xs: 12, sm: 6 }}>
-                <Typography variant="body1">
-                  - <Link href="https://github.com/dwani-ai/asr-indic-server" target="_blank">ASR Indic Server</Link>
-                  <br />
-                  - <Link href="https://github.com/dwani-ai/tts-indic-server" target="_blank">TTS Indic Server</Link>
-                  <br />
-                  - <Link href="https://github.com/dwani-ai/indic-translate-server" target="_blank">Indic Translate Server</Link>
-                </Typography>
-              </Grid>
-              <Grid size={{ xs: 12, sm: 6 }}>
-                <Typography variant="body1">
-                  - <Link href="https://github.com/dwani-ai/docs-indic-server" target="_blank">Indic Document Server</Link>
-                  <br />
-                  - <Link href="https://github.com/dwani-ai/dhwani-server" target="_blank">dwani.ai Server</Link>
-                  <br />
-                  - <Link href="https://github.com/dwani-ai/llm-indic-server_cpu" target="_blank">LLM Indic Server</Link>
-                </Typography>
-              </Grid>
-            </Grid>
-          </Stack>
+            <MuiCodeBlock code={
+              `
+      pip install dwani
 
+      import dwani
+
+      resp = dwani.Chat.create(
+        prompt="Hello!", src_lang="eng_Latn", tgt_lang="kan_Knda")
+      print(resp)`
+            } language="python" />
+            <MuiCodeBlock code={`{'response': 'ನಮಸ್ತೆ! ಭಾರತ ಮತ್ತು ಕರ್ನಾಟಕವನ್ನು ಗಮನದಲ್ಲಿಟ್ಟುಕೊಂಡು ಇಂದು ನಿಮ್ಮ ಪ್ರಶ್ನೆಗಳಿಗೆ ನಾನು ನಿಮಗೆ ಹೇಗೆ ಸಹಾಯ ಮಾಡಲಿ?'}`} language="json" />
+            <Divider sx={{ width: '100%' }} />
+          </Stack>
           {/* Contact Section */}
           <Stack
             spacing={2}

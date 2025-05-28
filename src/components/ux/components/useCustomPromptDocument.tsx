@@ -51,7 +51,7 @@ export const useCustomPromptDocument = () => {
 
     try {
       const response = await fetch(
-        'https://dwani-dwani-server-workshop.hf.space/v1/indic-custom-prompt-pdf',
+        'https://dwani-dwani-api.hf.space/v1/indic-custom-prompt-pdf',
         {
           method: 'POST',
           headers: {

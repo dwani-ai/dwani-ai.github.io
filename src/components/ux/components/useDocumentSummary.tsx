@@ -34,7 +34,7 @@ export const useDocumentSummary = () => {
 
     try {
       const response = await fetch(
-        'https://dwani-dwani-server-workshop.hf.space/v1/summarize-pdf',
+        'https://dwani-dwani-api.hf.space/v1/summarize-pdf',
         {
           method: 'POST',
           headers: {

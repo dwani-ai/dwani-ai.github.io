@@ -91,7 +91,7 @@ export const useKannadaPDFQuery = () => {
       formData.append('prompt', prompt);
       formData.append('src_lang', srcLang);
 
-      const baseUrl = 'https://dwani-dwani-server-workshop.hf.space';
+      const baseUrl = 'https://dwani-dwani-api.hf.space';
       const response = await axios.post(`${baseUrl}/v1/indic-custom-prompt-kannada-pdf`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         responseType: 'blob',

@@ -91,9 +91,9 @@ export const useKannadaPDFQuery = () => {
       formData.append('prompt', prompt);
       formData.append('src_lang', srcLang);
 
-      const baseUrl = 'https://dwani-dwani-api.hf.space';
+      const baseUrl = `${import.meta.env.VITE_DWANI_API_BASE_URL}`;
       const response = await axios.post(`${baseUrl}/v1/indic-custom-prompt-kannada-pdf`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
+        headers: { 'Content-Type': 'multipart/form-data' ,             'X-API-KEY': `${import.meta.env.VITE_DWANI_API_BASE_URL}`, },
         responseType: 'blob',
       });
 

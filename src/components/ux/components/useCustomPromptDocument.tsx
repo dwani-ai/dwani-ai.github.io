@@ -51,11 +51,12 @@ export const useCustomPromptDocument = () => {
 
     try {
       const response = await fetch(
-        'https://dwani-dwani-api.hf.space/v1/indic-custom-prompt-pdf',
+        `${import.meta.env.VITE_DWANI_API_BASE_URL}/v1/indic-custom-prompt-pdf`,
         {
           method: 'POST',
           headers: {
             accept: 'application/json',
+                        'X-API-KEY': `${import.meta.env.VITE_DWANI_API_BASE_URL}`, 
           },
           body: formData,
         }

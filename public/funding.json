@@ -1,0 +1,55 @@
+{
+    "version": "v1.0.0",
+    "entity": {
+        "type": "individual",                     
+        "role": "owner",                     
+        "name": "sachin shetty",                     
+        "email": "grants@dwani.ai",                    
+        "phone": "",                    
+        "description": "dwani.ai - Voice Assistant for Indian Languages",              
+        "webpageUrl": {
+            "url": "https://dwani.ai",                  
+            "wellKnown": ""             
+        }
+    },
+
+    "projects": [{
+        "guid": "dwani-ai-voice",                     
+        "name": "dwani.ai",                     
+        "description": "Voice Assistant for Indian Languauges",             
+        "webpageUrl": {
+            "url": "dwani.ai",                  // Required. Webpage with information about the project. Starts with https:// or http://. Max len 250.
+            "wellKnown": ""             // Optional. Required if the above url and the URL of the funding.json manifest do not have the same hostname. Starts with https:// or http://. Max len 250.
+        },
+        "repositoryUrl": {
+            "url": "https://github.com/dwani-ai",                  
+            "wellKnown": ""             
+        },
+        "licenses": ["spdx:MIT"],                  
+        "tags": ["developer-tools"]
+    }],
+
+    
+    "funding": {
+        "channels": [{
+            "guid": "",                 // Required. A short unique ID for the channel. Lowercase-alphanumeric-dashes only. eg: mybank, my-paypal. Max len 32.
+            "type": "",                 // Required. [bank, payment-provider, cheque, cash, other].
+            "address": "",              // Optional. A short unstructured textual representation of the payment address for the channel. eg: "Account: 12345 (branch: ABCX)", "mypaypal@domain.com", "https://payment-url.com", or a physical address for cheques. Max len 250.
+            "description": ""           // Optional. Any additional description or instructions for the payment channel. Max len 500.
+        }],
+
+        "plans": [{
+            "guid": "",                 // Required. A short unique ID for the plan. Lowercase-alphanumeric-dashes only. eg: mybank, paypal. Max len 32.
+            "status": "",               // Required. [active, inactive]. Indicates whether this plan is currently active or inactive.
+            "name": "",                 // Required. Name of the funding plan. eg: "Starter support plan", "Infra hosting", "Monthly funding plan".
+            "description": "",          // Optional. Any additional description or instructions for the funding plan.
+            "amount": 0,                // Required. The solicited amount for this plan. 0 is a wildcard that indicates "any amount".
+            "currency": "",             // Required. Three letter ISO 4217 currency code. eg: USD
+            "frequency": "",            // Required. [one-time, weekly, fortnightly, monthly, yearly, other]
+            "channels": []              // Required. One or more channel IDs defined in channels[] via which this plan can accept payments.
+        }]
+
+        
+    }
+}
+

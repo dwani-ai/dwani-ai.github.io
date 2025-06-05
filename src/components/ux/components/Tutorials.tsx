@@ -46,6 +46,18 @@ const VideoTitle = styled(Typography)(({ theme }) => ({
   },
 }));
 
+const DiagramImage = styled('img')(({ theme }) => ({
+  width: '100%',
+  maxWidth: '800px',
+  height: 'auto',
+  borderRadius: theme.shape.borderRadius,
+  boxShadow: theme.shadows[4],
+  margin: theme.spacing(2, 0),
+  [theme.breakpoints.down('sm')]: {
+    maxWidth: '100%',
+  },
+}));
+
 export default function Tutorials() {
   const videos = [
     {
@@ -68,14 +80,14 @@ export default function Tutorials() {
 
   return (
     <>
-      <title>dwani.ai - Knowledge through Voice</title>
+      <title>dwani.ai - Knowledge through Curiosity</title>
       <meta
         name="description"
         content="Dwani is a GenAI platform offering voice interaction in Kannada and other Indian languages. Watch our video tutorials to explore the dwani.ai project and its features."
       />
       <meta
         name="keywords"
-        content="Dwani, Kannada AI, voice assistant, Indian languages, GenAI, video tutorials"
+        content="Dwani, Kannada AI, voice assistant, Indian languages, GenAI, video tutorials, system diagram"
       />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <link rel="canonical" href="https://dwani.ai" />
@@ -133,7 +145,7 @@ export default function Tutorials() {
                 fontWeight: 'medium',
               }}
             >
-              Knowledge through Voice
+              Knowledge through Curiosity
             </Typography>
             <Typography
               sx={{
@@ -143,9 +155,44 @@ export default function Tutorials() {
                 fontSize: '1.1rem',
               }}
             >
-              Discover dwani.ai's GenAI-powered voice assistant through our engaging video tutorials.
+              Discover dwani.ai's GenAI-powered voice assistant through our engaging video tutorials and system diagram.
             </Typography>
           </Stack>
+
+          {/* System Diagram Section */}
+          <Stack
+            spacing={4}
+            useFlexGap
+            sx={{ alignItems: 'center', width: { xs: '100%', sm: '90%' }, mt: 8 }}
+          >
+            <Divider sx={{ width: '100%', borderColor: 'primary.main', borderWidth: 2 }} />
+            <Typography
+              variant="h4"
+              sx={{
+                textAlign: 'center',
+                fontWeight: 'bold',
+                color: 'text.primary',
+                letterSpacing: '0.03em',
+              }}
+            >
+              dwani.ai System Diagram
+            </Typography>
+            <Typography
+              sx={{
+                textAlign: 'center',
+                color: 'text.secondary',
+                fontSize: '1.1rem',
+                maxWidth: '600px',
+              }}
+            >
+              Explore the architecture of dwani.ai's GenAI-powered voice assistant.
+            </Typography>
+            <DiagramImage
+              src="https://raw.githubusercontent.com/slabstech/llm-recipes/gh-200-optimisation/tutorials/gh200/dwani-inference.drawio.png"
+              alt="dwani.ai System Diagram"
+            />
+          </Stack>
+
 
           {/* Videos Section */}
           <Stack
@@ -192,6 +239,7 @@ export default function Tutorials() {
               ))}
             </Grid>
           </Stack>
+
         </Container>
       </Box>
     </>

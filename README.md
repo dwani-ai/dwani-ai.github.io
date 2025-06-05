@@ -1,8 +1,8 @@
-# dwani.ai - knowledge through voice
+# dwani.ai - knowledge through Curiosity
 
 ## Overview
 
-dwani.ai is a self-hosted GenAI platform designed to provide voice AI interaction for Kannada and other Indian languages. 
+dwani.ai is a self-hosted GenAI platform designed to provide multimodal AI inference.
 
 
 Website -> [dwani.ai](https://dwani.ai)

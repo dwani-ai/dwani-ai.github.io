@@ -37,7 +37,7 @@ function MuiCodeBlock({ code, language = 'python' }: MuiCodeBlockProps) {
 export default function API() {
   return (
     <>
-      <title>dwani.ai - Knowledge through Voice</title>
+      <title>dwani.ai - Knowledge through Curiosity</title>
       <meta
         name="description"
         content="dwani.ai is a GenAI platform offering voice interaction in Kannada and other Indian languages."
@@ -102,7 +102,7 @@ export default function API() {
                 fontWeight: 'medium',
               }}
             >
-              Knowledge through Voice
+              Knowledge through Curiosity
             </Typography>
 
           </Stack>

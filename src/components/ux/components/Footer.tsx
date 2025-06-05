@@ -11,6 +11,8 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import TwitterIcon from '@mui/icons-material/X';
 import YouTubeIcon from '@mui/icons-material/YouTube';
+import InstragramIcon from '@mui/icons-material/Instagram';
+//import HuggingFaceIcon from '@mui/icons-material/HuggingFace';
 
 import DwaniAIIcon from './DwaniAIIcon';
 function Copyright() {
@@ -211,7 +213,7 @@ export default function Footer() {
             color="inherit"
             size="small"
             href="https://x.com/dwani_ai"
-            aria-label="X"
+            aria-label="X/Twitter"
             sx={{ alignSelf: 'center' }}
           >
             <TwitterIcon />
@@ -224,6 +226,15 @@ export default function Footer() {
             sx={{ alignSelf: 'center' }}
           >
             <LinkedInIcon />
+          </IconButton>
+          <IconButton
+            color="inherit"
+            size="small"
+            href="https://www.instagram.com/dwani.ai/"
+            aria-label="Instagram"
+            sx={{ alignSelf: 'center' }}
+          >
+            <InstragramIcon />
           </IconButton>
         </Stack>
       </Box>

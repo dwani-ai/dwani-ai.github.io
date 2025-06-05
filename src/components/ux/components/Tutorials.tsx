@@ -80,7 +80,7 @@ export default function Tutorials() {
 
   return (
     <>
-      <title>dwani.ai - Knowledge through Voice</title>
+      <title>dwani.ai - Knowledge through Curiosity</title>
       <meta
         name="description"
         content="Dwani is a GenAI platform offering voice interaction in Kannada and other Indian languages. Watch our video tutorials to explore the dwani.ai project and its features."
@@ -145,7 +145,7 @@ export default function Tutorials() {
                 fontWeight: 'medium',
               }}
             >
-              Knowledge through Voice
+              Knowledge through Curiosity
             </Typography>
             <Typography
               sx={{

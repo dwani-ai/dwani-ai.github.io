@@ -126,7 +126,7 @@ export default function Hero() {
       <title>dwani.ai</title>
       <meta
         name="description"
-        content="dwani.ai is a GenAI platform offering voice interaction in Kannada and other Indian languages. Download the app on Google Play and explore features like voice translation, text-to-speech, and document summarization."
+        content="dwani.ai is a GenAI platform designed for multimodal inference . Download the app on Google Play and explore features like voice translation, text-to-speech, and document summarization."
       />
       <meta
         name="keywords"
@@ -183,7 +183,7 @@ export default function Hero() {
                 width: { sm: '100%', md: '80%' },
               }}
             >
-              Knowledge through Voice
+              knowledge through Curiosity
             </Typography>
             <Typography
               sx={{
@@ -192,7 +192,7 @@ export default function Hero() {
                 width: { sm: '100%', md: '80%' },
               }}
             >
-              Chat in Kannada/Indian languages with dwani.ai's GenAI-powered voice assistant.
+              dwani.ai is self-hosted GenAI platform for multimodal AI inference
             </Typography>
             <Button
               variant="contained"

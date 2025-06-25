@@ -192,21 +192,20 @@ export default function Hero() {
                 width: { sm: '100%', md: '80%' },
               }}
             >
-              dwani.ai is self-hosted GenAI platform for multimodal AI inference
+              dwani.ai is self-hosted, multimodal AI inference designed for Indian languages
             </Typography>
+
             <Button
               variant="contained"
               color="primary"
-              href="https://play.google.com/store/apps/details?id=com.slabstech.dhwani.voiceai&pcampaignid=web_share"
+              href="https://chat.dwani.ai"
               target="_blank"
               size="large"
               sx={{ mt: 2, px: 4, py: 1.5 }}
-              aria-label="Download dwani.ai on Google Play"
-              startIcon={<SiGoogleplay size={24} />}
+              aria-label="Chat UX for dwani.ai"
             >
-              Google Play
+              chat.dwani.ai
             </Button>
-
             {/* Kannada PDF Query and Translation Section */}
             <Stack
               spacing={2}
@@ -356,6 +355,21 @@ export default function Hero() {
               )}
             </Stack>
           </Stack>
+            <Divider sx={{ width: '100%' }} />
+            <Button
+              variant="contained"
+              color="primary"
+              href="https://play.google.com/store/apps/details?id=com.slabstech.dhwani.voiceai&pcampaignid=web_share"
+              target="_blank"
+              size="large"
+              sx={{ mt: 2, px: 4, py: 1.5 }}
+              aria-label="Download dwani.ai on Google Play"
+              startIcon={<SiGoogleplay size={24} />}
+            >
+              Google Play
+            </Button>
+
+
 
           {/* Features Section */}
           <Stack

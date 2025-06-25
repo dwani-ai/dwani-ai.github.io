@@ -82,8 +82,8 @@ export default function Hero() {
 
   const features = [
     {
-      title: 'Kannada Voice AI',
-      description: 'Answer voice queries in Kannada',
+      title: 'Voice AI',
+      description: 'Answer voice queries in Indian languages',
       components: 'LLM',
       hardware: 'CPU/GPU',
     },
@@ -183,7 +183,7 @@ export default function Hero() {
                 width: { sm: '100%', md: '80%' },
               }}
             >
-              knowledge through Curiosity
+              Knowledge from Curiosity
             </Typography>
             <Typography
               sx={{
@@ -206,7 +206,9 @@ export default function Hero() {
             >
               chat.dwani.ai
             </Button>
-            {/* Kannada PDF Query and Translation Section */}
+
+      <div style={{ display: 'none' }}> 
+             {/* Kannada PDF Query and Translation Section */}
             <Stack
               spacing={2}
               useFlexGap
@@ -354,23 +356,9 @@ export default function Hero() {
                 </Box>
               )}
             </Stack>
+            </div>
           </Stack>
-            <Divider sx={{ width: '100%' }} />
-            <Button
-              variant="contained"
-              color="primary"
-              href="https://play.google.com/store/apps/details?id=com.slabstech.dhwani.voiceai&pcampaignid=web_share"
-              target="_blank"
-              size="large"
-              sx={{ mt: 2, px: 4, py: 1.5 }}
-              aria-label="Download dwani.ai on Google Play"
-              startIcon={<SiGoogleplay size={24} />}
-            >
-              Google Play
-            </Button>
-
-
-
+          
           {/* Features Section */}
           <Stack
             spacing={4}
@@ -399,6 +387,19 @@ export default function Hero() {
               ))}
             </Grid>
           </Stack>
+
+<Button
+              variant="contained"
+              color="primary"
+              href="https://play.google.com/store/apps/details?id=com.slabstech.dhwani.voiceai&pcampaignid=web_share"
+              target="_blank"
+              size="large"
+              sx={{ mt: 2, px: 4, py: 1.5 }}
+              aria-label="Download dwani.ai on Google Play"
+              startIcon={<SiGoogleplay size={24} />}
+            >
+              Google Play
+            </Button>
 
           <Stack
             spacing={2}

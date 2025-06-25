@@ -18,8 +18,6 @@ import Testimonials from './components/ux/components/Testimonials';
 import FAQ from './components/ux/components/FAQ';
 import Footer from './components/ux/components/Footer';
 import AppTheme from './components/ux/shared-theme/AppTheme';
-import SignIn from './components/ux/sign-in/SignIn';
-import SignUp from './components/ux/sign-up/SignUp';
 import Blog from './components/ux/blog/Blog';
 import Tutorials from './components/ux/components/Tutorials';
 import IndicDocumentFeatures from './components/ux/components/IndicDocumentFeatures';
@@ -42,8 +40,6 @@ if (rootElement) {
                 <Route path="/research" element={<Research />} />
                 <Route path="/api" element={<API />} />
                 <Route path="/demo" element={<Blog />} />
-                <Route path="/signin" element={<SignIn />} />
-                <Route path="/signup" element={<SignUp />} />
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/faq" element={<FAQ />} />
                 <Route

@@ -49,12 +49,12 @@ export const useTranslationDocumentSummary = () => {
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_DWANI_API_BASE_URL}/v1/indic-summarize-pdf`,
+        "https://api.dwani.ai/v1/indic-summarize-pdf",
         {
           method: 'POST',
           headers: {
             accept: 'application/json',
-            'X-API-KEY': `${import.meta.env.VITE_DWANI_API_BASE_URL}`, // Replace with actual API key
+            'X-API-KEY': `${import.meta.env.VITE_DWANI_API_KEY}`, // Replace with actual API key
           },
           body: formData,
         }

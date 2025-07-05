@@ -51,12 +51,12 @@ export const useCustomPromptDocument = () => {
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_DWANI_API_BASE_URL}/v1/indic-custom-prompt-pdf`,
+        "https://api.dwani.ai/v1/indic-custom-prompt-pdf",
         {
           method: 'POST',
           headers: {
             accept: 'application/json',
-                        'X-API-KEY': `${import.meta.env.VITE_DWANI_API_BASE_URL}`, 
+                        'X-API-KEY': `${import.meta.env.VITE_DWANI_API_KEY}`, 
           },
           body: formData,
         }

@@ -34,7 +34,7 @@ export const useDocumentSummary = () => {
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_DWANI_API_BASE_URL}/v1/summarize-pdf`,
+        `${import.meta.env.VITE_DWANI_API_BASE_URL}/v1/extract-text`,
         {
           method: 'POST',
           headers: {

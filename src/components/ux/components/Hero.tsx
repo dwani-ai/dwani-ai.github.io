@@ -194,6 +194,7 @@ export default function Hero() {
             >
               dwani.ai is self-hosted, multimodal AI inference designed for Indian languages
             </Typography>
+      <div style={{ display: 'none' }}> 
 
             <Button
               variant="contained"
@@ -206,7 +207,7 @@ export default function Hero() {
             >
               chat.dwani.ai
             </Button>
-
+</div>
       <div style={{ display: 'none' }}> 
              {/* Kannada PDF Query and Translation Section */}
             <Stack

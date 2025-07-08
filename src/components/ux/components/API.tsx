@@ -3,7 +3,6 @@ import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
-import Link from '@mui/material/Link';
 
 interface MuiCodeBlockProps {
   code: string;
@@ -72,40 +71,6 @@ export default function API() {
             pb: { xs: 8, sm: 12 },
           }}
         >
-          {/* Hero Section */}
-          <Stack
-            spacing={2}
-            useFlexGap
-            sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' } }}
-          >
-            <Typography
-              variant="h1"
-              sx={{
-                display: 'flex',
-                flexDirection: { xs: 'column', sm: 'row' },
-                alignItems: 'center',
-                fontSize: 'clamp(2.5rem, 8vw, 3.5rem)',
-                fontWeight: 'bold',
-                color: 'primary.main',
-                textTransform: 'smallcase',
-                letterSpacing: '0.05em',
-              }}
-            >
-              dwani.ai
-            </Typography>
-            <Typography
-              variant="h6"
-              sx={{
-                textAlign: 'center',
-                color: 'text.secondary',
-                width: { sm: '100%', md: '80%' },
-                fontWeight: 'medium',
-              }}
-            >
-              Knowledge through Curiosity
-            </Typography>
-
-          </Stack>
 
           <Stack
       spacing={2}
@@ -116,17 +81,13 @@ export default function API() {
       <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
         dwani.ai – Python Library
       </Typography>
-      <Typography sx={{ textAlign: 'center', color: 'text.secondary' }}>
-        Easily integrate multilingual voice and vision AI into your projects.<br />
-        <Link href="https://dwani.ai" target="_blank">Website</Link>
-      </Typography>
 
       <Divider sx={{ width: '100%' }} />
 
       <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
         Install the library
       </Typography>
-      <MuiCodeBlock code={`pip install dwani`} language="bash" />
+      <MuiCodeBlock code={`pip install --upgrade dwani`} language="bash" />
 
       <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
         Setup the credentials

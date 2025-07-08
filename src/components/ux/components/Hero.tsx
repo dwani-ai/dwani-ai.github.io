@@ -570,9 +570,9 @@ export default function Hero() {
               Get in Touch
             </Typography>
             <Typography sx={{ textAlign: 'center', color: 'text.secondary' }}>
-              For collaborations, join our <Link href="https://discord.gg/WZMCerEZ2P" target="_blank">Discord community</Link>.
+              For collaborations, join our <Link href="https://discord.gg/9Fq8J9Gnz3" target="_blank">Discord community</Link>.
               <br />
-              Have questions? <Link href="https://github.com/dwani-ai/dhwani-server/issues" target="_blank">Open an issue on GitHub</Link>.
+              Have questions? <Link href="https://calendar.app.google/j1L2Sh6sExfWpUTZ7" target="_blank">Schedule a Demo</Link>.
             </Typography>
           </Stack>
         </Container>

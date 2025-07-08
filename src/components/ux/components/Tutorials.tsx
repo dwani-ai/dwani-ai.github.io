@@ -147,16 +147,6 @@ export default function Tutorials() {
             >
               Knowledge through Curiosity
             </Typography>
-            <Typography
-              sx={{
-                textAlign: 'center',
-                color: 'text.secondary',
-                width: { sm: '100%', md: '80%' },
-                fontSize: '1.1rem',
-              }}
-            >
-              Discover dwani.ai's GenAI-powered voice assistant through our engaging video tutorials and system diagram.
-            </Typography>
           </Stack>
 
           {/* System Diagram Section */}
@@ -177,18 +167,9 @@ export default function Tutorials() {
             >
               dwani.ai System Diagram
             </Typography>
-            <Typography
-              sx={{
-                textAlign: 'center',
-                color: 'text.secondary',
-                fontSize: '1.1rem',
-                maxWidth: '600px',
-              }}
-            >
-              Explore the architecture of dwani.ai's GenAI-powered voice assistant.
-            </Typography>
+
             <DiagramImage
-              src="https://raw.githubusercontent.com/slabstech/llm-recipes/gh-200-optimisation/tutorials/gh200/dwani-inference.drawio.png"
+              src="https://raw.githubusercontent.com/dwani-ai/deploy/refs/heads/main/images/dwani-inference.drawio.png"
               alt="dwani.ai System Diagram"
             />
           </Stack>
@@ -210,7 +191,7 @@ export default function Tutorials() {
                 letterSpacing: '0.03em',
               }}
             >
-              Explore dwani.ai Tutorials
+              dwani.ai Tutorials
             </Typography>
             <Typography
               sx={{

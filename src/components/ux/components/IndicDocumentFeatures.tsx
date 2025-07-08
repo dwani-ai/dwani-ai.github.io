@@ -105,6 +105,9 @@ export default function IndicDocumentFeatures() {
         bgcolor: 'background.default',
       }}
     >
+
+      <div style={{ display: 'none' }}> 
+        
       {/* Kannada PDF Query and Translation Section */}
       <Stack
         spacing={2}
@@ -253,7 +256,7 @@ export default function IndicDocumentFeatures() {
           </Box>
         )}
       </Stack>
-
+</div>
       {/* Existing Document Summarization Section */}
       <Stack
         spacing={2}

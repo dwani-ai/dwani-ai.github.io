@@ -34,7 +34,7 @@ export const useDocumentSummary = () => {
 
     try {
       const response = await fetch(
-        "https://api.dwani.ai/v1/extract-text",
+        "https://api.dwani.ai/v1/summarize-pdf",
         {
           method: 'POST',
           headers: {

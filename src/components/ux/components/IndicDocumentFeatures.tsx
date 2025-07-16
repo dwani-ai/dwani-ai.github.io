@@ -106,6 +106,131 @@ export default function IndicDocumentFeatures() {
       }}
     >
 
+
+      {/* Existing Custom PDF Processing Section */}
+      <Stack
+        spacing={2}
+        useFlexGap
+        sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' }, mt: 4 }}
+      >
+        <Divider sx={{ width: '100%' }} />
+        <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
+          Try Custom PDF Processing
+        </Typography>
+        <Typography sx={{ textAlign: 'center', color: 'text.secondary' }}>
+          Upload a PDF, specify a custom prompt, select languages, and get a tailored response with translation.
+        </Typography>
+        <Stack direction="row" spacing={2} sx={{ mt: 2, alignItems: 'center' }}>
+          <input
+            type="file"
+            accept="application/pdf"
+            onChange={handleCustomFileChange}
+            style={{ display: 'none' }}
+            id="custom-pdf-upload"
+          />
+          <label htmlFor="custom-pdf-upload">
+            <Button variant="outlined" component="span">
+              Upload PDF
+            </Button>
+          </label>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleProcessDocument}
+            disabled={customLoading || !customFile || !prompt}
+            sx={{
+              px: 4,
+              py: 1.5,
+              '&.Mui-disabled': {
+                backgroundColor: 'rgba(0, 0, 0, 0.3)', // Darker background for disabled state
+                color: 'rgba(255, 255, 255, 0.5)', // Lighter text color for contrast
+                opacity: 0.6, // Slightly reduce opacity
+              },
+            }}
+          >
+            {customLoading ? <CircularProgress size={24} /> : 'Process & Translate'}
+          </Button>
+        </Stack>
+        {customFile && (
+          <Typography sx={{ mt: 1, color: 'text.secondary' }}>
+            Selected file: {customFile.name}
+          </Typography>
+        )}
+        <Stack
+          direction={{ xs: 'column', sm: 'row' }}
+          spacing={2}
+          sx={{ mt: 2, width: '100%', justifyContent: 'center' }}
+        >
+          <FormControl sx={{ minWidth: 150 }}>
+            <InputLabel id="custom-source-language-label">Source Language</InputLabel>
+            <Select
+              labelId="custom-source-language-label"
+              value={sourceLanguage}
+              label="Source Language"
+              onChange={(e) => setSourceLanguage(e.target.value)}
+            >
+              {customLanguageOptions.map((option) => ( // Removed unnecessary "any" type annotation
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl sx={{ minWidth: 150 }}>
+            <InputLabel id="custom-target-language-label">Target Language</InputLabel>
+            <Select
+              labelId="custom-target-language-label"
+              value={targetLanguage}
+              label="Target Language"
+              onChange={(e) => setTargetLanguage(e.target.value)}
+            >
+              {customLanguageOptions.map((option) => (
+                <MenuItem key={option.value} value={option.value}> {/* Corrected value from option to option.value */}
+                  {option.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Stack>
+        <TextField
+          label="Custom Prompt"
+          value={prompt}
+          onChange={(e) => setPrompt(e.target.value)}
+          fullWidth
+          sx={{ mt: 2 }}
+          placeholder="e.g., list the key points"
+          error={!prompt && !!customError}
+          helperText={!prompt && customError ? 'Please enter a prompt.' : ''}
+        />
+        {customError && (
+          <Alert severity="error" sx={{ mt: 2, width: '100%' }}>
+            {customError}
+          </Alert>
+        )}
+        {(response || translatedResponse) && (
+          <Box sx={{ mt: 2, p: 2, bgcolor: 'background.paper', borderRadius: 1, width: '100%' }}>
+            {response && (
+              <>
+                <Typography variant="h6" sx={{ fontWeight: 'medium' }}>
+                  Response
+                </Typography>
+                <Typography sx={{ mt: 1, color: 'text.primary' }}>{response}</Typography>
+              </>
+            )}
+            {translatedResponse && (
+              <>
+                <Typography variant="h6" sx={{ mt: 2, fontWeight: 'medium' }}>
+                  Translated Response
+                </Typography>
+                <Typography sx={{ mt: 1, color: 'text.primary' }}>
+                  {translatedResponse}
+                </Typography>
+              </>
+            )}
+          </Box>
+        )}
+      </Stack>
+
       <div style={{ display: 'none' }}> 
         
       {/* Kannada PDF Query and Translation Section */}
@@ -459,129 +584,6 @@ export default function IndicDocumentFeatures() {
         )}
       </Stack>
 
-      {/* Existing Custom PDF Processing Section */}
-      <Stack
-        spacing={2}
-        useFlexGap
-        sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' }, mt: 4 }}
-      >
-        <Divider sx={{ width: '100%' }} />
-        <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
-          Try Custom PDF Processing
-        </Typography>
-        <Typography sx={{ textAlign: 'center', color: 'text.secondary' }}>
-          Upload a PDF, specify a custom prompt, select languages, and get a tailored response with translation.
-        </Typography>
-        <Stack direction="row" spacing={2} sx={{ mt: 2, alignItems: 'center' }}>
-          <input
-            type="file"
-            accept="application/pdf"
-            onChange={handleCustomFileChange}
-            style={{ display: 'none' }}
-            id="custom-pdf-upload"
-          />
-          <label htmlFor="custom-pdf-upload">
-            <Button variant="outlined" component="span">
-              Upload PDF
-            </Button>
-          </label>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleProcessDocument}
-            disabled={customLoading || !customFile || !prompt}
-            sx={{
-              px: 4,
-              py: 1.5,
-              '&.Mui-disabled': {
-                backgroundColor: 'rgba(0, 0, 0, 0.3)', // Darker background for disabled state
-                color: 'rgba(255, 255, 255, 0.5)', // Lighter text color for contrast
-                opacity: 0.6, // Slightly reduce opacity
-              },
-            }}
-          >
-            {customLoading ? <CircularProgress size={24} /> : 'Process & Translate'}
-          </Button>
-        </Stack>
-        {customFile && (
-          <Typography sx={{ mt: 1, color: 'text.secondary' }}>
-            Selected file: {customFile.name}
-          </Typography>
-        )}
-        <Stack
-          direction={{ xs: 'column', sm: 'row' }}
-          spacing={2}
-          sx={{ mt: 2, width: '100%', justifyContent: 'center' }}
-        >
-          <FormControl sx={{ minWidth: 150 }}>
-            <InputLabel id="custom-source-language-label">Source Language</InputLabel>
-            <Select
-              labelId="custom-source-language-label"
-              value={sourceLanguage}
-              label="Source Language"
-              onChange={(e) => setSourceLanguage(e.target.value)}
-            >
-              {customLanguageOptions.map((option) => ( // Removed unnecessary "any" type annotation
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl sx={{ minWidth: 150 }}>
-            <InputLabel id="custom-target-language-label">Target Language</InputLabel>
-            <Select
-              labelId="custom-target-language-label"
-              value={targetLanguage}
-              label="Target Language"
-              onChange={(e) => setTargetLanguage(e.target.value)}
-            >
-              {customLanguageOptions.map((option) => (
-                <MenuItem key={option.value} value={option.value}> {/* Corrected value from option to option.value */}
-                  {option.label}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Stack>
-        <TextField
-          label="Custom Prompt"
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
-          fullWidth
-          sx={{ mt: 2 }}
-          placeholder="e.g., list the key points"
-          error={!prompt && !!customError}
-          helperText={!prompt && customError ? 'Please enter a prompt.' : ''}
-        />
-        {customError && (
-          <Alert severity="error" sx={{ mt: 2, width: '100%' }}>
-            {customError}
-          </Alert>
-        )}
-        {(response || translatedResponse) && (
-          <Box sx={{ mt: 2, p: 2, bgcolor: 'background.paper', borderRadius: 1, width: '100%' }}>
-            {response && (
-              <>
-                <Typography variant="h6" sx={{ fontWeight: 'medium' }}>
-                  Response
-                </Typography>
-                <Typography sx={{ mt: 1, color: 'text.primary' }}>{response}</Typography>
-              </>
-            )}
-            {translatedResponse && (
-              <>
-                <Typography variant="h6" sx={{ mt: 2, fontWeight: 'medium' }}>
-                  Translated Response
-                </Typography>
-                <Typography sx={{ mt: 1, color: 'text.primary' }}>
-                  {translatedResponse}
-                </Typography>
-              </>
-            )}
-          </Box>
-        )}
-      </Stack>
     </Box>
   );
 }

@@ -210,7 +210,7 @@ export default function Hero() {
                 width: { sm: '100%', md: '80%' },
               }}
             >
-              dwani.ai is self-hosted, multimodal AI inference designed for Indian languages
+              dwani.ai is self-hosted, multimodal AI inference designed for Indian + European languages
             </Typography>
       <div style={{ display: 'none' }}> 
 

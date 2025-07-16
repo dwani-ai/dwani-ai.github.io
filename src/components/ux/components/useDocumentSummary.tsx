@@ -30,11 +30,10 @@ export const useDocumentSummary = () => {
 
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('page_number', '1');
 
     try {
       const response = await fetch(
-        "https://api.dwani.ai/v1/summarize-pdf",
+        "https://api.dwani.ai/v1/indic-summarize-pdf-all",
         {
           method: 'POST',
           headers: {

@@ -43,13 +43,12 @@ export const useTranslationDocumentSummary = () => {
     // Prepare form data for the unified API
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('page_number', '1');
-    formData.append('src_lang', srcLang);
     formData.append('tgt_lang', tgtLang);
+    formData.append('model', "gemma3");
 
     try {
       const response = await fetch(
-        "https://api.dwani.ai/v1/indic-summarize-pdf",
+        "https://api.dwani.ai/v1/indic-summarize-pdf-all",
         {
           method: 'POST',
           headers: {
@@ -65,6 +64,7 @@ export const useTranslationDocumentSummary = () => {
       }
 
       const data = await response.json();
+      console.log(data);
       setSummary(data.summary);
       setTranslatedSummary(data.translated_summary);
       setOriginalText(data.original_text);

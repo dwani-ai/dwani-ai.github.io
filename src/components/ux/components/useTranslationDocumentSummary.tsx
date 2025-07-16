@@ -64,7 +64,6 @@ export const useTranslationDocumentSummary = () => {
       }
 
       const data = await response.json();
-      console.log(data);
       setSummary(data.summary);
       setTranslatedSummary(data.translated_summary);
       setOriginalText(data.original_text);

@@ -51,7 +51,7 @@ export const useCustomPromptDocument = () => {
 
     try {
       const response = await fetch(
-        "https://api.dwani.ai/v1/indic-custom-prompt-pdf",
+        "https://api.dwani.ai/v1/indic-custom-prompt-pdf-all",
         {
           method: 'POST',
           headers: {
@@ -68,8 +68,8 @@ export const useCustomPromptDocument = () => {
 
       const data = await response.json();
       setOriginalText(data.original_text);
-      setResponse(data.response);
-      setTranslatedResponse(data.translated_response);
+      setResponse(data.query_answer);
+      setTranslatedResponse(data.translated_query_answer);
       setProcessedPage(data.processed_page);
     } catch (err: unknown) {
       if (err instanceof Error) {

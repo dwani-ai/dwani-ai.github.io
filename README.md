@@ -2,10 +2,14 @@
 
 ## Overview
 
-dwani.ai is a self-hosted GenAI platform designed to provide multimodal AI inference.
+dwani.ai is a Multimodal Document Analytics platform
+
+It can be self-hosted and is designed for Indian + European languages
 
 
 Website -> [dwani.ai](https://dwani.ai)
+
+API Demo -> [workshop.dwani.ai](https://dwani.ai)
 
 [Download App on Google Play](
 https://play.google.com/store/apps/details?id=com.slabstech.dhwani.voiceai&pcampaignid=web_share)

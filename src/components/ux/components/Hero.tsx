@@ -100,6 +100,18 @@ export default function Hero() {
 
   const features = [
     {
+      title: 'PDF Query',
+      description: 'Query content from PDF documents seamlessly.',
+      components: 'Analytics',
+      hardware: 'GPU',
+    },
+    {
+      title: 'Image Query',
+      description: 'Query content from Images',
+      components: 'Vision',
+      hardware: 'GPU',
+    },
+    {
       title: 'Voice AI',
       description: 'Answer voice queries in Indian languages',
       components: 'LLM',
@@ -110,19 +122,7 @@ export default function Hero() {
       description: 'Generate natural-sounding speech from text.',
       components: 'TTS',
       hardware: 'GPU',
-    },
-    {
-      title: 'PDF Query',
-      description: 'Query content from PDF documents seamlessly.',
-      components: 'Translation',
-      hardware: 'GPU',
-    },
-    {
-      title: 'Image Query',
-      description: 'Query content from Images',
-      components: 'Vision',
-      hardware: 'GPU',
-    }
+    }  
   ];
 
   // Function to handle PDF download
@@ -210,7 +210,9 @@ export default function Hero() {
                 width: { sm: '100%', md: '80%' },
               }}
             >
-              dwani.ai is self-hosted, multimodal AI inference designed for Indian + European languages
+
+
+      dwani.ai is a Multimodal Document Analytics platform
             </Typography>
       <div style={{ display: 'none' }}> 
 

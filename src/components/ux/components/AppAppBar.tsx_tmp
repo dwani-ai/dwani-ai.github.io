@@ -103,10 +103,15 @@ export default function AppAppBar() {
               <Button variant="text" color="info" size="small" onClick={handleHomeClick}>
                 Home
               </Button>
+              <Button variant="text" color="info" size="small" onClick={handleDocsClick}>
+                Demo
+              </Button>
+              <Button variant="text" color="info" size="small" onClick={handleTutorialsClick}>
+                Tutorials
+              </Button>
               <Button variant="text" color="info" size="small" onClick={handleResearchClick}>
                 Research
               </Button>
-              <div style={{ display: 'none' }}>
               <Button variant="text" color="info" size="small" onClick={handleAPIClick}>
                 API
               </Button>
@@ -115,6 +120,7 @@ export default function AppAppBar() {
                 Demo
               </Button>
               </div>
+            <div style={{ display: 'none' }}>
               <Button variant="text" color="info" size="small">
                 Testimonials
               </Button>
@@ -184,12 +190,6 @@ export default function AppAppBar() {
                     Home
                   </Button>
                   </MenuItem>
-                <MenuItem>
-                  <Button color="primary" variant="contained" fullWidth onClick={handleResearchClick}>
-                    Research
-                  </Button>
-                </MenuItem>
-              <div style={{ display: 'none' }}>
                   <MenuItem>
                   <Button color="primary" variant="contained" fullWidth onClick={handleDocsClick}>
                     Demo
@@ -201,13 +201,22 @@ export default function AppAppBar() {
                   </Button>
                 </MenuItem>
                 <MenuItem>
+                  <Button color="primary" variant="contained" fullWidth onClick={handleResearchClick}>
+                    Research
+                  </Button>
+                </MenuItem>
+                <MenuItem>
                   <Button color="primary" variant="contained" fullWidth onClick={handleAPIClick}>
                     API
                   </Button>
-                </MenuItem>                
+                </MenuItem>
+                <div style={{ display: 'none' }}>
+
                 <MenuItem>Testimonials</MenuItem>
                 <MenuItem>Highlights</MenuItem>
                 <MenuItem>Pricing</MenuItem>
+                </div>
+                <div style={{ display: 'none' }}>
                 <MenuItem>
                   <Button color="primary" variant="contained" fullWidth onClick={handleDemoClick}>
                     Demo

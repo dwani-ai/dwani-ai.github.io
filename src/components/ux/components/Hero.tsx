@@ -380,7 +380,8 @@ export default function Hero() {
             </div>
           </Stack>
           
-
+    <div style={{ display: 'none' }}> 
+      
 
       {/* Existing Document Summarization with Translation Section */}
       <Stack
@@ -524,7 +525,7 @@ export default function Hero() {
               ))}
             </Grid>
           </Stack>
-
+      
 <Button
               variant="contained"
               color="primary"
@@ -577,6 +578,7 @@ export default function Hero() {
               Have questions? <Link href="https://calendar.app.google/j1L2Sh6sExfWpUTZ7" target="_blank">Schedule a Demo</Link>.
             </Typography>
           </Stack>
+          </div>
         </Container>
       </Box>
     </>

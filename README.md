@@ -1,20 +1,25 @@
-# dwani.ai - knowledge through Curiosity
+# dwani.ai - knowledge from curiosity
 
-## Overview
+### Overview
 
-dwani.ai is a Multimodal Document Analytics platform
+dwani.ai is a Document Analytics Platform
 
-It can be self-hosted and is designed for Indian + European languages
+- Designed for Indian + European languages.
 
+-  It can be self-hosted and
+provides multimodal inference, supporting text, images, documents, and speech
+
+---
 
 Website -> [dwani.ai](https://dwani.ai)
 
-API Demo -> [workshop.dwani.ai](https://dwani.ai)
+Live API Demo -> [app.dwani.ai](https://app.dwani.ai)
 
 [Download App on Google Play](
 https://play.google.com/store/apps/details?id=com.slabstech.dhwani.voiceai&pcampaignid=web_share)
 
-## Research Goals
+--- 
+#### Research Goals
 
 - Measure and improve the Time to First Token Generation (TTFTG) for model architectures in ASR, Translation, and TTS systems.
 - Develop and enhance a Kannada voice model that meets industry standards set by OpenAI, Google, ElevenLabs, xAI

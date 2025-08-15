@@ -203,6 +203,11 @@ export default function Hero() {
             >
               Knowledge from Curiosity
             </Typography>
+
+
+            <Divider sx={{ width: '100%' }} />
+            <Divider sx={{ width: '100%' }} />
+
             <Typography
               sx={{
                 textAlign: 'center',
@@ -212,22 +217,20 @@ export default function Hero() {
             >
 
 
-      dwani.ai is a Multimodal Document Analytics platform
+      Try Discovery from dwani.ai
             </Typography>
-      <div style={{ display: 'none' }}> 
 
             <Button
               variant="contained"
               color="primary"
-              href="https://chat.dwani.ai"
+              href="https://app.dwani.ai"
               target="_blank"
               size="large"
               sx={{ mt: 2, px: 4, py: 1.5 }}
-              aria-label="Chat UX for dwani.ai"
+              aria-label="Discovery from dwani.ai"
             >
-              chat.dwani.ai
+              app.dwani.ai
             </Button>
-</div>
       <div style={{ display: 'none' }}> 
              {/* Kannada PDF Query and Translation Section */}
             <Stack

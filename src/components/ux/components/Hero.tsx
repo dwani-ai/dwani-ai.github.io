@@ -231,6 +231,37 @@ export default function Hero() {
             >
               app.dwani.ai
             </Button>
+
+
+
+            <Divider sx={{ width: '100%' }} />
+            <Divider sx={{ width: '100%' }} />
+
+            <Typography
+              sx={{
+                textAlign: 'center',
+                color: 'text.secondary',
+                width: { sm: '100%', md: '80%' },
+              }}
+            >
+
+
+      Get started, Read the documentation 
+            </Typography>
+
+            <Button
+              variant="contained"
+              color="primary"
+              href="https://docs.dwani.ai"
+              target="_blank"
+              size="large"
+              sx={{ mt: 2, px: 4, py: 1.5 }}
+              aria-label="Discovery from dwani.ai"
+            >
+              docs.dwani.ai
+            </Button>
+
+
       <div style={{ display: 'none' }}> 
              {/* Kannada PDF Query and Translation Section */}
             <Stack

@@ -252,7 +252,7 @@ export default function Hero() {
             <Button
               variant="contained"
               color="primary"
-              href="https://docs.dwani.ai"
+              href="https://docs-81l.pages.dev/"
               target="_blank"
               size="large"
               sx={{ mt: 2, px: 4, py: 1.5 }}

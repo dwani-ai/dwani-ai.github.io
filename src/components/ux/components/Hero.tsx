@@ -246,13 +246,41 @@ export default function Hero() {
             >
 
 
-      Get started, Read the documentation 
+      Get started with Discovery , Read the documentation 
             </Typography>
 
             <Button
               variant="contained"
               color="primary"
-              href="https://docs-81l.pages.dev/"
+              href="https://discovery.dwani.ai/"
+              target="_blank"
+              size="large"
+              sx={{ mt: 2, px: 4, py: 1.5 }}
+              aria-label="Discovery from dwani.ai"
+            >
+              discovery.dwani.ai
+            </Button>
+
+
+            <Divider sx={{ width: '100%' }} />
+            <Divider sx={{ width: '100%' }} />
+
+            <Typography
+              sx={{
+                textAlign: 'center',
+                color: 'text.secondary',
+                width: { sm: '100%', md: '80%' },
+              }}
+            >
+
+
+      Get started with Multimodal Inference, Read the documentation 
+            </Typography>
+
+            <Button
+              variant="contained"
+              color="primary"
+              href="https://docs.dwani.ai/"
               target="_blank"
               size="large"
               sx={{ mt: 2, px: 4, py: 1.5 }}

@@ -9,8 +9,16 @@ import Divider from '@mui/material/Divider';
 import { styled } from '@mui/material/styles';
 import Chip from '@mui/material/Chip';
 import { SiGoogleplay } from 'react-icons/si';
+import {
+  SecurityOutlined,
+  LockOutlined,
+  GavelOutlined,
+  DocumentScannerOutlined,
+  LanguageOutlined,
+  VideoCameraFrontOutlined,
+} from '@mui/icons-material';
 
-// Styled FeatureCard with optimized hover effect
+// Styled FeatureCard (unchanged from your original code)
 const FeatureCard = styled(Box)(({ theme }) => ({
   padding: theme.spacing(3),
   borderRadius: theme.shape.borderRadius,
@@ -22,13 +30,72 @@ const FeatureCard = styled(Box)(({ theme }) => ({
     transform: 'scale(1.05)',
     boxShadow: theme.shadows[4],
   },
-  // Ensure focus state for accessibility
   '&:focus-within': {
     transform: 'scale(1.05)',
     boxShadow: theme.shadows[4],
     outline: `2px solid ${theme.palette.primary.main}`,
   },
 }));
+
+// Styled Problem/Solution Card
+const ProblemSolutionCard = styled(Box)(({ theme }) => ({
+  padding: theme.spacing(3),
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: theme.palette.background.paper,
+  boxShadow: theme.shadows[3],
+  transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
+  '&:hover': {
+    transform: 'translateY(-8px)',
+    boxShadow: theme.shadows[6],
+  },
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  minHeight: '200px',
+  textAlign: 'center',
+}));
+
+// Data for Problem and Solution sections
+const problems = [
+  {
+    text: 'Data sent to external AI providers for analysis',
+    icon: <SecurityOutlined color="error" fontSize="large" />,
+    chipLabel: 'Data Privacy',
+  },
+  {
+    text: 'Not secure or private by design',
+    icon: <LockOutlined color="error" fontSize="large" />,
+    chipLabel: 'Security Risk',
+  },
+  {
+    text: 'Limited control over AI model behavior',
+    icon: <GavelOutlined color="error" fontSize="large" />,
+    chipLabel: 'Lack of Control',
+  },
+];
+
+const solutions = [
+  {
+    text: 'Analytics for large-scale documents and priority task identification',
+    icon: <DocumentScannerOutlined color="primary" fontSize="large" />,
+    chipLabel: 'Document Analytics',
+  },
+  {
+    text: 'Self-hosted, multimodal inference with open-weight models',
+    icon: <LanguageOutlined color="primary" fontSize="large" />,
+    chipLabel: 'Self-Hosted AI',
+  },
+  {
+    text: 'Private, secure, auditable, and open-source',
+    icon: <LockOutlined color="primary" fontSize="large" />,
+    chipLabel: 'Secure & Open',
+  },
+  {
+    text: 'Interact with documents, images, text, voice, and video',
+    icon: <VideoCameraFrontOutlined color="primary" fontSize="large" />,
+    chipLabel: 'Multimodal',
+  },
+];
 
 const features = [
   {
@@ -58,7 +125,6 @@ const features = [
 ];
 
 export default function Hero() {
-
   return (
     <>
       <title>dwani.ai | Multimodal AI Platform</title>
@@ -166,43 +232,77 @@ export default function Hero() {
               </Link>.
             </Typography>
 
-            <Typography
-              variant="h5"
-              component="h3"
-              sx={{ textAlign: 'center', mt: 4, fontWeight: 'bold' }}
+            {/* Problem Section */}
+            <Stack
+              spacing={4}
+              useFlexGap
+              sx={{ alignItems: 'center', width: '100%', mt: 8 }}
             >
-              The Problem - Security with AI
-            </Typography>
-            <Typography
-              variant="body2"
-              sx={{ textAlign: 'center', color: 'text.secondary' }}
-            >
-              - Data sent to external AI providers for analysis
-              <br />
-              - Not secure or private by design
-              <br />
-              - Limited control over AI model behavior
-            </Typography>
+              <Typography
+                variant="h4"
+                component="h3"
+                sx={{ textAlign: 'center', fontWeight: 'bold' }}
+              >
+                The Problem - Security with AI
+              </Typography>
+              <Grid container spacing={3}>
+                {problems.map((problem, index) => (
+                  <Grid size={{ xs: 12, sm: 4 }} key={index}>
+                    <ProblemSolutionCard tabIndex={0}>
+                      <Box sx={{ mb: 2 }}>{problem.icon}</Box>
+                      <Typography
+                        variant="body2"
+                        sx={{ color: 'text.secondary', mb: 1 }}
+                      >
+                        {problem.text}
+                      </Typography>
+                      <Chip
+                        label={problem.chipLabel}
+                        color="error"
+                        variant="outlined"
+                        size="small"
+                      />
+                    </ProblemSolutionCard>
+                  </Grid>
+                ))}
+              </Grid>
+            </Stack>
 
-            <Typography
-              variant="h5"
-              component="h3"
-              sx={{ textAlign: 'center', mt: 4, fontWeight: 'bold' }}
+            {/* Solution Section */}
+            <Stack
+              spacing={4}
+              useFlexGap
+              sx={{ alignItems: 'center', width: '100%', mt: 6 }}
             >
-              The Solution - dwani.ai’s Discovery
-            </Typography>
-            <Typography
-              variant="body2"
-              sx={{ textAlign: 'center', color: 'text.secondary' }}
-            >
-              - Analytics for large-scale documents and priority task identification
-              <br />
-              - Self-hosted, multimodal inference with open-weight models
-              <br />
-              - Private, secure, auditable, and open-source
-              <br />
-              - Interact with documents, images, text, voice, and video
-            </Typography>
+              <Typography
+                variant="h4"
+                component="h3"
+                sx={{ textAlign: 'center', fontWeight: 'bold' }}
+              >
+                The Solution - dwani.ai’s Discovery
+              </Typography>
+              <Grid container spacing={3}>
+                {solutions.map((solution, index) => (
+                  <Grid size={{ xs: 12, sm: 6, md: 3 }} key={index}>
+                    <ProblemSolutionCard tabIndex={0}>
+                      <Box sx={{ mb: 2 }}>{solution.icon}</Box>
+                      <Typography
+                        variant="body2"
+                        sx={{ color: 'text.secondary', mb: 1 }}
+                      >
+                        {solution.text}
+                      </Typography>
+                      <Chip
+                        label={solution.chipLabel}
+                        color="primary"
+                        variant="outlined"
+                        size="small"
+                      />
+                    </ProblemSolutionCard>
+                  </Grid>
+                ))}
+              </Grid>
+            </Stack>
           </Stack>
 
           {/* Features Section */}

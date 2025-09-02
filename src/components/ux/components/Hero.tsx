@@ -232,6 +232,21 @@ export default function Hero() {
               </Link>.
             </Typography>
 
+            <Button
+              variant="contained"
+              color="primary"
+              href="https://workshop.dwani.ai"
+              target="_blank"
+              size="large"
+              sx={{ mt: 2, px: 4, py: 1.5, borderRadius: 2 }}
+              aria-label="Try Multimodal Inference"
+            >
+              Try - Multimodal Inference
+            </Button>
+
+            <Divider sx={{ width: '60%', mx: 'auto', my: 2 }} />
+
+
             {/* Problem Section */}
             <Stack
               spacing={4}

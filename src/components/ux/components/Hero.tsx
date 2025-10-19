@@ -206,7 +206,7 @@ export default function Hero() {
             <Button
               variant="contained"
               color="primary"
-              href="https://app.dwani.ai"
+              href="https://dev-tax.dwani.ai"
               target="_blank"
               size="large"
               sx={{ mt: 2, px: 4, py: 1.5, borderRadius: 2 }}
@@ -235,7 +235,7 @@ export default function Hero() {
             <Button
               variant="contained"
               color="primary"
-              href="https://workshop.dwani.ai"
+              href="https://dev-tax.dwani.ai"
               target="_blank"
               size="large"
               sx={{ mt: 2, px: 4, py: 1.5, borderRadius: 2 }}

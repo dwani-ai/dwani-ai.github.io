@@ -106,6 +106,7 @@ export default function Digitiser() {
       }}
     >
 
+      <div style={{ display: 'none' }}> 
 
       {/* Existing Custom PDF Processing Section */}
       <Stack
@@ -230,7 +231,7 @@ export default function Digitiser() {
           </Box>
         )}
       </Stack>
-
+</div>
       <div style={{ display: 'none' }}> 
         
       {/* Kannada PDF Query and Translation Section */}
@@ -469,6 +470,8 @@ export default function Digitiser() {
           </Box>
         )}
       </Stack>
+      <div style={{ display: 'none' }}> 
+
 
       {/* Existing Document Summarization with Translation Section */}
       <Stack
@@ -583,7 +586,7 @@ export default function Digitiser() {
           </Box>
         )}
       </Stack>
-
+        </div>
     </Box>
   );
 }

@@ -15,7 +15,7 @@ import { useTranslationDocumentSummary } from './useTranslationDocumentSummary';
 import { useCustomPromptDocument } from './useCustomPromptDocument'; // Adjust path as needed
 import { useKannadaPDFQuery } from './useKannadaPdfQuery'; // Adjust path as needed
 
-export default function IndicDocumentFeatures() {
+export default function Digitiser() {
   const {
     file,
     summary,

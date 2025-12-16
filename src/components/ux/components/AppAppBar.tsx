@@ -54,6 +54,12 @@ export default function AppAppBar() {
     toggleDrawer(false)();
   };
 
+  const handleDigitiseClick = () => {
+    navigate('/digitise');
+    toggleDrawer(false)();
+  };
+
+
   const handleAPIClick = () => {
     navigate('/api');
     toggleDrawer(false)();
@@ -103,6 +109,10 @@ export default function AppAppBar() {
               <Button variant="text" color="info" size="small" onClick={handleHomeClick}>
                 Home
               </Button>
+              <Button variant="text" color="info" size="small" onClick={handleDigitiseClick}>
+                Digitise
+              </Button>
+              
               <Button variant="text" color="info" size="small" onClick={handleResearchClick}>
                 Research
               </Button>
@@ -184,6 +194,11 @@ export default function AppAppBar() {
                     Home
                   </Button>
                   </MenuItem>
+                                  <MenuItem>
+                  <Button color="primary" variant="contained" fullWidth onClick={handleDigitiseClick}>
+                    Digitise
+                  </Button>
+                </MenuItem>
                 <MenuItem>
                   <Button color="primary" variant="contained" fullWidth onClick={handleResearchClick}>
                     Research

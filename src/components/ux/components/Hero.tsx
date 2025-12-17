@@ -206,7 +206,7 @@ export default function Hero() {
             <Button
               variant="contained"
               color="primary"
-              href="https://dev-tax.dwani.ai"
+              href="https://dwani.ai/digitise"
               target="_blank"
               size="large"
               sx={{ mt: 2, px: 4, py: 1.5, borderRadius: 2 }}
@@ -221,7 +221,7 @@ export default function Hero() {
               variant="body1"
               sx={{ textAlign: 'center', color: 'text.secondary' }}
             >
-              Explore Multimodal Inference. Read the{' '}
+              Explore Discovery. Read the{' '}
               <Link
                 href="https://docs.dwani.ai/"
                 target="_blank"
@@ -232,6 +232,8 @@ export default function Hero() {
               </Link>.
             </Typography>
 
+
+    <div style={{ display: 'none' }}> 
             <Button
               variant="contained"
               color="primary"
@@ -243,9 +245,8 @@ export default function Hero() {
             >
               Try - Multimodal Inference
             </Button>
-
+</div>
             <Divider sx={{ width: '60%', mx: 'auto', my: 2 }} />
-
 
             {/* Problem Section */}
             <Stack

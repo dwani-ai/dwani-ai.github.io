@@ -15,7 +15,7 @@ import { useTranslationDocumentSummary } from './useTranslationDocumentSummary';
 import { useCustomPromptDocument } from './useCustomPromptDocument'; // Adjust path as needed
 import { useKannadaPDFQuery } from './useKannadaPdfQuery'; // Adjust path as needed
 
-export default function IndicDocumentFeatures() {
+export default function Digitiser() {
   const {
     file,
     summary,
@@ -106,6 +106,7 @@ export default function IndicDocumentFeatures() {
       }}
     >
 
+      <div style={{ display: 'none' }}> 
 
       {/* Existing Custom PDF Processing Section */}
       <Stack
@@ -230,7 +231,7 @@ export default function IndicDocumentFeatures() {
           </Box>
         )}
       </Stack>
-
+</div>
       <div style={{ display: 'none' }}> 
         
       {/* Kannada PDF Query and Translation Section */}
@@ -469,6 +470,8 @@ export default function IndicDocumentFeatures() {
           </Box>
         )}
       </Stack>
+      <div style={{ display: 'none' }}> 
+
 
       {/* Existing Document Summarization with Translation Section */}
       <Stack
@@ -583,7 +586,7 @@ export default function IndicDocumentFeatures() {
           </Box>
         )}
       </Stack>
-
+        </div>
     </Box>
   );
 }

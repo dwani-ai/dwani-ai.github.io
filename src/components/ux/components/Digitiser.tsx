@@ -60,7 +60,7 @@ function MuiCodeBlock({ code, language = 'python' }: MuiCodeBlockProps) {
 }
 
 
-export default function Hero() {
+export default function Digitiser() {
   const {
     file: kannadaFile,
     pageNumber,
@@ -296,7 +296,6 @@ The Solution - dwani.ai’s Discovery
 ●Private, Secure, Auditable, Open Source
 ●Interact with Documents, Images, Text, Voice and Video
 
-      <div style={{ display: 'none' }}> 
              {/* Kannada PDF Query and Translation Section */}
             <Stack
               spacing={2}
@@ -445,7 +444,7 @@ The Solution - dwani.ai’s Discovery
                 </Box>
               )}
             </Stack>
-            </div>
+
           </Stack>
           
     <div style={{ display: 'none' }}> 

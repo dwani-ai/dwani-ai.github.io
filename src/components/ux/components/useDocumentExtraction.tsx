@@ -27,12 +27,12 @@ export const useDocumentExtraction = () => {
   const [loading, setLoading] = useState(false);
   const [uploadLoading, setUploadLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   const pollIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   //const API_BASE = 'https://api.dwani.ai';
-  const API_BASE = 'http://localhost:8000';
-
+  const API_BASE = 'http://localhost:8000'
   const API_KEY = import.meta.env.VITE_DWANI_API_KEY;
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,6 +43,7 @@ export const useDocumentExtraction = () => {
       setExtractedText('');
       setStatus(null);
       setError(null);
+      setPreviewUrl(null);
     } else {
       setError('Please select a valid PDF file.');
       setFile(null);
@@ -146,6 +147,56 @@ export const useDocumentExtraction = () => {
     }
   };
 
+  const handleDownloadPdf = async () => {
+    if (!fileId) return;
+
+    try {
+      const response = await fetch(`${API_BASE}/files/${fileId}/pdf`, {
+        headers: {
+          'X-API-KEY': API_KEY,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to download PDF');
+      }
+
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `regenerated_${file?.name || 'document.pdf'}`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      setError('Failed to download regenerated PDF');
+    }
+  };
+
+  const handlePreviewPdf = async () => {
+    if (!fileId || previewUrl) return;  // Avoid re-fetch if already previewed
+
+    try {
+      const response = await fetch(`${API_BASE}/files/${fileId}/pdf`, {
+        headers: {
+          'X-API-KEY': API_KEY,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch PDF for preview');
+      }
+
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      setPreviewUrl(url);
+    } catch (err) {
+      setError('Failed to preview regenerated PDF');
+    }
+  };
+
   const reset = () => {
     setFile(null);
     setFileId(null);
@@ -154,6 +205,10 @@ export const useDocumentExtraction = () => {
     setError(null);
     setLoading(false);
     setUploadLoading(false);
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+      setPreviewUrl(null);
+    }
     if (pollIntervalRef.current) {
       clearInterval(pollIntervalRef.current);
     }
@@ -167,8 +222,11 @@ export const useDocumentExtraction = () => {
     loading: loading || uploadLoading,
     uploadLoading,
     error,
+    previewUrl,
     handleFileChange,
     handleStartExtraction,
+    handleDownloadPdf,
+    handlePreviewPdf,
     reset,
   };
 };

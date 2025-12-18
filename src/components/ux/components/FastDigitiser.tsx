@@ -1,3 +1,4 @@
+import { useState} from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
@@ -6,6 +7,10 @@ import Divider from '@mui/material/Divider';
 import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
 import Chip from '@mui/material/Chip';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 
 import { useDocumentExtraction } from './useDocumentExtraction';
 
@@ -18,10 +23,15 @@ export default function Digitiser() {
     loading,
     uploadLoading,
     error,
+    previewUrl,
     handleFileChange,
     handleStartExtraction,
+    handleDownloadPdf,
+    handlePreviewPdf,
     reset,
   } = useDocumentExtraction();
+
+  const [previewOpen, setPreviewOpen] = useState(false);
 
   const getStatusColor = (status: string | null) => {
     switch (status) {
@@ -50,6 +60,15 @@ export default function Digitiser() {
       default:
         return 'Ready to upload';
     }
+  };
+
+  const handleOpenPreview = () => {
+    handlePreviewPdf();
+    setPreviewOpen(true);
+  };
+
+  const handleClosePreview = () => {
+    setPreviewOpen(false);
   };
 
   return (
@@ -176,19 +195,44 @@ export default function Digitiser() {
               {extractedText}
             </Typography>
 
-            <Box sx={{ mt: 3, textAlign: 'right' }}>
+            <Stack direction="row" spacing={2} sx={{ mt: 3, justifyContent: 'flex-end' }}>
               <Button
                 variant="outlined"
                 onClick={() => {
                   navigator.clipboard.writeText(extractedText);
                 }}
               >
-                Copy to Clipboard
+                Copy Text
               </Button>
-            </Box>
+              <Button variant="outlined" onClick={handleOpenPreview}>
+                Preview PDF
+              </Button>
+              <Button variant="contained" onClick={handleDownloadPdf}>
+                Download PDF
+              </Button>
+            </Stack>
           </Box>
         )}
       </Stack>
+
+      {/* PDF Preview Dialog */}
+      <Dialog open={previewOpen} onClose={handleClosePreview} maxWidth="lg" fullWidth>
+        <DialogTitle>Regenerated PDF Preview</DialogTitle>
+        <DialogContent>
+          {previewUrl ? (
+            <iframe
+              src={previewUrl}
+              style={{ width: '100%', height: '70vh', border: 'none' }}
+              title="PDF Preview"
+            />
+          ) : (
+            <CircularProgress sx={{ display: 'block', mx: 'auto' }} />
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClosePreview}>Close</Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }

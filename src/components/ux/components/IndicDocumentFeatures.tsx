@@ -470,7 +470,7 @@ export default function Digitiser() {
           </Box>
         )}
       </Stack>
-      <div style={{ display: 'none' }}> 
+
 
 
       {/* Existing Document Summarization with Translation Section */}
@@ -586,7 +586,6 @@ export default function Digitiser() {
           </Box>
         )}
       </Stack>
-        </div>
     </Box>
   );
 }

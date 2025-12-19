@@ -29,6 +29,7 @@ export default function Digitiser() {
     handleDownloadPdf,
     handlePreviewPdf,
     reset,
+    clearError
   } = useDocumentExtraction();
 
   const [previewOpen, setPreviewOpen] = useState(false);
@@ -154,7 +155,7 @@ export default function Digitiser() {
 
         {/* Error Alert */}
         {error && (
-          <Alert severity="error" sx={{ width: '100%' }} onClose={() => setError(null)}>
+          <Alert severity="error" sx={{ width: '100%' }} onClose={clearError}>
             {error}
           </Alert>
         )}

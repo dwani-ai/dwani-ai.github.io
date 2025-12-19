@@ -31,8 +31,8 @@ export const useDocumentExtraction = () => {
 
   const pollIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  //const API_BASE = 'https://api.dwani.ai';
-  const API_BASE = 'http://localhost:8000'
+  const API_BASE = 'https://discovery-server.dwani.ai';
+  
   const API_KEY = import.meta.env.VITE_DWANI_API_KEY;
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {

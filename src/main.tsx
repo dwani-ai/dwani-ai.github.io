@@ -24,7 +24,6 @@ import AppTheme from './components/ux/shared-theme/AppTheme';
 import Research from './components/ux/components/Research';
 //import API from './components/ux/components/API';
 
-import Digitiser from './components/ux/components/FastDigitiser';
 const rootElement = document.getElementById('root');
 if (rootElement) {
   createRoot(rootElement).render(
@@ -38,7 +37,6 @@ if (rootElement) {
               <Routes>
                 
                 <Route path="/research" element={<Research />} />
-                <Route path="/digitise" element={<Digitiser />} />
                 <Route
                   path="/"
                   element={

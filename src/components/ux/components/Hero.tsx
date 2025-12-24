@@ -221,7 +221,7 @@ export default function Hero() {
               variant="body1"
               sx={{ textAlign: 'center', color: 'text.secondary' }}
             >
-              Explore Discovery. Read the{' '}
+              Setup Discovery. Read the{' '}
               <Link
                 href="https://docs.dwani.ai/"
                 target="_blank"
@@ -233,19 +233,27 @@ export default function Hero() {
             </Typography>
 
 
-    <div style={{ display: 'none' }}> 
+            <Divider sx={{ width: '60%', mx: 'auto', my: 2 }} />
+
+            <Typography
+              variant="body1"
+              sx={{ textAlign: 'center', color: 'text.secondary' }}
+            >
+              Explore dwani API with Workshop
+            </Typography>
+
             <Button
               variant="contained"
               color="primary"
-              href="https://dev-tax.dwani.ai"
+              href="https://workshop.dwani.ai"
               target="_blank"
               size="large"
               sx={{ mt: 2, px: 4, py: 1.5, borderRadius: 2 }}
               aria-label="Try Multimodal Inference"
             >
-              Try - Multimodal Inference
+              Try Workshop
             </Button>
-</div>
+
             <Divider sx={{ width: '60%', mx: 'auto', my: 2 }} />
 
             {/* Problem Section */}

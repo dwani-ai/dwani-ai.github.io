@@ -55,6 +55,12 @@ export default function AppAppBar() {
   };
 
 
+  const handleDiscoveryClick = () => {
+    navigate('/discovery');
+    toggleDrawer(false)();
+  };
+
+
   const handleAPIClick = () => {
     navigate('/api');
     toggleDrawer(false)();
@@ -105,9 +111,15 @@ export default function AppAppBar() {
                 Home
               </Button>
               
+
+              <Button variant="text" color="info" size="small" onClick={handleDiscoveryClick}>
+                Discovery
+              </Button>
+                            <div style={{ display: 'none' }}>
               <Button variant="text" color="info" size="small" onClick={handleResearchClick}>
                 Research
               </Button>
+              </div>
               <div style={{ display: 'none' }}>
               <Button variant="text" color="info" size="small" onClick={handleAPIClick}>
                 API
@@ -187,10 +199,18 @@ export default function AppAppBar() {
                   </Button>
                   </MenuItem>
                 <MenuItem>
+                  <Button color="primary" variant="contained" fullWidth onClick={handleDiscoveryClick}>
+                    Discovery
+                  </Button>
+                </MenuItem>
+                              <div style={{ display: 'none' }}>
+
+                <MenuItem>
                   <Button color="primary" variant="contained" fullWidth onClick={handleResearchClick}>
                     Research
                   </Button>
                 </MenuItem>
+                </div>
               <div style={{ display: 'none' }}>
                   <MenuItem>
                   <Button color="primary" variant="contained" fullWidth onClick={handleDocsClick}>

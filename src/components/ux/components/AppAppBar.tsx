@@ -54,8 +54,9 @@ export default function AppAppBar() {
     toggleDrawer(false)();
   };
 
-  const handleDigitiseClick = () => {
-    navigate('/digitise');
+
+  const handleDiscoveryClick = () => {
+    navigate('/discovery');
     toggleDrawer(false)();
   };
 
@@ -109,13 +110,16 @@ export default function AppAppBar() {
               <Button variant="text" color="info" size="small" onClick={handleHomeClick}>
                 Home
               </Button>
-              <Button variant="text" color="info" size="small" onClick={handleDigitiseClick}>
-                Digitise
-              </Button>
               
+
+              <Button variant="text" color="info" size="small" onClick={handleDiscoveryClick}>
+                Discovery
+              </Button>
+                            <div style={{ display: 'none' }}>
               <Button variant="text" color="info" size="small" onClick={handleResearchClick}>
                 Research
               </Button>
+              </div>
               <div style={{ display: 'none' }}>
               <Button variant="text" color="info" size="small" onClick={handleAPIClick}>
                 API
@@ -194,16 +198,19 @@ export default function AppAppBar() {
                     Home
                   </Button>
                   </MenuItem>
-                                  <MenuItem>
-                  <Button color="primary" variant="contained" fullWidth onClick={handleDigitiseClick}>
-                    Digitise
+                <MenuItem>
+                  <Button color="primary" variant="contained" fullWidth onClick={handleDiscoveryClick}>
+                    Discovery
                   </Button>
                 </MenuItem>
+                              <div style={{ display: 'none' }}>
+
                 <MenuItem>
                   <Button color="primary" variant="contained" fullWidth onClick={handleResearchClick}>
                     Research
                   </Button>
                 </MenuItem>
+                </div>
               <div style={{ display: 'none' }}>
                   <MenuItem>
                   <Button color="primary" variant="contained" fullWidth onClick={handleDocsClick}>

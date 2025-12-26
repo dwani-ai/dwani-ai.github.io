@@ -20,11 +20,9 @@ import Footer from './components/ux/components/Footer';
 import AppTheme from './components/ux/shared-theme/AppTheme';
 //import Blog from './components/ux/blog/Blog';
 //import Tutorials from './components/ux/components/Tutorials';
-//import IndicDocumentFeatures from './components/ux/components/IndicDocumentFeatures';
-import Research from './components/ux/components/Research';
-//import API from './components/ux/components/API';
 
 import Digitiser from './components/ux/components/FastDigitiser';
+
 const rootElement = document.getElementById('root');
 if (rootElement) {
   createRoot(rootElement).render(
@@ -37,8 +35,7 @@ if (rootElement) {
               <AppAppBar />
               <Routes>
                 
-                <Route path="/research" element={<Research />} />
-                <Route path="/digitise" element={<Digitiser />} />
+                <Route path="/discovery" element={<Digitiser />} />
                 <Route
                   path="/"
                   element={

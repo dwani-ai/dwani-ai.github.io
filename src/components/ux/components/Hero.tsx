@@ -196,6 +196,49 @@ export default function Hero() {
 
             <Divider sx={{ width: '60%', mx: 'auto', my: 2 }} />
 
+
+            <Typography
+              variant="body1"
+              sx={{ textAlign: 'center', color: 'text.secondary' }}
+            >
+              Conversational AI for Indian languages
+            </Typography>
+
+            <Button
+              variant="contained"
+              color="primary"
+              href="https://talk.dwani.ai"
+              target="_blank"
+              size="large"
+              sx={{ mt: 2, px: 4, py: 1.5, borderRadius: 2 }}
+              aria-label="Try Talk on dwani.ai"
+            >
+              Try Talk 
+            </Button>
+
+            <Divider sx={{ width: '60%', mx: 'auto', my: 2 }} />
+
+            <Typography
+              variant="body1"
+              sx={{ textAlign: 'center', color: 'text.secondary' }}
+            >
+              Setup Talk. Read the{' '}
+              <Link
+                href="https://docs.dwani.ai/"
+                target="_blank"
+                color="primary"
+                aria-label="dwani.ai documentation"
+              >
+                Documentation
+              </Link>.
+            </Typography>
+
+
+            <Divider sx={{ width: '60%', mx: 'auto', my: 2 }} />
+
+
+         <div style={{ display: 'none' }}>
+
             <Typography
               variant="body1"
               sx={{ textAlign: 'center', color: 'text.secondary' }}
@@ -254,7 +297,14 @@ export default function Hero() {
               Try Workshop
             </Button>
 
+            </div>
+
+            <div style={{ display: 'none' }}>
+
+
             <Divider sx={{ width: '60%', mx: 'auto', my: 2 }} />
+
+            
 
             {/* Problem Section */}
             <Stack
@@ -291,6 +341,8 @@ export default function Hero() {
                 ))}
               </Grid>
             </Stack>
+</div>
+
 
             {/* Solution Section */}
             <Stack
@@ -298,6 +350,7 @@ export default function Hero() {
               useFlexGap
               sx={{ alignItems: 'center', width: '100%', mt: 6 }}
             >
+              
               <Typography
                 variant="h4"
                 component="h3"
@@ -328,6 +381,8 @@ export default function Hero() {
               </Grid>
             </Stack>
           </Stack>
+
+            <div style={{ display: 'none' }}>
 
           {/* Features Section */}
           <Stack
@@ -378,7 +433,7 @@ export default function Hero() {
               ))}
             </Grid>
           </Stack>
-
+</div>
           <Button
             variant="contained"
             color="primary"

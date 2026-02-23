@@ -111,10 +111,11 @@ export default function AppAppBar() {
                 Home
               </Button>
               
-
+     <div style={{ display: 'none' }}>
               <Button variant="text" color="info" size="small" onClick={handleDiscoveryClick}>
                 Discovery
               </Button>
+              </div>
                             <div style={{ display: 'none' }}>
               <Button variant="text" color="info" size="small" onClick={handleResearchClick}>
                 Research
@@ -198,11 +199,14 @@ export default function AppAppBar() {
                     Home
                   </Button>
                   </MenuItem>
+                   <div style={{ display: 'none' }}>
+    
                 <MenuItem>
                   <Button color="primary" variant="contained" fullWidth onClick={handleDiscoveryClick}>
                     Discovery
                   </Button>
                 </MenuItem>
+ </div>
                               <div style={{ display: 'none' }}>
 
                 <MenuItem>

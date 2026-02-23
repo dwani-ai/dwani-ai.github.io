@@ -351,6 +351,8 @@ export default function Hero() {
               sx={{ alignItems: 'center', width: '100%', mt: 6 }}
             >
               
+
+            <div style={{ display: 'none' }}>
               <Typography
                 variant="h4"
                 component="h3"
@@ -358,6 +360,10 @@ export default function Hero() {
               >
                 The Solution - dwani.ai’s Discovery
               </Typography>
+            </div>
+
+            <div style={{ display: 'none' }}>
+            
               <Grid container spacing={3}>
                 {solutions.map((solution, index) => (
                   <Grid size={{ xs: 12, sm: 6, md: 3 }} key={index}>
@@ -379,6 +385,8 @@ export default function Hero() {
                   </Grid>
                 ))}
               </Grid>
+              </div>
+
             </Stack>
           </Stack>
 
@@ -434,6 +442,17 @@ export default function Hero() {
             </Grid>
           </Stack>
 </div>
+
+            <Divider sx={{ width: '60%', mx: 'auto', my: 2 }} />
+
+
+            <Typography
+              variant="body1"
+              sx={{ textAlign: 'center', color: 'text.secondary' }}
+            >
+              Download Android App 
+            </Typography>
+
           <Button
             variant="contained"
             color="primary"

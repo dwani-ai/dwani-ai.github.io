@@ -22,7 +22,7 @@
     "@mui/x-date-pickers": "^7.22.2",
     "@reduxjs/toolkit": "^2.3.0",
     "@types/recordrtc": "^5.6.14",
-    "axios": "^1.8.2",
+    "axios": "^1.13.5",
     "dayjs": "^1.11.13",
     "pdfjs-dist": "^4.8.69",
     "react": "^18.3.1",

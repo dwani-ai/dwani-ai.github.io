@@ -213,7 +213,7 @@ export default function Hero() {
               sx={{ mt: 2, px: 4, py: 1.5, borderRadius: 2 }}
               aria-label="Try Talk on dwani.ai"
             >
-              Try Talk 
+              Try Agents 
             </Button>
 
             <Divider sx={{ width: '60%', mx: 'auto', my: 2 }} />

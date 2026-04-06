@@ -201,13 +201,13 @@ export default function Hero() {
               variant="body1"
               sx={{ textAlign: 'center', color: 'text.secondary' }}
             >
-              Conversational AI for Indian languages
+              Agentic AI 
             </Typography>
 
             <Button
               variant="contained"
               color="primary"
-              href="https://talk.dwani.ai"
+              href="https://agents.dwani.ai"
               target="_blank"
               size="large"
               sx={{ mt: 2, px: 4, py: 1.5, borderRadius: 2 }}
@@ -222,7 +222,7 @@ export default function Hero() {
               variant="body1"
               sx={{ textAlign: 'center', color: 'text.secondary' }}
             >
-              Setup Talk. Read the{' '}
+              Setup Agents. Read the{' '}
               <Link
                 href="https://docs.dwani.ai/"
                 target="_blank"
@@ -442,6 +442,7 @@ export default function Hero() {
             </Grid>
           </Stack>
 </div>
+            <div style={{ display: 'none' }}>
 
             <Divider sx={{ width: '60%', mx: 'auto', my: 2 }} />
 
@@ -506,6 +507,8 @@ export default function Hero() {
               </Link>.
             </Typography>
           </Stack>
+
+          </div>
         </Container>
       </Box>
     </>
